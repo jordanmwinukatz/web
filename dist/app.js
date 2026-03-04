@@ -367,10 +367,9 @@ function LiveRateConverter({ buyRate, sellRate, waLink }) {
       }
     }, side === 'buy' ? 'BUY rate' : 'SELL rate')
   ),
-    /* ── CTA: Trade on WhatsApp ── */
+    /* ── CTA: Start Trade ── */
     /*#__PURE__*/React.createElement("a", {
-    href: wa('Hello, I would like to place a trade.'),
-    target: '_blank', rel: 'noopener noreferrer',
+    href: '#contact',
     style: {
       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
       width: '100%', boxSizing: 'border-box',
@@ -383,7 +382,7 @@ function LiveRateConverter({ buyRate, sellRate, waLink }) {
       marginBottom: '12px'
     }
   },
-    "Trade on WhatsApp"
+    "Start Trade"
   ),
     /* ── Secondary link ── */
     /*#__PURE__*/React.createElement("div", { style: { textAlign: 'center' } },
@@ -2213,10 +2212,10 @@ function App() {
   }, "View Live Prices"),
       /*#__PURE__*/React.createElement(Button, {
     as: "a",
-    href: wa("Hello, I want to trade via jordanmwinukatz P2P Trading."),
-    onClick: () => trackWhatsAppClick('hero_section'),
+    href: "#contact",
+    onClick: () => trackButtonClick('hero_start_trade', 'hero_section'),
     className: "min-h-[44px]"
-  }, "WhatsApp Chat")
+  }, "Start Trading")
   ),
 
     /* ── Trust Stats Row ── */
@@ -2412,7 +2411,7 @@ function App() {
     desc: "See the latest buy/sell rates for your platform."
   }, {
     title: "2) Submit Order",
-    desc: "Fill a short form with WhatsApp and amount."
+    desc: "Fill a short form with your details and amount."
   }, {
     title: "3) Pay & Upload",
     desc: "Follow payment access, upload your receipt, add exchange email."
@@ -2438,7 +2437,7 @@ function App() {
     desc: "Transparent flows and clean records."
   }, {
     title: "24/7 Support",
-    desc: "WhatsApp assistance whenever you need it."
+    desc: "Live chat assistance whenever you need it."
   }, {
     title: "Best Market Rates",
     desc: "Competitive, clearly displayed spreads."
@@ -2993,7 +2992,7 @@ function App() {
   }, /*#__PURE__*/React.createElement(Button, {
     as: "a",
     href: wa("Hello, I need assistance.")
-  }, "WhatsApp"), /*#__PURE__*/React.createElement(Button, {
+  }, "Support"), /*#__PURE__*/React.createElement(Button, {
     as: "a",
     href: `mailto:${SUPPORT_EMAIL}`
   }, "Email"))), /*#__PURE__*/React.createElement("div", {
@@ -3069,7 +3068,7 @@ function App() {
       name: e.target.value
     })
   }), /*#__PURE__*/React.createElement(Input, {
-    placeholder: "WhatsApp Number",
+    placeholder: "Phone Number",
     value: order.whatsapp,
     onChange: e => setOrder({
       ...order,
@@ -3128,7 +3127,7 @@ function App() {
     className: "mb-4"
   }, /*#__PURE__*/React.createElement(CardContent, null, /*#__PURE__*/React.createElement("div", {
     className: "text-sm space-y-1"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Side:"), " ", order.side), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Platform:"), " ", order.platform), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Amount:"), " ", order.amount, " ", order.currency), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "WhatsApp:"), " ", order.whatsapp), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Message:"), " ", order.message || "-")))), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Side:"), " ", order.side), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Platform:"), " ", order.platform), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Amount:"), " ", order.amount, " ", order.currency), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Phone:"), " ", order.whatsapp), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("b", null, "Message:"), " ", order.message || "-")))), /*#__PURE__*/React.createElement("div", {
     className: "flex justify-end gap-2"
   }, /*#__PURE__*/React.createElement(Button, {
     onClick: () => setOrderOpen(false)
