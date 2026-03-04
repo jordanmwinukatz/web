@@ -15,7 +15,7 @@ const {
 const BUSINESS_NAME = "jordanmwinukatz P2P Trading";
 const WHATSAPP_NUMBER = "+255714107557";
 const SUPPORT_EMAIL = "jordanmwinuka@gmail.com";
-const LOGO_URL = "/logo.png"; // optional — shows gradient placeholder if missing
+const LOGO_URL = "./logo.png"; // optional — shows gradient placeholder if missing
 const FAVICON_URL = "/favicon.png"; // optional
 
 /* Helpers */
