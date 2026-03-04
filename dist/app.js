@@ -2178,6 +2178,7 @@ function App() {
   /*#__PURE__*/React.createElement("div", {
     style: { maxWidth: '760px' }
   },
+    /*#__PURE__*/React.createElement("div", { className: "hero-eyebrow" }, /*#__PURE__*/React.createElement("span", { className: "pulse-dot" }), " LIVE P2P USDT DESK — 24/7 INSTANT CONFIRMATIONS"),
     /*#__PURE__*/React.createElement("h1", {
     style: {
       margin: '0 0 16px 0',
