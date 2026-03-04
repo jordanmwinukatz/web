@@ -2208,7 +2208,18 @@ function App() {
     style: { marginBottom: '20px' }
   },
       /*#__PURE__*/React.createElement(Button, {
-    as: "a", href: "#prices", className: "min-h-[44px]"
+    as: "a",
+    href: "#prices",
+    className: "min-h-[44px] hero-btn-primary",
+    style: {
+      background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+      border: 'none',
+      color: '#fff',
+      fontWeight: 600,
+      padding: '12px 24px',
+      borderRadius: '12px',
+      boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
+    }
   }, "View Live Prices"),
       /*#__PURE__*/React.createElement(Button, {
     as: "a",
@@ -2216,7 +2227,16 @@ function App() {
     target: "_blank",
     rel: "noopener noreferrer",
     onClick: () => trackButtonClick('hero_whatsapp_chat', 'hero_section'),
-    className: "min-h-[44px]"
+    className: "min-h-[44px] hero-btn-whatsapp",
+    style: {
+      background: '#25D366',
+      border: 'none',
+      color: '#fff',
+      fontWeight: 600,
+      padding: '12px 24px',
+      borderRadius: '12px',
+      boxShadow: '0 4px 14px rgba(37, 211, 102, 0.4)'
+    }
   }, "WhatsApp Chat")
   ),
 

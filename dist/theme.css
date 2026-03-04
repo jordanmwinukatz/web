@@ -1102,3 +1102,21 @@ section {
         padding: 0 16px !important;
     }
 }
+
+/* ===== Hero CTA Buttons — Pro styling + hover ===== */
+a.hero-btn-primary:hover {
+    background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45) !important;
+    transform: translateY(-1px);
+}
+a.hero-btn-whatsapp:hover {
+    background: #20bd5a !important;
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5) !important;
+    transform: translateY(-1px);
+}
+a.hero-btn-primary,
+a.hero-btn-whatsapp {
+    transition: box-shadow var(--duration-normal) var(--ease-out),
+                transform var(--duration-normal) var(--ease-out),
+                background var(--duration-normal) var(--ease-out);
+}
