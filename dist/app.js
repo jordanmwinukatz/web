@@ -2212,10 +2212,12 @@ function App() {
   }, "View Live Prices"),
       /*#__PURE__*/React.createElement(Button, {
     as: "a",
-    href: "#contact",
-    onClick: () => trackButtonClick('hero_start_trade', 'hero_section'),
+    href: wa("Hi, I'd like to start trading."),
+    target: "_blank",
+    rel: "noopener noreferrer",
+    onClick: () => trackButtonClick('hero_whatsapp_chat', 'hero_section'),
     className: "min-h-[44px]"
-  }, "Start Trading")
+  }, "WhatsApp Chat")
   ),
 
     /* ── Trust Stats Row ── */
