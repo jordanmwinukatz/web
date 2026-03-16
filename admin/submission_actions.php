@@ -17,7 +17,7 @@ try {
             $newStatus = $input['status'] ?? '';
             $notes = $input['notes'] ?? '';
             
-            if (!$id || !in_array($newStatus, ['pending', 'reviewed', 'completed'])) {
+            if (!$id || !in_array($newStatus, ['pending', 'reviewed', 'completed', 'rejected'])) {
                 echo json_encode(['success' => false, 'error' => 'Invalid parameters']);
                 exit;
             }

@@ -32,7 +32,8 @@ $countsStmt = $pdo->query("
         COUNT(*) AS total,
         SUM(CASE WHEN submission_status = 'pending' THEN 1 ELSE 0 END) AS pending,
         SUM(CASE WHEN submission_status = 'reviewed' THEN 1 ELSE 0 END) AS reviewed,
-        SUM(CASE WHEN submission_status = 'completed' THEN 1 ELSE 0 END) AS completed
+        SUM(CASE WHEN submission_status = 'completed' THEN 1 ELSE 0 END) AS completed,
+        SUM(CASE WHEN submission_status = 'rejected' THEN 1 ELSE 0 END) AS rejected
     FROM user_submissions
 ");
 $counts = $countsStmt->fetch(PDO::FETCH_ASSOC);
@@ -213,6 +214,7 @@ function timeAgoSub($datetime) {
         .status-pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
         .status-reviewed { background: rgba(96,165,250,0.15); color: #60a5fa; }
         .status-completed { background: rgba(52,211,153,0.15); color: #34d399; }
+        .status-rejected { background: rgba(239,68,68,0.15); color: #f87171; }
         .card-body { display: flex; align-items: center; justify-content: space-between; }
         .card-user { display: flex; flex-direction: column; gap: 2px; }
         .card-name { font-size: 14px; font-weight: 600; color: #e2e8f0; }
@@ -248,6 +250,8 @@ function timeAgoSub($datetime) {
         .btn-complete:hover:not(:disabled) { background: rgba(52,211,153,0.25); }
         .btn-pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
         .btn-pending:hover:not(:disabled) { background: rgba(251,191,36,0.25); }
+        .btn-reject { background: rgba(239,68,68,0.15); color: #f87171; }
+        .btn-reject:hover:not(:disabled) { background: rgba(239,68,68,0.25); }
 
         /* Notes */
         .note-input-row { display: flex; gap: 8px; margin-top: 12px; }
@@ -400,6 +404,9 @@ function timeAgoSub($datetime) {
                         <a href="?status=completed<?= $search ? '&search='.urlencode($search) : '' ?>" class="filter-tab <?= $statusFilter === 'completed' ? 'active' : '' ?>">
                             Completed <span class="count"><?= $counts['completed'] ?></span>
                         </a>
+                        <a href="?status=rejected<?= $search ? '&search='.urlencode($search) : '' ?>" class="filter-tab <?= $statusFilter === 'rejected' ? 'active' : '' ?>" style="<?= $statusFilter === 'rejected' ? '' : '' ?>">
+                            Rejected <span class="count"><?= $counts['rejected'] ?></span>
+                        </a>
                     </div>
                     <div style="font-size:13px; color:var(--text-muted);">
                         Showing <?= count($submissions) ?> submissions
@@ -474,6 +481,9 @@ function timeAgoSub($datetime) {
                                     </button>
                                     <button class="action-btn btn-complete" onclick="updateStatus(<?= $subId ?>, 'completed')" id="btn-complete-<?= $subId ?>" <?= $status === 'completed' ? 'disabled' : '' ?>>
                                         <i class="fas fa-check-circle"></i> Mark Complete
+                                    </button>
+                                    <button class="action-btn btn-reject" onclick="rejectSubmission(<?= $subId ?>)" id="btn-rejected-<?= $subId ?>" <?= $status === 'rejected' ? 'disabled' : '' ?>>
+                                        <i class="fas fa-times-circle"></i> Reject
                                     </button>
                                     <button class="action-btn btn-pending" onclick="updateStatus(<?= $subId ?>, 'pending')" id="btn-pending-<?= $subId ?>" <?= $status === 'pending' ? 'disabled' : '' ?>>
                                         <i class="fas fa-undo"></i> Reopen
@@ -617,7 +627,7 @@ function timeAgoSub($datetime) {
             histEl.innerHTML = '<div style="color:var(--text-muted); font-size:12px;">No status changes yet</div>';
         } else {
             histEl.innerHTML = history.map(h => {
-                const colors = { completed: '#34d399', reviewed: '#60a5fa', pending: '#fbbf24' };
+                const colors = { completed: '#34d399', reviewed: '#60a5fa', pending: '#fbbf24', rejected: '#f87171' };
                 const color = colors[h.new_status] || '#94a3b8';
                 const dt = new Date(h.created_at);
                 const timeStr = dt.toLocaleDateString('en', { month:'short', day:'numeric' }) + ' ' + dt.toLocaleTimeString('en', { hour:'2-digit', minute:'2-digit' });
@@ -651,7 +661,7 @@ function timeAgoSub($datetime) {
             const card = document.getElementById('card-' + id);
             card.dataset.status = newStatus;
             // Update buttons
-            ['pending', 'reviewed', 'completed'].forEach(s => {
+            ['pending', 'reviewed', 'completed', 'rejected'].forEach(s => {
                 const btn = document.getElementById('btn-' + s + '-' + id);
                 if (btn) btn.disabled = (s === newStatus);
             });
@@ -661,6 +671,19 @@ function timeAgoSub($datetime) {
         } else {
             showToast(result.error || 'Failed to update', 'error');
         }
+    }
+
+    async function rejectSubmission(id) {
+        const reason = prompt('⚠️ Reject this submission?\n\nPlease enter the rejection reason (e.g. "Receipt doesn\'t match amount", "Fake receipt", "Wrong payment method"):');
+        if (reason === null) return; // cancelled
+        if (!reason.trim()) {
+            showToast('Please provide a rejection reason', 'error');
+            return;
+        }
+        // Put reason in the note field so it gets logged
+        const noteEl = document.getElementById('note-' + id);
+        if (noteEl) noteEl.value = reason.trim();
+        await updateStatus(id, 'rejected');
     }
 
     async function addNote(id) {
