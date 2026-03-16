@@ -67,19 +67,18 @@ foreach ($rows as $row) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-slate-950 text-white min-h-screen">
-    <header class="border-b border-white/10 bg-slate-900/80 backdrop-blur">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="h-10 w-10 rounded-xl bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center">
-                    <i class="fas fa-clipboard-check text-emerald-400"></i>
-                </div>
+    <header class="border-b border-white/10 bg-[rgba(15,23,42,0.92)] backdrop-blur-xl sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <a href="../index.html" class="flex items-center gap-3 text-decoration-none no-underline">
+                <img src="../logo.png" alt="Logo" style="height:30px;width:auto;" onerror="this.style.display='none'">
                 <div>
-                    <h1 class="text-2xl font-bold">Completed Orders Archive</h1>
-                    <p class="text-sm text-white/60">Reference log of all finalized buy &amp; sell flows.</p>
+                    <div style="font-size:16px;font-weight:700;background:linear-gradient(135deg,#facc15,#fbbf24,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">jordanmwinukatz P2P</div>
+                    <div style="font-size:11px;color:rgba(148,163,184,1);letter-spacing:0.03em;">Completed Orders</div>
                 </div>
-            </div>
+            </a>
             <div class="flex items-center gap-3">
-                <a href="index.php" class="px-4 py-2 rounded-lg border border-white/10 hover:bg-white/10 transition">← Back to Dashboard</a>
+                <a href="../index.html" class="px-3 py-1.5 text-sm rounded-lg border transition" style="border-color:rgba(250,204,21,0.2);background:rgba(250,204,21,0.07);color:#fde047;">← Back to Site</a>
+                <a href="index.php" class="px-4 py-2 rounded-lg border border-white/10 hover:bg-white/10 transition text-sm">← Dashboard</a>
             </div>
         </div>
     </header>

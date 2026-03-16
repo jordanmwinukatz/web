@@ -179,16 +179,27 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             justify-content: center;
             border: 1px solid rgba(16, 185, 129, 0.2);
         }
-        .brand-icon i { color: var(--accent-emerald); font-size: 16px; }
+        .brand-logo {
+            height: 32px;
+            width: auto;
+        }
+        .brand-logo-fallback {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, rgba(250,204,21,0.2), rgba(34,211,238,0.15));
+            border: 1px solid rgba(250,204,21,0.25);
+            display: none;
+        }
         .brand-title {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan));
+            background: linear-gradient(135deg, #facc15, #fbbf24, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .brand-subtitle { font-size: 12px; color: var(--text-secondary); }
+        .brand-subtitle { font-size: 11px; color: var(--text-secondary); letter-spacing: 0.03em; }
         
         .header-actions {
             display: flex;
@@ -636,13 +647,14 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
     <header class="admin-header">
         <div class="header-inner">
             <div class="header-brand">
-                <div class="brand-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div>
-                    <div class="brand-title">Admin Dashboard</div>
-                    <div class="brand-subtitle">Jordan P2P Management Center</div>
-                </div>
+                <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+                    <img src="../logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+                    <div class="brand-logo-fallback" style="display:none;"></div>
+                    <div>
+                        <div class="brand-title">jordanmwinukatz P2P</div>
+                        <div class="brand-subtitle">Admin Management Center</div>
+                    </div>
+                </a>
             </div>
             <div class="header-actions">
                 <div class="header-pill">
@@ -665,6 +677,10 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                 <button onclick="refreshData()" class="icon-btn" title="Refresh">
                     <i class="fas fa-sync-alt"></i>
                 </button>
+                <a href="../index.html" class="logout-btn" style="background:rgba(250,204,21,0.08);border-color:rgba(250,204,21,0.2);color:#fde047;" title="Back to main site">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Site</span>
+                </a>
                 <a href="logout.php" class="logout-btn">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
@@ -677,7 +693,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
     <main class="main-content">
         <!-- Welcome Section -->
         <div class="welcome-section">
-            <h2 class="welcome-title">Welcome Back, Admin</h2>
+            <h2 class="welcome-title" style="background:linear-gradient(135deg,#facc15,#fbbf24,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Welcome Back, Admin</h2>
             <p class="welcome-subtitle">Manage your P2P trading platform with powerful analytics and submission tracking tools.</p>
         </div>
 
