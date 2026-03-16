@@ -58,6 +58,56 @@ $avgRespDisplay = $avgRespHours > 0 ? round($avgRespHours, 1) . 'h' : '0h';
 
 // Conversion rate (completed submissions / unique visitors last 30 days)
 $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) * 100, 1) : 0;
+
+// ── Real comparison data ───────────────────────────────────
+// Previous month visitors for % change
+$prevVisitorsStmt = $pdo->query("SELECT COUNT(DISTINCT session_id) AS c FROM analytics_events WHERE created_at >= DATE_SUB(NOW(), INTERVAL 60 DAY) AND created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)");
+$prevVisitors = (int)($prevVisitorsStmt->fetch(PDO::FETCH_ASSOC)['c'] ?? 0);
+$visitorsChange = $prevVisitors > 0 ? round((($totalVisitors - $prevVisitors) / $prevVisitors) * 100, 1) : ($totalVisitors > 0 ? 100 : 0);
+
+// New submissions today
+$newTodayStmt = $pdo->query("SELECT COUNT(*) AS c FROM user_submissions WHERE DATE(created_at) = CURDATE()");
+$newToday = (int)($newTodayStmt->fetch(PDO::FETCH_ASSOC)['c'] ?? 0);
+
+// Revenue formatted
+$revenueDisplay = $revenueTotal > 0 ? 'TZS ' . number_format($revenueTotal, 0) : '$0';
+$revenueContext = $revenueTotal > 0 ? number_format($completedCount) . ' completed orders' : 'No revenue data';
+
+// Previous period success rate for comparison
+$prevSuccessStmt = $pdo->query("
+    SELECT 
+        COUNT(*) AS total, 
+        SUM(CASE WHEN submission_status = 'completed' THEN 1 ELSE 0 END) AS completed
+    FROM user_submissions 
+    WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)
+");
+$prevSuccess = $prevSuccessStmt->fetch(PDO::FETCH_ASSOC);
+$prevSuccessRate = ((int)$prevSuccess['total'] > 0) ? round(((int)$prevSuccess['completed'] / (int)$prevSuccess['total']) * 100, 1) : 0;
+$successRateChange = round($successRate - $prevSuccessRate, 1);
+
+// ── Recent Activity from real data ─────────────────────────
+$recentActivityStmt = $pdo->query("
+    SELECT us.id, us.order_number, us.submission_type, us.submission_status,
+           JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.amount')) AS amount,
+           JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.name')) AS user_name,
+           JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.email')) AS user_email,
+           us.created_at, us.updated_at
+    FROM user_submissions us
+    ORDER BY us.updated_at DESC
+    LIMIT 8
+");
+$recentActivity = $recentActivityStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Helper: human-readable time ago
+function timeAgo($datetime) {
+    $now = new DateTime();
+    $ago = new DateTime($datetime);
+    $diff = $now->diff($ago);
+    if ($diff->d > 0) return $diff->d . 'd ago';
+    if ($diff->h > 0) return $diff->h . 'h ago';
+    if ($diff->i > 0) return $diff->i . 'm ago';
+    return 'just now';
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -893,7 +943,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                             <div class="stat-icon"><i class="fas fa-users"></i></div>
                         </div>
                         <div class="stat-footer">
-                            <span class="change">+12%</span>
+                            <span class="change"><?php echo ($visitorsChange >= 0 ? '+' : '') . $visitorsChange; ?>%</span>
                             <span class="context">vs last month</span>
                         </div>
                     </div>
@@ -907,7 +957,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                             <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
                         </div>
                         <div class="stat-footer">
-                            <span class="change">5 new</span>
+                            <span class="change"><?php echo $newToday; ?> new</span>
                             <span class="context">today</span>
                         </div>
                     </div>
@@ -916,12 +966,12 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                         <div class="stat-top">
                             <div>
                                 <div class="stat-label">Revenue</div>
-                                <div class="stat-value" id="revenue">$0</div>
+                                <div class="stat-value" id="revenue"><?php echo $revenueDisplay; ?></div>
                             </div>
                             <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
                         </div>
                         <div class="stat-footer">
-                            <span class="context">No revenue data</span>
+                            <span class="context"><?php echo $revenueContext; ?></span>
                         </div>
                     </div>
 
@@ -934,8 +984,8 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                             <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
                         </div>
                         <div class="stat-footer">
-                            <span class="change">+2.1%</span>
-                            <span class="context">improvement</span>
+                            <span class="change"><?php echo ($successRateChange >= 0 ? '+' : '') . $successRateChange; ?>%</span>
+                            <span class="context">vs prev period</span>
                         </div>
                     </div>
                 </div>
@@ -1069,42 +1119,46 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                     </div>
                 </div>
 
-                <!-- Recent Activity -->
+                <!-- Recent Activity (Real Data) -->
                 <div class="glass-card-static activity-section">
                     <h3 class="activity-title">Recent Activity</h3>
                     <div class="activity-list">
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
-                                <i class="fas fa-check"></i>
+                        <?php if (empty($recentActivity)): ?>
+                            <div style="text-align:center;padding:32px 0;color:rgba(148,163,184,0.6);">
+                                <i class="fas fa-inbox" style="font-size:32px;margin-bottom:12px;"></i>
+                                <p>No recent activity yet.</p>
                             </div>
-                            <div class="activity-info">
-                                <div class="title">New order completed</div>
-                                <div class="desc">Order #ORD-123456 - $150 USDT</div>
+                        <?php else: ?>
+                            <?php foreach ($recentActivity as $act): 
+                                $status = $act['submission_status'];
+                                $name = htmlspecialchars($act['user_name'] ?? 'Unknown');
+                                $order = htmlspecialchars($act['order_number'] ?? '#' . $act['id']);
+                                $amt = $act['amount'] ? number_format((float)$act['amount'], 0) : '';
+                                $amtLabel = $amt ? " - TZS $amt" : '';
+                                $time = timeAgo($act['updated_at']);
+
+                                if ($status === 'completed') {
+                                    $iconBg = 'var(--accent-emerald-dim)'; $iconColor = '#34d399'; $icon = 'fa-check'; $title = 'Order completed';
+                                } elseif ($status === 'reviewed') {
+                                    $iconBg = 'var(--accent-blue-dim)'; $iconColor = '#60a5fa'; $icon = 'fa-eye'; $title = 'Order reviewed';
+                                } elseif ($status === 'pending') {
+                                    $iconBg = 'var(--accent-amber-dim)'; $iconColor = '#fbbf24'; $icon = 'fa-clock'; $title = 'New submission';
+                                } else {
+                                    $iconBg = 'rgba(148,163,184,0.1)'; $iconColor = '#94a3b8'; $icon = 'fa-circle'; $title = ucfirst($status);
+                                }
+                            ?>
+                            <div class="activity-item">
+                                <div class="activity-icon" style="background: <?php echo $iconBg; ?>; color: <?php echo $iconColor; ?>;">
+                                    <i class="fas <?php echo $icon; ?>"></i>
+                                </div>
+                                <div class="activity-info">
+                                    <div class="title"><?php echo $title; ?></div>
+                                    <div class="desc"><?php echo $order; ?> by <?php echo $name; ?><?php echo $amtLabel; ?></div>
+                                </div>
+                                <span class="activity-time"><?php echo $time; ?></span>
                             </div>
-                            <span class="activity-time">2 minutes ago</span>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: var(--accent-blue-dim); color: #60a5fa;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="activity-info">
-                                <div class="title">New user registered</div>
-                                <div class="desc">john.doe@example.com</div>
-                            </div>
-                            <span class="activity-time">5 minutes ago</span>
-                        </div>
-                        
-                        <div class="activity-item">
-                            <div class="activity-icon" style="background: var(--accent-amber-dim); color: #fbbf24;">
-                                <i class="fas fa-exclamation"></i>
-                            </div>
-                            <div class="activity-info">
-                                <div class="title">Pending review</div>
-                                <div class="desc">Order #ORD-123457 needs attention</div>
-                            </div>
-                            <span class="activity-time">10 minutes ago</span>
-                        </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
             </main>
