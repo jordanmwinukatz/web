@@ -83,7 +83,6 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         
         :root {
-            /* Main website dark navy palette */
             --bg-primary: #0f172a;
             --bg-secondary: #0b1225;
             --bg-surface: rgba(30, 41, 59, 0.6);
@@ -91,8 +90,6 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             --bg-card: rgba(15, 23, 42, 0.8);
             --border-subtle: rgba(255, 255, 255, 0.08);
             --border-medium: rgba(255, 255, 255, 0.12);
-            
-            /* Accent colors matching main site */
             --accent-emerald: #10b981;
             --accent-emerald-dim: rgba(16, 185, 129, 0.15);
             --accent-blue: #2563eb;
@@ -103,109 +100,240 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             --accent-cyan-dim: rgba(34, 211, 238, 0.12);
             --accent-red: #ef4444;
             --accent-red-dim: rgba(239, 68, 68, 0.15);
-            
-            /* Text colors */
+            --accent-yellow: #facc15;
             --text-primary: #f1f5f9;
             --text-secondary: rgba(148, 163, 184, 1);
             --text-muted: rgba(100, 116, 139, 1);
+            --sidebar-width: 260px;
         }
         
         html { scroll-behavior: smooth; }
         
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            background: var(--bg-secondary);
             color: var(--text-primary);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        
-        /* ===== Glass Card System ===== */
-        .glass-card {
+
+        /* ===== Admin Layout: Sidebar + Main ===== */
+        .admin-layout {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            min-height: 100vh;
+        }
+
+        /* ===== Sidebar ===== */
+        .admin-sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, #0c1427 0%, #080e1e 100%);
+            border-right: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px 20px;
+            border-bottom: 1px solid var(--border-subtle);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+        .sidebar-brand img {
+            height: 30px;
+            width: auto;
+        }
+        .sidebar-brand-text {
+            font-size: 16px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #facc15, #fbbf24, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+        .sidebar-brand-sub {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            font-weight: 400;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 16px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar-section-label {
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            padding: 16px 12px 8px;
+        }
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .sidebar-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+        .sidebar-link.active {
+            background: rgba(250, 204, 21, 0.08);
+            color: #fde68a;
+            font-weight: 600;
+        }
+        .sidebar-link.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 6px;
+            bottom: 6px;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+            background: linear-gradient(180deg, var(--accent-yellow), var(--accent-cyan));
+        }
+        .sidebar-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .sidebar-link .badge {
+            margin-left: auto;
+            background: var(--accent-red);
+            color: white;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 99px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 16px 12px;
+            border-top: 1px solid var(--border-subtle);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .sidebar-footer-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .sidebar-footer-link:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+        }
+        .sidebar-footer-link.logout {
+            color: #fca5a5;
+        }
+        .sidebar-footer-link.logout:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fecaca;
+        }
+
+        /* ===== Mobile sidebar toggle ===== */
+        .sidebar-toggle {
+            display: none;
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 200;
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 16px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 10px;
+            width: 44px;
+            height: 44px;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-primary);
+            font-size: 18px;
         }
-        .glass-card:hover {
-            background: var(--bg-surface-hover);
-            border-color: var(--border-medium);
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.6);
+            z-index: 90;
         }
-        
-        .glass-card-static {
-            background: var(--bg-surface);
-            border: 1px solid var(--border-subtle);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 16px;
+
+        /* ===== Main Area ===== */
+        .admin-main {
+            grid-column: 2;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
-        
-        /* ===== Header ===== */
-        .admin-header {
-            background: rgba(15, 23, 42, 0.9);
+
+        /* ===== Top Bar ===== */
+        .admin-topbar {
+            background: rgba(15, 23, 42, 0.85);
             border-bottom: 1px solid var(--border-subtle);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             position: sticky;
             top: 0;
             z-index: 50;
-        }
-        .header-inner {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 48px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 64px;
         }
-        .header-brand {
+        .topbar-breadcrumb {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
         }
-        .brand-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--accent-emerald-dim), var(--accent-blue-dim));
+        .topbar-breadcrumb a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        .topbar-breadcrumb a:hover { color: var(--text-primary); }
+        .topbar-breadcrumb .sep { color: var(--text-muted); font-size: 12px; }
+        .topbar-breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+
+        .topbar-actions {
             display: flex;
             align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(16, 185, 129, 0.2);
+            gap: 10px;
         }
-        .brand-logo {
-            height: 32px;
-            width: auto;
-        }
-        .brand-logo-fallback {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, rgba(250,204,21,0.2), rgba(34,211,238,0.15));
-            border: 1px solid rgba(250,204,21,0.25);
-            display: none;
-        }
-        .brand-title {
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #facc15, #fbbf24, #22d3ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        .brand-subtitle { font-size: 11px; color: var(--text-secondary); letter-spacing: 0.03em; }
-        
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+
         .header-pill {
             background: var(--bg-surface);
             border: 1px solid var(--border-subtle);
@@ -254,27 +382,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             display: none;
         }
         .notif-badge.visible { display: block; }
-        
-        .logout-btn {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            border-radius: 10px;
-            padding: 8px 16px;
-            color: #fca5a5;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .logout-btn:hover {
-            background: rgba(239, 68, 68, 0.2);
-            color: #fecaca;
-        }
-        
+
         /* ===== Notification Dropdown ===== */
         .notif-dropdown {
             display: none;
@@ -337,19 +445,18 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         .order-badge.buy { background: rgba(34, 197, 94, 0.15); color: #86efac; border: 1px solid rgba(34, 197, 94, 0.3); }
         .order-badge.sell { background: rgba(244, 63, 94, 0.15); color: #fda4af; border: 1px solid rgba(244, 63, 94, 0.3); }
         
-        /* ===== Main Layout ===== */
+        /* ===== Main Content ===== */
         .main-content {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 32px 24px;
+            padding: 40px 48px;
+            flex: 1;
         }
         
         /* ===== Welcome Section ===== */
-        .welcome-section { margin-bottom: 32px; }
+        .welcome-section { margin-bottom: 36px; }
         .welcome-title {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--accent-emerald), var(--accent-cyan));
+            background: linear-gradient(135deg, #facc15, #fbbf24, #22d3ee);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -357,16 +464,37 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         }
         .welcome-subtitle { color: var(--text-secondary); font-size: 15px; max-width: 600px; }
         
+        /* ===== Glass Card System ===== */
+        .glass-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            background: var(--bg-surface-hover);
+            border-color: var(--border-medium);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.4);
+        }
+        .glass-card-static {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-subtle);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 16px;
+        }
+
         /* ===== Stats Grid ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 32px;
+            gap: 24px;
+            margin-bottom: 36px;
         }
-        .stat-card {
-            padding: 24px;
-        }
+        .stat-card { padding: 28px; }
         .stat-top {
             display: flex;
             align-items: flex-start;
@@ -407,8 +535,8 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         .dashboard-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-            margin-bottom: 32px;
+            gap: 28px;
+            margin-bottom: 36px;
         }
         .dash-card { padding: 32px; }
         .dash-card-header {
@@ -458,19 +586,13 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             transform: translateY(-1px);
             box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.3);
         }
-        
-        .btn-blue {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-        }
+        .btn-blue { background: linear-gradient(135deg, #2563eb, #1d4ed8); }
         .btn-blue:hover { background: linear-gradient(135deg, #3b82f6, #2563eb); }
-        
-        .btn-emerald {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
+        .btn-emerald { background: linear-gradient(135deg, #10b981, #059669); }
         .btn-emerald:hover { background: linear-gradient(135deg, #34d399, #10b981); }
         
         /* ===== P2P Config Section ===== */
-        .config-section { padding: 32px; margin-bottom: 32px; }
+        .config-section { padding: 32px; margin-bottom: 36px; }
         .config-title { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
         .config-grid {
             display: grid;
@@ -513,7 +635,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         .config-note { font-size: 12px; color: var(--text-muted); margin-top: 12px; }
         
         /* ===== Additional Tools ===== */
-        .tools-section { padding: 32px; margin-bottom: 32px; }
+        .tools-section { padding: 32px; margin-bottom: 36px; }
         .tools-title { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
         .tools-grid {
             display: grid;
@@ -604,7 +726,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             position: fixed;
             top: 80px;
             right: 16px;
-            z-index: 60;
+            z-index: 200;
             background: rgba(245, 158, 11, 0.9);
             color: #000;
             padding: 8px 16px;
@@ -619,9 +741,36 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         }
         
         /* ===== Responsive ===== */
-        @media (max-width: 1024px) {
+        @media (max-width: 1200px) {
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
             .tools-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 1024px) {
+            .admin-layout {
+                grid-template-columns: 1fr;
+            }
+            .admin-sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            .admin-sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-overlay.open {
+                display: block;
+            }
+            .sidebar-toggle {
+                display: flex;
+            }
+            .admin-main {
+                grid-column: 1;
+            }
+            .admin-topbar {
+                padding: 0 20px 0 72px;
+            }
+            .main-content {
+                padding: 24px 20px;
+            }
         }
         @media (max-width: 768px) {
             .stats-grid { grid-template-columns: 1fr; }
@@ -629,300 +778,338 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
             .config-grid { grid-template-columns: 1fr; }
             .tools-grid { grid-template-columns: 1fr; }
             .header-pill { display: none; }
-            .welcome-title { font-size: 26px; }
+            .welcome-title { font-size: 24px; }
             .main-content { padding: 20px 16px; }
-            .header-inner { padding: 0 16px; }
-            .notif-dropdown { width: 300px; right: -60px; }
         }
         @media (max-width: 480px) {
-            .header-actions { gap: 8px; }
-            .logout-btn span { display: none; }
+            .topbar-actions { gap: 6px; }
         }
     </style>
 </head>
 <body>
     <audio id="notifSound" src="assets/audio/mixkit-urgent-simple-tone-loop-2976.wav" preload="none"></audio>
-    
-    <!-- Header -->
-    <header class="admin-header">
-        <div class="header-inner">
-            <div class="header-brand">
-                <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-                    <img src="../logo.png" alt="Logo" class="brand-logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-                    <div class="brand-logo-fallback" style="display:none;"></div>
-                    <div>
-                        <div class="brand-title">jordanmwinukatz P2P</div>
-                        <div class="brand-subtitle">Admin Management Center</div>
-                    </div>
+
+    <!-- Mobile sidebar toggle -->
+    <button class="sidebar-toggle" onclick="document.querySelector('.admin-sidebar').classList.toggle('open');document.querySelector('.sidebar-overlay').classList.toggle('open');">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="sidebar-overlay" onclick="document.querySelector('.admin-sidebar').classList.remove('open');this.classList.remove('open');"></div>
+
+    <div class="admin-layout">
+        <!-- ===== Sidebar ===== -->
+        <aside class="admin-sidebar">
+            <a href="../index.html" class="sidebar-brand">
+                <img src="../logo.png" alt="Logo" onerror="this.style.display='none'">
+                <div>
+                    <div class="sidebar-brand-text">jordanmwinukatz P2P</div>
+                    <div class="sidebar-brand-sub">Admin Panel</div>
+                </div>
+            </a>
+
+            <nav class="sidebar-nav">
+                <div class="sidebar-section-label">Main</div>
+                <a href="index.php" class="sidebar-link active">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="dashboard_real.php" class="sidebar-link">
+                    <i class="fas fa-chart-line"></i> Analytics
+                </a>
+                <a href="submissions_dashboard.php" class="sidebar-link">
+                    <i class="fas fa-clipboard-list"></i> Submissions
+                    <span id="sidebarBadge" class="badge" style="display:none;"></span>
+                </a>
+                <a href="completed_orders.php" class="sidebar-link">
+                    <i class="fas fa-clipboard-check"></i> Completed Orders
+                </a>
+
+                <div class="sidebar-section-label">Management</div>
+                <a href="#" class="sidebar-link" style="opacity:0.4;cursor:default;">
+                    <i class="fas fa-user-cog"></i> Users
+                </a>
+                <a href="#settings-section" class="sidebar-link">
+                    <i class="fas fa-cog"></i> Settings
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="../index.html" class="sidebar-footer-link">
+                    <i class="fas fa-arrow-left"></i> Back to Site
+                </a>
+                <a href="logout.php" class="sidebar-footer-link logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
                 </a>
             </div>
-            <div class="header-actions">
-                <div class="header-pill">
-                    <span class="label">Last login:</span>
-                    <span class="value" id="lastLogin">Just now</span>
+        </aside>
+
+        <!-- ===== Main Area ===== -->
+        <div class="admin-main">
+            <!-- Top Bar -->
+            <div class="admin-topbar">
+                <div class="topbar-breadcrumb">
+                    <a href="index.php"><i class="fas fa-home" style="font-size:13px;"></i></a>
+                    <span class="sep">/</span>
+                    <span class="current">Dashboard</span>
                 </div>
-                <div style="position: relative;">
-                    <button id="notifBtn" title="View new submissions" class="icon-btn">
-                        <i class="fas fa-bell"></i>
-                        <span id="notifBadge" class="notif-badge">0</span>
+                <div class="topbar-actions">
+                    <div class="header-pill">
+                        <span class="label">Last login:</span>
+                        <span class="value" id="lastLogin">Just now</span>
+                    </div>
+                    <div style="position: relative;">
+                        <button id="notifBtn" title="View new submissions" class="icon-btn">
+                            <i class="fas fa-bell"></i>
+                            <span id="notifBadge" class="notif-badge">0</span>
+                        </button>
+                        <div id="notifDropdown" class="notif-dropdown">
+                            <div class="notif-dropdown-header">
+                                <span>New Submissions</span>
+                                <a href="submissions_dashboard.php">Open all</a>
+                            </div>
+                            <div id="notifList" class="notif-list"></div>
+                        </div>
+                    </div>
+                    <button onclick="refreshData()" class="icon-btn" title="Refresh">
+                        <i class="fas fa-sync-alt"></i>
                     </button>
-                    <div id="notifDropdown" class="notif-dropdown">
-                        <div class="notif-dropdown-header">
-                            <span>New Submissions</span>
-                            <a href="submissions_dashboard.php">Open all</a>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Welcome Section -->
+                <div class="welcome-section">
+                    <h2 class="welcome-title">Welcome Back, Admin</h2>
+                    <p class="welcome-subtitle">Manage your P2P trading platform with powerful analytics and submission tracking tools.</p>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="stats-grid">
+                    <div class="glass-card stat-card stat-blue">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-label">Total Users</div>
+                                <div class="stat-value" id="totalUsers"><?php echo number_format($totalVisitors); ?></div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-users"></i></div>
                         </div>
-                        <div id="notifList" class="notif-list"></div>
-                    </div>
-                </div>
-                <button onclick="refreshData()" class="icon-btn" title="Refresh">
-                    <i class="fas fa-sync-alt"></i>
-                </button>
-                <a href="../index.html" class="logout-btn" style="background:rgba(250,204,21,0.08);border-color:rgba(250,204,21,0.2);color:#fde047;" title="Back to main site">
-                    <i class="fas fa-arrow-left"></i>
-                    <span>Back to Site</span>
-                </a>
-                <a href="logout.php" class="logout-btn">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Welcome Section -->
-        <div class="welcome-section">
-            <h2 class="welcome-title" style="background:linear-gradient(135deg,#facc15,#fbbf24,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Welcome Back, Admin</h2>
-            <p class="welcome-subtitle">Manage your P2P trading platform with powerful analytics and submission tracking tools.</p>
-        </div>
-
-        <!-- Quick Stats -->
-        <div class="stats-grid">
-            <div class="glass-card stat-card stat-blue">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Total Users</div>
-                        <div class="stat-value" id="totalUsers"><?php echo number_format($totalVisitors); ?></div>
-                    </div>
-                    <div class="stat-icon"><i class="fas fa-users"></i></div>
-                </div>
-                <div class="stat-footer">
-                    <span class="change">+12%</span>
-                    <span class="context">vs last month</span>
-                </div>
-            </div>
-
-            <div class="glass-card stat-card stat-amber">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Active Orders</div>
-                        <div class="stat-value" id="activeOrders"><?php echo number_format($activeOrders); ?></div>
-                    </div>
-                    <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
-                </div>
-                <div class="stat-footer">
-                    <span class="change">5 new</span>
-                    <span class="context">today</span>
-                </div>
-            </div>
-
-            <div class="glass-card stat-card stat-emerald">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Revenue</div>
-                        <div class="stat-value" id="revenue">$0</div>
-                    </div>
-                    <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
-                </div>
-                <div class="stat-footer">
-                    <span class="context">No revenue data</span>
-                </div>
-            </div>
-
-            <div class="glass-card stat-card stat-cyan">
-                <div class="stat-top">
-                    <div>
-                        <div class="stat-label">Success Rate</div>
-                        <div class="stat-value" id="successRate"><?php echo $successRate; ?>%</div>
-                    </div>
-                    <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
-                </div>
-                <div class="stat-footer">
-                    <span class="change">+2.1%</span>
-                    <span class="context">improvement</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Main Dashboard Cards -->
-        <div class="dashboard-grid">
-            <!-- Analytics Dashboard Card -->
-            <div class="glass-card dash-card">
-                <div class="dash-card-header">
-                    <div class="dash-card-icon" style="background: var(--accent-blue-dim); color: #60a5fa;">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div>
-                        <div class="dash-card-title">Analytics Dashboard</div>
-                        <div class="dash-card-desc">Track website performance and user behavior</div>
-                    </div>
-                </div>
-                <div class="dash-card-stats">
-                    <div class="dash-stat-row">
-                        <span class="label">Page Views</span>
-                        <span class="value"><?php echo number_format($pageViews7d); ?></span>
-                    </div>
-                    <div class="dash-stat-row">
-                        <span class="label">Unique Visitors</span>
-                        <span class="value"><?php echo number_format($totalVisitors); ?></span>
-                    </div>
-                    <div class="dash-stat-row">
-                        <span class="label">Conversion Rate</span>
-                        <span class="value"><?php echo $conversionRate; ?>%</span>
-                    </div>
-                </div>
-                <button onclick="openAnalytics()" class="dash-action-btn btn-blue">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Open Analytics Dashboard</span>
-                </button>
-            </div>
-
-            <!-- Submissions Dashboard Card -->
-            <div class="glass-card dash-card">
-                <div class="dash-card-header">
-                    <div class="dash-card-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
-                        <i class="fas fa-clipboard-list"></i>
-                    </div>
-                    <div>
-                        <div class="dash-card-title">Submissions Dashboard</div>
-                        <div class="dash-card-desc">Manage customer orders and inquiries</div>
-                    </div>
-                </div>
-                <div class="dash-card-stats">
-                    <div class="dash-stat-row">
-                        <span class="label">Pending Reviews</span>
-                        <span class="value" style="color: #fbbf24;"><?php echo number_format($pendingCount); ?></span>
-                    </div>
-                    <div class="dash-stat-row">
-                        <span class="label">Completed Today</span>
-                        <span class="value" style="color: #34d399;"><?php echo number_format($completedToday); ?></span>
-                    </div>
-                    <div class="dash-stat-row">
-                        <span class="label">Avg Response Time</span>
-                        <span class="value"><?php echo $avgRespDisplay; ?></span>
-                    </div>
-                </div>
-                <button onclick="openSubmissions()" class="dash-action-btn btn-emerald">
-                    <i class="fas fa-clipboard-check"></i>
-                    <span>Open Submissions Dashboard</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- P2P Config Card -->
-        <div class="glass-card-static config-section">
-            <h3 class="config-title">P2P USDT Ad Codes</h3>
-            <form onsubmit="saveP2PConfig(event)">
-                <div class="config-grid">
-                    <div>
-                        <label class="config-label">Buy ad code</label>
-                        <input id="p2pBuyCode" type="text" class="config-input" placeholder="e.g. j15stHvu1u4" />
-                    </div>
-                    <div>
-                        <label class="config-label">Sell ad code</label>
-                        <input id="p2pSellCode" type="text" class="config-input" placeholder="e.g. HrOzHzvC5uj" />
-                    </div>
-                </div>
-                <button id="p2pSaveBtn" class="config-save-btn">Save</button>
-            </form>
-            <p class="config-note">Note: Frontend polls every 30s; server caches for 15s.</p>
-        </div>
-
-        <!-- Additional Tools Section -->
-        <div class="glass-card-static tools-section">
-            <h3 class="tools-title">Additional Tools</h3>
-            <div class="tools-grid">
-                <!-- User Management -->
-                <div class="tool-card">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">
-                            <i class="fas fa-user-cog"></i>
+                        <div class="stat-footer">
+                            <span class="change">+12%</span>
+                            <span class="context">vs last month</span>
                         </div>
-                        <h4>User Management</h4>
                     </div>
-                    <p>Manage user accounts and permissions</p>
-                    <button class="tool-btn disabled">Coming Soon</button>
-                </div>
 
-                <!-- Order Management -->
-                <div class="tool-card">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
-                            <i class="fas fa-shopping-bag"></i>
+                    <div class="glass-card stat-card stat-amber">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-label">Active Orders</div>
+                                <div class="stat-value" id="activeOrders"><?php echo number_format($activeOrders); ?></div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
                         </div>
-                        <h4>Order Management</h4>
+                        <div class="stat-footer">
+                            <span class="change">5 new</span>
+                            <span class="context">today</span>
+                        </div>
                     </div>
-                    <p>Track and manage all orders</p>
-                    <button class="tool-btn disabled">Coming Soon</button>
+
+                    <div class="glass-card stat-card stat-emerald">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-label">Revenue</div>
+                                <div class="stat-value" id="revenue">$0</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="context">No revenue data</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card stat-card stat-cyan">
+                        <div class="stat-top">
+                            <div>
+                                <div class="stat-label">Success Rate</div>
+                                <div class="stat-value" id="successRate"><?php echo $successRate; ?>%</div>
+                            </div>
+                            <div class="stat-icon"><i class="fas fa-chart-line"></i></div>
+                        </div>
+                        <div class="stat-footer">
+                            <span class="change">+2.1%</span>
+                            <span class="context">improvement</span>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Completed Orders -->
-                <div class="tool-card">
-                    <div class="tool-card-header">
-                        <div class="tool-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
+                <!-- Main Dashboard Cards -->
+                <div class="dashboard-grid">
+                    <!-- Analytics Dashboard Card -->
+                    <div class="glass-card dash-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-icon" style="background: var(--accent-blue-dim); color: #60a5fa;">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <div>
+                                <div class="dash-card-title">Analytics Dashboard</div>
+                                <div class="dash-card-desc">Track website performance and user behavior</div>
+                            </div>
+                        </div>
+                        <div class="dash-card-stats">
+                            <div class="dash-stat-row">
+                                <span class="label">Page Views</span>
+                                <span class="value"><?php echo number_format($pageViews7d); ?></span>
+                            </div>
+                            <div class="dash-stat-row">
+                                <span class="label">Unique Visitors</span>
+                                <span class="value"><?php echo number_format($totalVisitors); ?></span>
+                            </div>
+                            <div class="dash-stat-row">
+                                <span class="label">Conversion Rate</span>
+                                <span class="value"><?php echo $conversionRate; ?>%</span>
+                            </div>
+                        </div>
+                        <button onclick="openAnalytics()" class="dash-action-btn btn-blue">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Open Analytics Dashboard</span>
+                        </button>
+                    </div>
+
+                    <!-- Submissions Dashboard Card -->
+                    <div class="glass-card dash-card">
+                        <div class="dash-card-header">
+                            <div class="dash-card-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div>
+                                <div class="dash-card-title">Submissions Dashboard</div>
+                                <div class="dash-card-desc">Manage customer orders and inquiries</div>
+                            </div>
+                        </div>
+                        <div class="dash-card-stats">
+                            <div class="dash-stat-row">
+                                <span class="label">Pending Reviews</span>
+                                <span class="value" style="color: #fbbf24;"><?php echo number_format($pendingCount); ?></span>
+                            </div>
+                            <div class="dash-stat-row">
+                                <span class="label">Completed Today</span>
+                                <span class="value" style="color: #34d399;"><?php echo number_format($completedToday); ?></span>
+                            </div>
+                            <div class="dash-stat-row">
+                                <span class="label">Avg Response Time</span>
+                                <span class="value"><?php echo $avgRespDisplay; ?></span>
+                            </div>
+                        </div>
+                        <button onclick="openSubmissions()" class="dash-action-btn btn-emerald">
                             <i class="fas fa-clipboard-check"></i>
-                        </div>
-                        <h4>Completed Orders</h4>
+                            <span>Open Submissions Dashboard</span>
+                        </button>
                     </div>
-                    <p>Review finalized trades with attached proofs</p>
-                    <a href="completed_orders.php" class="tool-btn" style="background: linear-gradient(135deg, #10b981, #059669);">
-                        <i class="fas fa-eye"></i>
-                        View Archive
-                    </a>
                 </div>
-            </div>
-        </div>
 
-        <!-- Recent Activity -->
-        <div class="glass-card-static activity-section">
-            <h3 class="activity-title">Recent Activity</h3>
-            <div class="activity-list">
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
-                        <i class="fas fa-check"></i>
-                    </div>
-                    <div class="activity-info">
-                        <div class="title">New order completed</div>
-                        <div class="desc">Order #ORD-123456 - $150 USDT</div>
-                    </div>
-                    <span class="activity-time">2 minutes ago</span>
+                <!-- P2P Config Card -->
+                <div id="settings-section" class="glass-card-static config-section">
+                    <h3 class="config-title">P2P USDT Ad Codes</h3>
+                    <form onsubmit="saveP2PConfig(event)">
+                        <div class="config-grid">
+                            <div>
+                                <label class="config-label">Buy ad code</label>
+                                <input id="p2pBuyCode" type="text" class="config-input" placeholder="e.g. j15stHvu1u4" />
+                            </div>
+                            <div>
+                                <label class="config-label">Sell ad code</label>
+                                <input id="p2pSellCode" type="text" class="config-input" placeholder="e.g. HrOzHzvC5uj" />
+                            </div>
+                        </div>
+                        <button id="p2pSaveBtn" class="config-save-btn">Save</button>
+                    </form>
+                    <p class="config-note">Note: Frontend polls every 30s; server caches for 15s.</p>
                 </div>
-                
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: var(--accent-blue-dim); color: #60a5fa;">
-                        <i class="fas fa-user"></i>
+
+                <!-- Additional Tools Section -->
+                <div class="glass-card-static tools-section">
+                    <h3 class="tools-title">Additional Tools</h3>
+                    <div class="tools-grid">
+                        <!-- User Management -->
+                        <div class="tool-card">
+                            <div class="tool-card-header">
+                                <div class="tool-icon" style="background: rgba(168, 85, 247, 0.15); color: #c084fc;">
+                                    <i class="fas fa-user-cog"></i>
+                                </div>
+                                <h4>User Management</h4>
+                            </div>
+                            <p>Manage user accounts and permissions</p>
+                            <button class="tool-btn disabled">Coming Soon</button>
+                        </div>
+
+                        <!-- Order Management -->
+                        <div class="tool-card">
+                            <div class="tool-card-header">
+                                <div class="tool-icon" style="background: rgba(249, 115, 22, 0.15); color: #fb923c;">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <h4>Order Management</h4>
+                            </div>
+                            <p>Track and manage all orders</p>
+                            <button class="tool-btn disabled">Coming Soon</button>
+                        </div>
+
+                        <!-- Completed Orders -->
+                        <div class="tool-card">
+                            <div class="tool-card-header">
+                                <div class="tool-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
+                                    <i class="fas fa-clipboard-check"></i>
+                                </div>
+                                <h4>Completed Orders</h4>
+                            </div>
+                            <p>Review finalized trades with attached proofs</p>
+                            <a href="completed_orders.php" class="tool-btn" style="background: linear-gradient(135deg, #10b981, #059669);">
+                                <i class="fas fa-eye"></i>
+                                View Archive
+                            </a>
+                        </div>
                     </div>
-                    <div class="activity-info">
-                        <div class="title">New user registered</div>
-                        <div class="desc">john.doe@example.com</div>
-                    </div>
-                    <span class="activity-time">5 minutes ago</span>
                 </div>
-                
-                <div class="activity-item">
-                    <div class="activity-icon" style="background: var(--accent-amber-dim); color: #fbbf24;">
-                        <i class="fas fa-exclamation"></i>
+
+                <!-- Recent Activity -->
+                <div class="glass-card-static activity-section">
+                    <h3 class="activity-title">Recent Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
+                                <i class="fas fa-check"></i>
+                            </div>
+                            <div class="activity-info">
+                                <div class="title">New order completed</div>
+                                <div class="desc">Order #ORD-123456 - $150 USDT</div>
+                            </div>
+                            <span class="activity-time">2 minutes ago</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: var(--accent-blue-dim); color: #60a5fa;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="activity-info">
+                                <div class="title">New user registered</div>
+                                <div class="desc">john.doe@example.com</div>
+                            </div>
+                            <span class="activity-time">5 minutes ago</span>
+                        </div>
+                        
+                        <div class="activity-item">
+                            <div class="activity-icon" style="background: var(--accent-amber-dim); color: #fbbf24;">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                            <div class="activity-info">
+                                <div class="title">Pending review</div>
+                                <div class="desc">Order #ORD-123457 needs attention</div>
+                            </div>
+                            <span class="activity-time">10 minutes ago</span>
+                        </div>
                     </div>
-                    <div class="activity-info">
-                        <div class="title">Pending review</div>
-                        <div class="desc">Order #ORD-123457 needs attention</div>
-                    </div>
-                    <span class="activity-time">10 minutes ago</span>
                 </div>
-            </div>
-        </div>
-    </main>
+            </main>
+        </div><!-- end admin-main -->
+    </div><!-- end admin-layout -->
 
     <script defer>
         const notifSound = document.getElementById('notifSound');
