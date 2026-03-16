@@ -439,50 +439,99 @@ function timeAgo($datetime) {
             position: absolute;
             right: 0;
             top: 48px;
-            width: 360px;
-            background: rgba(15, 23, 42, 0.95);
+            width: 420px;
+            background: rgba(15, 23, 42, 0.97);
             border: 1px solid var(--border-medium);
             backdrop-filter: blur(24px);
             border-radius: 14px;
-            padding: 14px;
+            padding: 0;
             z-index: 60;
             box-shadow: 0 20px 60px -12px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
         }
         .notif-dropdown.open { display: block; }
         .notif-dropdown-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 10px;
+            padding: 16px 18px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .notif-dropdown-header span { font-size: 13px; font-weight: 600; color: var(--text-secondary); }
-        .notif-dropdown-header a { font-size: 12px; color: var(--accent-cyan); text-decoration: none; }
+        .notif-dropdown-header a { font-size: 12px; color: var(--accent-cyan); text-decoration: none; font-weight: 500; }
         .notif-dropdown-header a:hover { text-decoration: underline; }
-        .notif-list { max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+        .notif-list {
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .notif-list::-webkit-scrollbar { width: 4px; }
+        .notif-list::-webkit-scrollbar-track { background: transparent; }
+        .notif-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
         .notif-item {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 8px;
-            padding: 10px 12px;
-        }
-        .notif-item-info { font-size: 13px; }
-        .notif-item-user { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-        .notif-view-btn {
-            background: var(--accent-emerald);
-            color: white;
-            border: none;
-            border-radius: 6px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 600;
+            gap: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            padding: 12px 14px;
+            border-left: 3px solid transparent;
+            transition: all 0.15s;
             cursor: pointer;
-            white-space: nowrap;
-            transition: background 0.15s;
         }
-        .notif-view-btn:hover { background: #059669; }
+        .notif-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+        .notif-item.unread {
+            border-left-color: var(--accent-cyan);
+            background: rgba(34, 211, 238, 0.04);
+        }
+        .notif-item-left { flex: 1; min-width: 0; }
+        .notif-item-top {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .notif-order { font-size: 13px; font-weight: 600; color: #e2e8f0; }
+        .notif-amount { font-size: 13px; font-weight: 700; color: var(--accent-emerald); }
+        .notif-item-bottom {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .notif-user { font-size: 12px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 160px; }
+        .notif-time { font-size: 11px; color: rgba(255,255,255,0.3); white-space: nowrap; }
+        .notif-time::before { content: '•'; margin-right: 8px; }
+        .notif-status {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 99px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+        .notif-status.s-pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .notif-status.s-reviewed { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .notif-status.s-completed { background: rgba(52,211,153,0.15); color: #34d399; }
+        .notif-status.s-rejected { background: rgba(239,68,68,0.15); color: #f87171; }
+        .notif-empty {
+            padding: 32px 16px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        .notif-empty i {
+            display: block;
+            font-size: 28px;
+            margin-bottom: 10px;
+            opacity: 0.4;
+        }
         .order-badge {
             display: inline-block;
             font-size: 10px;
@@ -1278,6 +1327,7 @@ function timeAgo($datetime) {
                         }
                         const user = (n.user_info && (n.user_info.name || n.user_info.email)) || 'Visitor';
                         const amount = formData && (formData.amount || formData.usdt || formData.tzs) || '';
+                        const currency = formData && formData.currency || '';
                         const orderTypeRaw = formData && (formData.order_type || formData.trade_type || formData.tradeType || formData.action || formData.mode);
                         const orderType = typeof orderTypeRaw === 'string' ? orderTypeRaw.trim().toLowerCase() : '';
                         const isBuy = orderType === 'buy';
@@ -1285,74 +1335,60 @@ function timeAgo($datetime) {
                         const badge = isBuy || isSell
                             ? `<span class="order-badge ${isBuy ? 'buy' : 'sell'}">${isBuy ? 'Buy' : 'Sell'}</span>`
                             : '';
-                        const titleParts = [
-                            `#${n.id}`,
-                            n.submission_type ? n.submission_type.replace('_',' ') : 'submission'
-                        ];
-                        const infoLine = [titleParts.join(' '), badge].filter(Boolean).join(' ');
+                        const orderNum = n.order_number || ('#' + n.id);
+                        const status = n.submission_status || 'pending';
+                        const timeStr = timeAgo(n.created_at);
+                        const amountDisplay = amount ? (currency === 'USDT' ? amount + ' USDT' : 'TZS ' + Number(amount).toLocaleString()) : '';
+
                         const row = document.createElement('div');
-                        row.className = 'notif-item';
+                        row.className = 'notif-item unread';
+                        row.setAttribute('data-id', n.id);
                         row.innerHTML = `
-                            <div>
-                                <div class="notif-item-info" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">${infoLine}${amount ? `<span style="color: var(--text-muted); font-size: 11px;">• ${amount}</span>` : ''}</div>
-                                <div class="notif-item-user">${user}</div>
+                            <div class="notif-item-left">
+                                <div class="notif-item-top">
+                                    <span class="notif-order">${orderNum}</span>
+                                    ${badge}
+                                    ${amountDisplay ? `<span class="notif-amount">${amountDisplay}</span>` : ''}
+                                </div>
+                                <div class="notif-item-bottom">
+                                    <span class="notif-user">${user}</span>
+                                    <span class="notif-time">${timeStr}</span>
+                                </div>
                             </div>
-                            <button data-id="${n.id}" data-order-type="${orderType}" data-submission-type="${n.submission_type || ''}" class="markRead notif-view-btn">View</button>
+                            <span class="notif-status s-${status}">${status}</span>
                         `;
+                        // Click entire row to open submission
+                        row.addEventListener('click', async () => {
+                            try {
+                                await fetch('../api/submissions.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'mark_viewed', submission_id: n.id }) });
+                            } catch {}
+                            updateNotifBadge();
+                            document.getElementById('notifDropdown').classList.remove('open');
+                            window.location.href = 'submissions_dashboard.php?expand=' + n.id;
+                        });
                         list.appendChild(row);
                     });
                 } else {
-                    list.innerHTML = '<div style="color: var(--text-muted); font-size: 13px;">No new submissions</div>';
+                    list.innerHTML = '<div class="notif-empty"><i class="fas fa-check-circle"></i>All caught up! No new submissions.</div>';
                 }
-
-                // wire buttons
-                list.querySelectorAll('.markRead').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        const id = e.currentTarget.getAttribute('data-id');
-                        const orderTypeAttr = (e.currentTarget.getAttribute('data-order-type') || '').toLowerCase();
-                        const submissionTypeAttr = (e.currentTarget.getAttribute('data-submission-type') || '').toLowerCase();
-                        const resolvedType = (() => {
-                            if (orderTypeAttr === 'buy' || orderTypeAttr === 'sell') {
-                                return orderTypeAttr;
-                            }
-                            if (submissionTypeAttr.includes('buy')) return 'buy';
-                            if (submissionTypeAttr.includes('sell')) return 'sell';
-                            return '';
-                        })();
-                        const orderPage = resolvedType === 'buy'
-                            ? '../buy order.html'
-                            : resolvedType === 'sell'
-                                ? '../sell order.html'
-                                : 'dashboard_real.php';
-                        try {
-                            await fetch('../api/submissions.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'mark_viewed', submission_id: id }) });
-                        } catch {}
-                        // refresh badge and list
-                        updateNotifBadge();
-                        loadNotifications();
-                        // hide dropdown and open specific page
-                        document.getElementById('notifDropdown').classList.remove('open');
-                        try {
-                            let targetUrl = orderPage;
-                            if (orderPage !== 'dashboard_real.php') {
-                                const url = new URL(orderPage, window.location.href);
-                                url.searchParams.set('id', id);
-                                // cache preview payload for fallback rendering
-                                try {
-                                    const cacheKey = `submission-preview-${id}`;
-                                    localStorage.setItem(cacheKey, JSON.stringify(n));
-                                    localStorage.setItem('submission-preview-latest', JSON.stringify({ id, data: n }));
-                                } catch (_) {}
-                                targetUrl = url.toString();
-                            }
-                            window.location.href = targetUrl;
-                        } catch (err) {
-                            console.error('Failed to open order preview', err);
-                            window.location.href = 'dashboard_real.php';
-                        }
-                    });
-                });
             } catch (e) {}
+        }
+
+        function timeAgo(dateStr) {
+            if (!dateStr) return '';
+            const now = new Date();
+            const then = new Date(dateStr);
+            const diffMs = now - then;
+            const diffSec = Math.floor(diffMs / 1000);
+            if (diffSec < 60) return 'just now';
+            const diffMin = Math.floor(diffSec / 60);
+            if (diffMin < 60) return diffMin + 'm ago';
+            const diffHr = Math.floor(diffMin / 60);
+            if (diffHr < 24) return diffHr + 'h ago';
+            const diffDays = Math.floor(diffHr / 24);
+            if (diffDays < 7) return diffDays + 'd ago';
+            if (diffDays < 30) return Math.floor(diffDays / 7) + 'w ago';
+            return then.toLocaleDateString('en', { month: 'short', day: 'numeric' });
         }
 
         function refreshData() {

@@ -8,6 +8,12 @@ $pdo = $db->getConnection();
 // Filter
 $statusFilter = $_GET['status'] ?? 'all';
 $search = $_GET['search'] ?? '';
+$expandId = (int)($_GET['expand'] ?? 0);
+
+// If expanding a specific card from notification, show all to ensure it's found
+if ($expandId > 0) {
+    $statusFilter = 'all';
+}
 
 // Build query
 $where = [];
@@ -700,6 +706,19 @@ function timeAgoSub($datetime) {
             showToast(result.error || 'Failed to add note', 'error');
         }
     }
+    // Auto-expand from notification link
+    <?php if ($expandId > 0): ?>
+    (function() {
+        const expandId = <?= $expandId ?>;
+        const card = document.getElementById('card-' + expandId);
+        if (card) {
+            setTimeout(() => {
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(() => toggleCard(expandId), 400);
+            }, 300);
+        }
+    })();
+    <?php endif; ?>
     </script>
 </body>
 </html>

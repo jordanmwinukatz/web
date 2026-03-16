@@ -503,7 +503,7 @@ try {
                     $conn->exec("ALTER TABLE user_submissions ADD COLUMN admin_viewed TINYINT(1) NOT NULL DEFAULT 0, ADD COLUMN admin_viewed_at TIMESTAMP NULL DEFAULT NULL");
                 }
             } catch (Exception $e) { /* ignore */ }
-            $stmt = $conn->prepare("SELECT id, submission_type, created_at, form_data, user_info FROM user_submissions WHERE submission_status='pending' AND (admin_viewed = 0 OR admin_viewed IS NULL) ORDER BY created_at DESC LIMIT ?");
+            $stmt = $conn->prepare("SELECT id, order_number, submission_type, submission_status, created_at, form_data, user_info FROM user_submissions WHERE submission_status='pending' AND (admin_viewed = 0 OR admin_viewed IS NULL) ORDER BY created_at DESC LIMIT ?");
             $stmt->bindValue(1, (int)$limit, PDO::PARAM_INT);
             $stmt->execute();
             $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
