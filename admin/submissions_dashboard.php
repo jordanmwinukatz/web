@@ -190,10 +190,12 @@ function timeAgoSub($datetime) {
         /* Submission cards */
         .submission-card {
             background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 14px; padding: 20px 24px; transition: all 0.2s;
+            border-radius: 14px; transition: all 0.2s; cursor: pointer;
         }
         .submission-card:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.12); }
         .submission-card.unread { border-left: 3px solid #fbbf24; }
+        .submission-card.expanded { border-color: rgba(250,204,21,0.3); background: rgba(255,255,255,0.06); }
+        .card-summary { padding: 20px 24px; }
         .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
         .card-order { font-weight: 700; font-size: 15px; color: #f1f5f9; }
         .card-status {
@@ -210,6 +212,70 @@ function timeAgoSub($datetime) {
         .card-meta { display: flex; align-items: center; gap: 20px; }
         .card-amount { font-size: 18px; font-weight: 700; color: #34d399; }
         .card-time { font-size: 12px; color: var(--text-muted); }
+        .card-expand-hint { font-size: 11px; color: var(--text-muted); margin-top: 8px; }
+        .card-expand-hint i { margin-right: 4px; transition: transform 0.2s; }
+        .submission-card.expanded .card-expand-hint i { transform: rotate(180deg); }
+
+        /* Detail panel */
+        .card-detail {
+            display: none; padding: 0 24px 20px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .submission-card.expanded .card-detail { display: block; }
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+        .detail-section { background: rgba(255,255,255,0.03); border-radius: 10px; padding: 16px; border: 1px solid rgba(255,255,255,0.05); }
+        .detail-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 10px; }
+
+        /* Action buttons */
+        .action-bar { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+        .action-btn {
+            padding: 9px 18px; border-radius: 10px; font-size: 13px; font-weight: 600;
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+            transition: all 0.2s; font-family: inherit;
+        }
+        .action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn-review { background: rgba(96,165,250,0.15); color: #60a5fa; }
+        .btn-review:hover:not(:disabled) { background: rgba(96,165,250,0.25); }
+        .btn-complete { background: rgba(52,211,153,0.15); color: #34d399; }
+        .btn-complete:hover:not(:disabled) { background: rgba(52,211,153,0.25); }
+        .btn-pending { background: rgba(251,191,36,0.15); color: #fbbf24; }
+        .btn-pending:hover:not(:disabled) { background: rgba(251,191,36,0.25); }
+
+        /* Notes */
+        .note-input-row { display: flex; gap: 8px; margin-top: 12px; }
+        .note-input {
+            flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px; padding: 10px 14px; color: #f1f5f9; font-family: inherit;
+            font-size: 13px; outline: none; resize: none;
+        }
+        .note-input::placeholder { color: var(--text-muted); }
+        .note-input:focus { border-color: rgba(250,204,21,0.3); }
+        .btn-note { background: rgba(250,204,21,0.15); color: #fbbf24; padding: 10px 16px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; font-family: inherit; }
+        .btn-note:hover { background: rgba(250,204,21,0.25); }
+
+        /* Info rows */
+        .info-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 13px; }
+        .info-row:last-child { border-bottom: none; }
+        .info-key { color: var(--text-muted); }
+        .info-val { color: #e2e8f0; font-weight: 500; }
+
+        /* History timeline */
+        .history-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; font-size: 12px; }
+        .history-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+        .history-text { color: var(--text-secondary); }
+        .history-time { color: var(--text-muted); font-size: 11px; }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; padding: 14px 24px; border-radius: 12px;
+            font-size: 14px; font-weight: 600; z-index: 9999;
+            animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+        }
+        .toast-success { background: rgba(52,211,153,0.2); color: #34d399; border: 1px solid rgba(52,211,153,0.3); }
+        .toast-error { background: rgba(239,68,68,0.2); color: #fca5a5; border: 1px solid rgba(239,68,68,0.3); }
+        @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
+
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 48px; margin-bottom: 16px; }
 
@@ -223,6 +289,7 @@ function timeAgoSub($datetime) {
             .admin-topbar { padding: 0 20px 0 72px; }
             .card-body { flex-direction: column; align-items: flex-start; gap: 8px; }
             .card-meta { gap: 12px; }
+            .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -311,25 +378,74 @@ function timeAgoSub($datetime) {
                             $type = $sub['order_type'] ? ucfirst($sub['order_type']) : ucfirst(str_replace('_', ' ', $sub['submission_type']));
                             $time = timeAgoSub($sub['created_at']);
                             $unread = !$sub['admin_viewed'];
+                            $subId = $sub['id'];
                         ?>
-                        <div class="submission-card <?= $unread ? 'unread' : '' ?>">
-                            <div class="card-header">
-                                <div style="display:flex; align-items:center; gap:12px;">
-                                    <span class="card-order"><?= $order ?></span>
-                                    <span style="font-size:12px; color:var(--text-muted);"><?= $type ?></span>
+                        <div class="submission-card <?= $unread ? 'unread' : '' ?>" id="card-<?= $subId ?>" data-id="<?= $subId ?>" data-status="<?= $status ?>">
+                            <div class="card-summary" onclick="toggleCard(<?= $subId ?>)">
+                                <div class="card-header">
+                                    <div style="display:flex; align-items:center; gap:12px;">
+                                        <span class="card-order"><?= $order ?></span>
+                                        <span style="font-size:12px; color:var(--text-muted);"><?= $type ?></span>
+                                    </div>
+                                    <span class="card-status status-<?= $status ?>" id="badge-<?= $subId ?>"><?= $status ?></span>
                                 </div>
-                                <span class="card-status status-<?= $status ?>"><?= $status ?></span>
+                                <div class="card-body">
+                                    <div class="card-user">
+                                        <span class="card-name"><?= $name ?></span>
+                                        <span class="card-email"><?= $email ?></span>
+                                    </div>
+                                    <div class="card-meta">
+                                        <?php if ($amt): ?>
+                                            <span class="card-amount"><?= $amt ?></span>
+                                        <?php endif; ?>
+                                        <span class="card-time"><i class="far fa-clock" style="margin-right:4px;"></i><?= $time ?></span>
+                                    </div>
+                                </div>
+                                <div class="card-expand-hint"><i class="fas fa-chevron-down"></i> Click to view details & take action</div>
                             </div>
-                            <div class="card-body">
-                                <div class="card-user">
-                                    <span class="card-name"><?= $name ?></span>
-                                    <span class="card-email"><?= $email ?></span>
+
+                            <div class="card-detail" id="detail-<?= $subId ?>">
+                                <!-- Action Buttons -->
+                                <div class="action-bar">
+                                    <button class="action-btn btn-review" onclick="updateStatus(<?= $subId ?>, 'reviewed')" id="btn-review-<?= $subId ?>" <?= $status === 'reviewed' ? 'disabled' : '' ?>>
+                                        <i class="fas fa-eye"></i> Mark Reviewed
+                                    </button>
+                                    <button class="action-btn btn-complete" onclick="updateStatus(<?= $subId ?>, 'completed')" id="btn-complete-<?= $subId ?>" <?= $status === 'completed' ? 'disabled' : '' ?>>
+                                        <i class="fas fa-check-circle"></i> Mark Complete
+                                    </button>
+                                    <button class="action-btn btn-pending" onclick="updateStatus(<?= $subId ?>, 'pending')" id="btn-pending-<?= $subId ?>" <?= $status === 'pending' ? 'disabled' : '' ?>>
+                                        <i class="fas fa-undo"></i> Reopen
+                                    </button>
                                 </div>
-                                <div class="card-meta">
-                                    <?php if ($amt): ?>
-                                        <span class="card-amount"><?= $amt ?></span>
-                                    <?php endif; ?>
-                                    <span class="card-time"><i class="far fa-clock" style="margin-right:4px;"></i><?= $time ?></span>
+
+                                <!-- Add Note -->
+                                <div class="note-input-row">
+                                    <input type="text" class="note-input" id="note-<?= $subId ?>" placeholder="Add admin note...">
+                                    <button class="btn-note" onclick="addNote(<?= $subId ?>)"><i class="fas fa-paper-plane"></i></button>
+                                </div>
+
+                                <!-- Detail Info (loaded via AJAX) -->
+                                <div class="detail-grid" id="info-<?= $subId ?>">
+                                    <div class="detail-section">
+                                        <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i>Customer Info</div>
+                                        <div class="info-row"><span class="info-key">Name</span><span class="info-val"><?= $name ?></span></div>
+                                        <div class="info-row"><span class="info-key">Email</span><span class="info-val"><?= $email ?></span></div>
+                                        <div class="info-row"><span class="info-key">Order</span><span class="info-val"><?= $order ?></span></div>
+                                        <div class="info-row"><span class="info-key">Amount</span><span class="info-val"><?= $amt ?: 'N/A' ?></span></div>
+                                        <div class="info-row"><span class="info-key">Created</span><span class="info-val"><?= date('M j, Y H:i', strtotime($sub['created_at'])) ?></span></div>
+                                    </div>
+                                    <div class="detail-section">
+                                        <div class="detail-label"><i class="fas fa-history" style="margin-right:6px;"></i>Status History</div>
+                                        <div id="history-<?= $subId ?>">
+                                            <div style="color:var(--text-muted); font-size:12px;">Loading...</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Admin Notes -->
+                                <div class="detail-section" style="margin-top:12px;">
+                                    <div class="detail-label"><i class="fas fa-sticky-note" style="margin-right:6px;"></i>Admin Notes</div>
+                                    <div id="notes-<?= $subId ?>" style="font-size:13px; color:var(--text-secondary); white-space:pre-line;">Loading...</div>
                                 </div>
                             </div>
                         </div>
@@ -339,5 +455,112 @@ function timeAgoSub($datetime) {
             </main>
         </div>
     </div>
+
+    <script>
+    function showToast(msg, type = 'success') {
+        const t = document.createElement('div');
+        t.className = 'toast toast-' + type;
+        t.textContent = msg;
+        document.body.appendChild(t);
+        setTimeout(() => t.remove(), 3000);
+    }
+
+    async function apiCall(data) {
+        const res = await fetch('submission_actions.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+        return res.json();
+    }
+
+    function toggleCard(id) {
+        const card = document.getElementById('card-' + id);
+        const wasExpanded = card.classList.contains('expanded');
+        
+        // Close all others
+        document.querySelectorAll('.submission-card.expanded').forEach(c => c.classList.remove('expanded'));
+
+        if (!wasExpanded) {
+            card.classList.add('expanded');
+            card.classList.remove('unread');
+            loadDetails(id);
+        }
+    }
+
+    async function loadDetails(id) {
+        const result = await apiCall({ action: 'get_details', id });
+        if (!result.success) return;
+
+        const sub = result.submission;
+        const history = result.history;
+
+        // Status history
+        const histEl = document.getElementById('history-' + id);
+        if (history.length === 0) {
+            histEl.innerHTML = '<div style="color:var(--text-muted); font-size:12px;">No status changes yet</div>';
+        } else {
+            histEl.innerHTML = history.map(h => {
+                const colors = { completed: '#34d399', reviewed: '#60a5fa', pending: '#fbbf24' };
+                const color = colors[h.new_status] || '#94a3b8';
+                const dt = new Date(h.created_at);
+                const timeStr = dt.toLocaleDateString('en', { month:'short', day:'numeric' }) + ' ' + dt.toLocaleTimeString('en', { hour:'2-digit', minute:'2-digit' });
+                return `<div class="history-item">
+                    <div class="history-dot" style="background:${color}"></div>
+                    <div>
+                        <div class="history-text">${h.old_status || '—'} → <strong>${h.new_status}</strong>${h.notes ? ' — ' + h.notes : ''}</div>
+                        <div class="history-time">${timeStr}</div>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // Admin notes
+        const notesEl = document.getElementById('notes-' + id);
+        notesEl.textContent = sub.admin_notes || 'No notes yet.';
+    }
+
+    async function updateStatus(id, newStatus) {
+        const noteEl = document.getElementById('note-' + id);
+        const notes = noteEl ? noteEl.value.trim() : '';
+        
+        const result = await apiCall({ action: 'update_status', id, status: newStatus, notes });
+        if (result.success) {
+            showToast('Status updated to ' + newStatus);
+            // Update badge
+            const badge = document.getElementById('badge-' + id);
+            badge.className = 'card-status status-' + newStatus;
+            badge.textContent = newStatus;
+            // Update card data
+            const card = document.getElementById('card-' + id);
+            card.dataset.status = newStatus;
+            // Update buttons
+            ['pending', 'reviewed', 'completed'].forEach(s => {
+                const btn = document.getElementById('btn-' + s + '-' + id);
+                if (btn) btn.disabled = (s === newStatus);
+            });
+            // Clear note and reload details
+            if (noteEl) noteEl.value = '';
+            loadDetails(id);
+        } else {
+            showToast(result.error || 'Failed to update', 'error');
+        }
+    }
+
+    async function addNote(id) {
+        const noteEl = document.getElementById('note-' + id);
+        const notes = noteEl.value.trim();
+        if (!notes) { showToast('Please enter a note', 'error'); return; }
+
+        const result = await apiCall({ action: 'add_note', id, notes });
+        if (result.success) {
+            showToast('Note added');
+            noteEl.value = '';
+            loadDetails(id);
+        } else {
+            showToast(result.error || 'Failed to add note', 'error');
+        }
+    }
+    </script>
 </body>
 </html>
