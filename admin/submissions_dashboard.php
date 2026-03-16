@@ -39,8 +39,16 @@ $counts = $countsStmt->fetch(PDO::FETCH_ASSOC);
 
 // Submissions list
 $sql = "SELECT us.id, us.order_number, us.submission_type, us.submission_status,
+               us.form_data,
                JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.amount')) AS amount,
                JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.order_type')) AS order_type,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.currency')) AS currency,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.platform')) AS platform,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.payment_method')) AS payment_method,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.amount_usdt')) AS amount_usdt,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.amount_tzs')) AS amount_tzs,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.platform_uid')) AS platform_uid,
+               JSON_UNQUOTE(JSON_EXTRACT(us.form_data, '$.platform_email')) AS platform_email,
                JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.name')) AS user_name,
                JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.email')) AS user_email,
                us.created_at, us.updated_at, us.admin_viewed
@@ -276,6 +284,44 @@ function timeAgoSub($datetime) {
         @keyframes slideIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         @keyframes fadeOut { to { opacity: 0; transform: translateY(-10px); } }
 
+        /* Receipt styles */
+        .receipt-grid { display: flex; gap: 12px; flex-wrap: wrap; }
+        .receipt-thumb {
+            position: relative; width: 200px; height: 250px; border-radius: 10px; overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: all 0.2s;
+        }
+        .receipt-thumb:hover { border-color: rgba(250,204,21,0.4); transform: scale(1.02); }
+        .receipt-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .receipt-overlay {
+            position: absolute; inset: 0; background: rgba(0,0,0,0.6);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 6px; opacity: 0; transition: opacity 0.2s;
+            font-size: 13px; font-weight: 600; color: #fde68a;
+        }
+        .receipt-thumb:hover .receipt-overlay { opacity: 1; }
+        .receipt-overlay i { font-size: 24px; }
+        .receipt-error {
+            width: 100%; height: 100%; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; gap: 8px;
+            background: rgba(255,255,255,0.03); color: var(--text-muted); font-size: 12px;
+        }
+        .receipt-error i { font-size: 32px; }
+
+        /* Lightbox */
+        .lightbox {
+            display: none; position: fixed; inset: 0; z-index: 10000;
+            background: rgba(0,0,0,0.92); align-items: center; justify-content: center;
+        }
+        .lightbox.open { display: flex; }
+        .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; }
+        .lightbox-close {
+            position: absolute; top: 20px; right: 20px; width: 44px; height: 44px;
+            border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: #f1f5f9; font-size: 18px; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
         .empty-state { text-align: center; padding: 60px 20px; color: var(--text-muted); }
         .empty-state i { font-size: 48px; margin-bottom: 16px; }
 
@@ -379,6 +425,22 @@ function timeAgoSub($datetime) {
                             $time = timeAgoSub($sub['created_at']);
                             $unread = !$sub['admin_viewed'];
                             $subId = $sub['id'];
+
+                            // Extract receipts
+                            $formData = json_decode($sub['form_data'], true) ?: [];
+                            $receipts = [];
+                            if (!empty($formData['receipts']) && is_array($formData['receipts'])) {
+                                $receipts = array_filter($formData['receipts']);
+                            } elseif (!empty($formData['receipt_url'])) {
+                                $receipts = [$formData['receipt_url']];
+                            }
+
+                            $paymentMethod = htmlspecialchars($sub['payment_method'] ?? '');
+                            $platform = htmlspecialchars($sub['platform'] ?? '');
+                            $amountUsdt = $sub['amount_usdt'] ? number_format((float)$sub['amount_usdt'], 2) . ' USDT' : '';
+                            $amountTzs = $sub['amount_tzs'] ? 'TZS ' . number_format((float)$sub['amount_tzs'], 0) : '';
+                            $platformUid = htmlspecialchars($sub['platform_uid'] ?? '');
+                            $platformEmail = htmlspecialchars($sub['platform_email'] ?? '');
                         ?>
                         <div class="submission-card <?= $unread ? 'unread' : '' ?>" id="card-<?= $subId ?>" data-id="<?= $subId ?>" data-status="<?= $status ?>">
                             <div class="card-summary" onclick="toggleCard(<?= $subId ?>)">
@@ -424,7 +486,7 @@ function timeAgoSub($datetime) {
                                     <button class="btn-note" onclick="addNote(<?= $subId ?>)"><i class="fas fa-paper-plane"></i></button>
                                 </div>
 
-                                <!-- Detail Info (loaded via AJAX) -->
+                                <!-- Detail Info -->
                                 <div class="detail-grid" id="info-<?= $subId ?>">
                                     <div class="detail-section">
                                         <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i>Customer Info</div>
@@ -432,6 +494,21 @@ function timeAgoSub($datetime) {
                                         <div class="info-row"><span class="info-key">Email</span><span class="info-val"><?= $email ?></span></div>
                                         <div class="info-row"><span class="info-key">Order</span><span class="info-val"><?= $order ?></span></div>
                                         <div class="info-row"><span class="info-key">Amount</span><span class="info-val"><?= $amt ?: 'N/A' ?></span></div>
+                                        <?php if ($amountUsdt): ?>
+                                            <div class="info-row"><span class="info-key">USDT</span><span class="info-val"><?= $amountUsdt ?></span></div>
+                                        <?php endif; ?>
+                                        <?php if ($amountTzs): ?>
+                                            <div class="info-row"><span class="info-key">TZS</span><span class="info-val"><?= $amountTzs ?></span></div>
+                                        <?php endif; ?>
+                                        <?php if ($platform): ?>
+                                            <div class="info-row"><span class="info-key">Platform</span><span class="info-val"><?= $platform ?></span></div>
+                                        <?php endif; ?>
+                                        <?php if ($platformUid): ?>
+                                            <div class="info-row"><span class="info-key">Platform UID</span><span class="info-val"><?= $platformUid ?></span></div>
+                                        <?php endif; ?>
+                                        <?php if ($paymentMethod): ?>
+                                            <div class="info-row"><span class="info-key">Payment</span><span class="info-val"><?= $paymentMethod ?></span></div>
+                                        <?php endif; ?>
                                         <div class="info-row"><span class="info-key">Created</span><span class="info-val"><?= date('M j, Y H:i', strtotime($sub['created_at'])) ?></span></div>
                                     </div>
                                     <div class="detail-section">
@@ -441,6 +518,29 @@ function timeAgoSub($datetime) {
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Payment Receipt -->
+                                <?php if (!empty($receipts)): ?>
+                                <div class="detail-section" style="margin-top:12px;">
+                                    <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i>Payment Receipt (<?= count($receipts) ?>)</div>
+                                    <div class="receipt-grid">
+                                        <?php foreach ($receipts as $idx => $receiptPath):
+                                            $cleanPath = str_replace('\\/', '/', $receiptPath);
+                                            $imgUrl = '../' . ltrim($cleanPath, '/');
+                                        ?>
+                                        <div class="receipt-thumb" onclick="openLightbox('<?= htmlspecialchars($imgUrl) ?>')">
+                                            <img src="<?= htmlspecialchars($imgUrl) ?>" alt="Receipt <?= $idx + 1 ?>" onerror="this.parentElement.innerHTML='<div class=receipt-error><i class=fas fa-image></i><span>Image not available</span></div>'">
+                                            <div class="receipt-overlay"><i class="fas fa-search-plus"></i> View Full Size</div>
+                                        </div>
+                                        <?php endforeach; ?>
+                                    </div>
+                                </div>
+                                <?php else: ?>
+                                <div class="detail-section" style="margin-top:12px;">
+                                    <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i>Payment Receipt</div>
+                                    <div style="color:var(--text-muted); font-size:13px; padding:8px 0;"><i class="fas fa-exclamation-triangle" style="margin-right:6px; color:#fbbf24;"></i>No receipt uploaded</div>
+                                </div>
+                                <?php endif; ?>
 
                                 <!-- Admin Notes -->
                                 <div class="detail-section" style="margin-top:12px;">
@@ -456,7 +556,23 @@ function timeAgoSub($datetime) {
         </div>
     </div>
 
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()"><i class="fas fa-times"></i></button>
+        <img id="lightbox-img" src="" alt="Receipt full view" onclick="event.stopPropagation()">
+    </div>
     <script>
+    function openLightbox(src) {
+        document.getElementById('lightbox-img').src = src;
+        document.getElementById('lightbox').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeLightbox() {
+        document.getElementById('lightbox').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
     function showToast(msg, type = 'success') {
         const t = document.createElement('div');
         t.className = 'toast toast-' + type;
