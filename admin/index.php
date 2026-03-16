@@ -814,7 +814,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                 <a href="dashboard_real.php" class="sidebar-link">
                     <i class="fas fa-chart-line"></i> Analytics
                 </a>
-                <a href="submissions_dashboard.php" class="sidebar-link">
+                <a href="#submissions-section" class="sidebar-link">
                     <i class="fas fa-clipboard-list"></i> Submissions
                     <span id="sidebarBadge" class="badge" style="display:none;"></span>
                 </a>
@@ -863,7 +863,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                         <div id="notifDropdown" class="notif-dropdown">
                             <div class="notif-dropdown-header">
                                 <span>New Submissions</span>
-                                <a href="submissions_dashboard.php">Open all</a>
+                                <a href="#submissions-section">Open all</a>
                             </div>
                             <div id="notifList" class="notif-list"></div>
                         </div>
@@ -974,7 +974,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
                     </div>
 
                     <!-- Submissions Dashboard Card -->
-                    <div class="glass-card dash-card">
+                    <div class="glass-card dash-card" id="submissions-section">
                         <div class="dash-card-header">
                             <div class="dash-card-icon" style="background: var(--accent-emerald-dim); color: #34d399;">
                                 <i class="fas fa-clipboard-list"></i>
@@ -1166,7 +1166,7 @@ $conversionRate = $totalVisitors > 0 ? round(($completedCount / $totalVisitors) 
         }
 
         function openSubmissions() {
-            window.open('submissions_dashboard.php', '_blank');
+            document.getElementById('submissions-section').scrollIntoView({behavior: 'smooth'});
         }
 
         async function updateNotifBadge() {
