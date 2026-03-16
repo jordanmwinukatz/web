@@ -864,7 +864,7 @@ function timeAgo($datetime) {
                 <a href="dashboard_real.php" class="sidebar-link">
                     <i class="fas fa-chart-line"></i> Analytics
                 </a>
-                <a href="#submissions-section" class="sidebar-link">
+                <a href="submissions_dashboard.php" class="sidebar-link">
                     <i class="fas fa-clipboard-list"></i> Submissions
                     <span id="sidebarBadge" class="badge" style="display:none;"></span>
                 </a>
@@ -913,7 +913,7 @@ function timeAgo($datetime) {
                         <div id="notifDropdown" class="notif-dropdown">
                             <div class="notif-dropdown-header">
                                 <span>New Submissions</span>
-                                <a href="#submissions-section">Open all</a>
+                                <a href="submissions_dashboard.php">Open all</a>
                             </div>
                             <div id="notifList" class="notif-list"></div>
                         </div>
@@ -1220,7 +1220,7 @@ function timeAgo($datetime) {
         }
 
         function openSubmissions() {
-            document.getElementById('submissions-section').scrollIntoView({behavior: 'smooth'});
+            window.location.href = 'submissions_dashboard.php';
         }
 
         async function updateNotifBadge() {
