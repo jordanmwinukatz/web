@@ -163,7 +163,7 @@ const Title = ({
 /* =========================
    LIVE RATE CONVERTER PANEL
    ========================= */
-function LiveRateConverter({ buyRate, sellRate, waLink }) {
+function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
   const [side, setSide] = useState('buy');        // 'buy' | 'sell'
   const [amount, setAmount] = useState('');       // raw input
   const [fromCcy, setFromCcy] = useState('USDT'); // 'USDT' | 'TZS'
@@ -369,7 +369,11 @@ function LiveRateConverter({ buyRate, sellRate, waLink }) {
   ),
     /* ── CTA: Start Trade ── */
     /*#__PURE__*/React.createElement("a", {
-    href: '#contact',
+    href: 'javascript:void(0)',
+    onClick: e => {
+      e.preventDefault();
+      if (onStartTrade) onStartTrade(side === 'buy' ? 'Buy' : 'Sell');
+    },
     style: {
       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
       width: '100%', boxSizing: 'border-box',
@@ -549,9 +553,13 @@ function App() {
   const WIZARD_BUY_PAYMENT_ACCOUNTS = {
     "CRDB Bank": "0152961669100",
     "NMB Bank": "42710015482",
-    "M-Pesa": "701103",
-    "Tigo Pesa": "557106",
-    "Airtel Money": ""
+    "M-Pesa Paybill": "50999535",
+    "M-Pesa (Agent 701103)": "701103",
+    "M-Pesa (Agent 973450)": "973450",
+    "TigoPesa Paybill": "6235584",
+    "TigoPesa Agent": "557106",
+    "Halopesa Agent": "4013202",
+    "Airtel Money Agent": "10289971"
   };
 
   // Get receiver info based on selected payment method (reactive to wizardPayment changes)
@@ -561,7 +569,7 @@ function App() {
     // If account number is undefined, fall back to CRDB. If it's empty string, keep it empty.
     return {
       bank: paymentMethod,
-      name: "Jordan Timoth Mwinuka",
+      name: "Jordan Ti",
       number: accountNumber !== undefined ? accountNumber : WIZARD_BUY_PAYMENT_ACCOUNTS["CRDB Bank"]
     };
   }, [wizardPayment]);
@@ -1007,7 +1015,7 @@ function App() {
   // Calculate minimum TZS amount after wizardEffectiveRate is defined
   // Round to ensure it's a whole number and ensure it's at least 1
   const wizardTzsMin = Math.max(1, Math.round(WIZARD_MIN_USDT * wizardEffectiveRate));
-  const WIZARD_PAYMENT_METHODS = ["CRDB Bank", "NMB Bank", "M-Pesa", "Tigo Pesa", "Airtel Money"];
+  const WIZARD_PAYMENT_METHODS = ["CRDB Bank", "NMB Bank", "M-Pesa Paybill", "M-Pesa (Agent 701103)", "M-Pesa (Agent 973450)", "TigoPesa Paybill", "TigoPesa Agent", "Halopesa Agent", "Airtel Money Agent"];
   const WIZARD_PLATFORMS = ["Binance", "Bitget", "BYBIT", "KuCoin", "OKX", "Remitano", "MEXC Exchange"];
 
   // Computed amounts (used in previews/finals) - must be after WIZARD_RATE is defined
@@ -1587,9 +1595,9 @@ function App() {
   }, "View Prices")), authUser ? /*#__PURE__*/React.createElement("div", {
     className: "hidden md:flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setShowUserDashboard(true),
+    onClick: authUser.email === 'jordanmwinukatz@gmail.com' ? () => window.location.href = 'admin/index.php' : () => setShowUserDashboard(true),
     className: "inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium border border-white/10 bg-white/5 hover:bg-white/10 transition",
-    title: "View my orders"
+    title: authUser.email === 'jordanmwinukatz@gmail.com' ? "Admin Dashboard" : "View my orders"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-4 h-4",
     fill: "none",
@@ -1599,7 +1607,7 @@ function App() {
     strokeLinecap: "round",
     strokeLinejoin: "round",
     strokeWidth: 2,
-    d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    d: authUser.email === 'jordanmwinukatz@gmail.com' ? "M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
   })), /*#__PURE__*/React.createElement("span", null, authUser.name)), /*#__PURE__*/React.createElement("button", {
     onClick: async () => {
       try {
@@ -2276,7 +2284,8 @@ function App() {
   },
     /*#__PURE__*/React.createElement(LiveRateConverter, {
     buyRate: liveBuyRate,
-    sellRate: liveSellRate
+    sellRate: liveSellRate,
+    onStartTrade: openQuickOrder
   })
   ))), /*#__PURE__*/React.createElement("section", {
     id: "prices",
@@ -3326,7 +3335,7 @@ function App() {
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));
           if (j.user && j.user.email === 'jordanmwinukatz@gmail.com') {
-            window.location.href = 'admin/index.php';
+            setAuthOpen(false);
             return;
           }
           setAuthOpen(false);
@@ -3367,7 +3376,7 @@ function App() {
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));
           if (j.user && j.user.email === 'jordanmwinukatz@gmail.com') {
-            window.location.href = 'admin/index.php';
+            setAuthOpen(false);
             return;
           }
           // Check if email verification is required
