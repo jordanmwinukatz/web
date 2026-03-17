@@ -922,7 +922,7 @@ function timeAgo($datetime) {
                 </a>
 
                 <div class="sidebar-section-label">Management</div>
-                <a href="#" class="sidebar-link" style="opacity:0.4;cursor:default;">
+                <a href="users.php" class="sidebar-link">
                     <i class="fas fa-user-cog"></i> Users
                 </a>
                 <a href="#settings-section" class="sidebar-link">
