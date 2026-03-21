@@ -2393,7 +2393,7 @@ function App() {
     className: "mt-4 flex flex-wrap justify-center gap-4"
   }, currentPaymentMethods.length === 0 ? /*#__PURE__*/React.createElement("span", {
     className: "text-sm text-slate-400"
-  }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/Mpesa(vodafone).jpeg", "Tigo Pesa": "/web/img/payments/tigopesa.jpeg", "CRDB Bank": "/web/img/payments/CRDBBANK.jpeg", "NMB Bank": "/web/img/payments/nmbbank.jpeg", "M-pesa Paybill": "/web/img/payments/mpesapaybill.jpeg"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
+  }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/mpesa_voda.png", "Tigo Pesa": "/web/img/payments/tigopesa.png", "CRDB Bank": "/web/img/payments/crdb_bank.png", "NMB Bank": "/web/img/payments/nmb_bank.png", "M-pesa Paybill": "/web/img/payments/mpesa_paybill.png"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
     key: `${priceMode}-${method}`,
     className: "pm-card",
     title: method
