@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     require_once '../config/database.php';
+    require_once 'auth_middleware.php';
     
     $database = new Database();
     $conn = $database->getConnection();
@@ -44,6 +45,7 @@ try {
         
         // Handle different POST actions
         if ($action === 'get_submission') {
+            require_admin();
             $id = $input['id'] ?? '';
             if (!$id) {
                 throw new Exception('Submission ID is required');
@@ -69,6 +71,7 @@ try {
         }
         
         if ($action === 'update_status') {
+            require_admin();
             $submission_id = $input['submission_id'] ?? '';
             $new_status = $input['new_status'] ?? '';
             
@@ -91,6 +94,7 @@ try {
         }
         
         if ($action === 'update_submission') {
+            require_admin();
             $submission_id = $input['submission_id'] ?? '';
             $status = $input['status'] ?? '';
             $admin_notes = $input['admin_notes'] ?? '';
@@ -110,6 +114,7 @@ try {
         }
 
         if ($action === 'mark_viewed') {
+            require_admin();
             $submission_id = $input['submission_id'] ?? '';
             if (!$submission_id) { throw new Exception('Submission ID is required'); }
             $stmt = $conn->prepare("UPDATE user_submissions SET admin_viewed = 1, admin_viewed_at = NOW() WHERE id = ?");
@@ -119,6 +124,7 @@ try {
         }
 
         if ($action === 'mark_completed') {
+            require_admin();
             $submission_id = $input['submission_id'] ?? '';
             if (!$submission_id) { throw new Exception('Submission ID is required'); }
 
@@ -454,6 +460,7 @@ try {
         $action = $_GET['action'] ?? '';
         
         if ($action === 'get_submission') {
+            require_admin();
             $id = $_GET['id'] ?? '';
             if (!$id) {
                 throw new Exception('Submission ID is required');
@@ -479,6 +486,7 @@ try {
         }
 
         if ($action === 'pending_count') {
+            require_admin();
             // unread pending only
             // best-effort ensure column exists
             try {
@@ -495,6 +503,7 @@ try {
         }
 
         if ($action === 'notifications_list') {
+            require_admin();
             // Return recent unread pending submissions
             $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 10;
             try {
@@ -516,6 +525,7 @@ try {
         }
 
         if ($action === 'completed_list') {
+            require_admin();
             $limit = isset($_GET['limit']) ? max(1, (int)$_GET['limit']) : 50;
             $offset = isset($_GET['offset']) ? max(0, (int)$_GET['offset']) : 0;
             $stmt = $conn->prepare("SELECT id, order_number, submission_type, form_data, user_info, created_at, updated_at FROM user_submissions WHERE submission_status = 'completed' ORDER BY updated_at DESC LIMIT ? OFFSET ?");
@@ -565,9 +575,10 @@ try {
         }
 
         if ($action === 'user_submissions') {
-            $userId = $_GET['user_id'] ?? '';
+            require_auth();
+            $userId = get_current_user_id();
             $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 20;
-            if (!$userId) { throw new Exception('user_id is required'); }
+            if (!$userId) { throw new Exception('user_id is required from session'); }
             $stmt = $conn->prepare("SELECT id, order_number, submission_type, form_data, user_info, submission_status, created_at FROM user_submissions WHERE user_id = ? ORDER BY created_at DESC LIMIT ?");
             $stmt->bindValue(1, (int)$userId, PDO::PARAM_INT);
             $stmt->bindValue(2, (int)$limit, PDO::PARAM_INT);
@@ -582,6 +593,7 @@ try {
         }
         
         // Original GET logic for listing submissions
+        require_admin();
         $page = $_GET['page'] ?? 1;
         $limit = $_GET['limit'] ?? 20;
         $status = $_GET['status'] ?? '';

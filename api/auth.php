@@ -208,7 +208,10 @@ try {
         }
         
         // Start session for all users
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id'];
         
         // Set admin session if this is the admin user
@@ -385,11 +388,11 @@ try {
         
     } elseif ($action === 'update_profile') {
         // Update user profile (name and/or email)
-        session_start();
+        require_once 'auth_middleware.php';
+        require_auth();
         
         $email = trim($input['email'] ?? '');
         $name = trim($input['name'] ?? '');
-        $currentEmail = $input['current_email'] ?? '';
         
         if (empty($email) || empty($name)) {
             throw new Exception('Name and email are required');
@@ -399,42 +402,14 @@ try {
             throw new Exception('Invalid email format');
         }
         
-        // Determine user ID: from session, admin session, or by current_email
-        $userId = null;
+        // Strictly determine user ID from session
+        $userId = get_current_user_id();
         
-        if (isset($_SESSION['admin_logged_in']) && isset($_SESSION['admin_user']['id'])) {
-            // Admin can update any profile if user_id is provided, otherwise their own
-            $userId = $input['user_id'] ?? $_SESSION['admin_user']['id'];
-        } elseif (isset($_SESSION['user_id'])) {
-            // Regular user can only update their own profile
-            $userId = $_SESSION['user_id'];
-            
-            // Verify they're updating their own profile by checking current_email matches session
-            if ($currentEmail) {
-                // Get user from session to verify email matches
-                $stmt = $pdo->prepare('SELECT email FROM users WHERE id = ?');
-                $stmt->execute([$userId]);
-                $sessionUser = $stmt->fetch(PDO::FETCH_ASSOC);
-                
-                if (!$sessionUser || $sessionUser['email'] !== $currentEmail) {
-                    throw new Exception('Authentication required');
-                }
-            }
-        } else {
-            // No session - try to get userId from current_email
-            if ($currentEmail) {
-                $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
-                $stmt->execute([$currentEmail]);
-                $userFromEmail = $stmt->fetch(PDO::FETCH_ASSOC);
-                if ($userFromEmail) {
-                    $userId = $userFromEmail['id'];
-                }
-            }
-            
-            if (!$userId) {
-                throw new Exception('Authentication required');
-            }
+        // Allow admin to override user_id if provided
+        if (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true && !empty($input['user_id'])) {
+            $userId = $input['user_id'];
         }
+
         
         // Check if email is being changed and if new email already exists
         $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');

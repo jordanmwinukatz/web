@@ -48,12 +48,15 @@ try {
         // Index doesn't exist, that's fine
     }
 
+    require_once 'auth_middleware.php';
+    require_auth();
+
     $method = $_SERVER['REQUEST_METHOD'];
     $input = json_decode(file_get_contents('php://input'), true) ?? [];
     $action = $_GET['action'] ?? $input['action'] ?? '';
 
-    // Get user_id from session, GET, or POST input
-    $user_id = $_SESSION['user_id'] ?? $_GET['user_id'] ?? $input['user_id'] ?? null;
+    // Enforce strict session mapping
+    $user_id = get_current_user_id();
 
     if (!$user_id) {
         http_response_code(401);

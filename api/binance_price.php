@@ -20,6 +20,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 try {
+    session_start();
+    if (!isset($_SESSION['binance_price_limit'])) {
+        $_SESSION['binance_price_limit'] = ['time' => time(), 'count' => 0];
+    }
+    if (time() - $_SESSION['binance_price_limit']['time'] > 60) {
+        $_SESSION['binance_price_limit'] = ['time' => time(), 'count' => 1];
+    } else {
+        $_SESSION['binance_price_limit']['count']++;
+        if ($_SESSION['binance_price_limit']['count'] > 20) {
+            http_response_code(429);
+            echo json_encode(['success' => false, 'error' => 'Rate limit exceeded. Try again in a minute.']);
+            exit;
+        }
+    }
+
     $code = isset($_GET['code']) ? trim($_GET['code']) : '';
     $minAmount = null;
     $maxAmount = null;

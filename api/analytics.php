@@ -169,7 +169,13 @@ class AnalyticsAPI {
 $analytics = new AnalyticsAPI();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $input = json_decode(file_get_contents('php://input'), true);
+    $raw_input = file_get_contents('php://input');
+    if (strlen($raw_input) > 2048) {
+        http_response_code(413);
+        echo json_encode(['success' => false, 'error' => 'Payload too large']);
+        exit;
+    }
+    $input = json_decode($raw_input, true);
     
     if (isset($input['action'])) {
         switch($input['action']) {
@@ -183,6 +189,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 echo json_encode($analytics->trackWizardStep($input['data']));
                 break;
             case 'get_analytics':
+                require_once 'auth_middleware.php';
+                require_admin();
                 echo json_encode($analytics->getAnalyticsData($input['period'] ?? '7d'));
                 break;
             default:
