@@ -1008,33 +1008,44 @@ section {
 
 /* ===== Hero Eyebrow (positioning line above headline) ===== */
 .hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 13px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-  backdrop-filter: blur(6px);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+    backdrop-filter: blur(6px);
 }
 
 .pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #34D399;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
-  animation: pulse 1.8s infinite;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #34D399;
+    box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
+    animation: pulse 1.8s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.5); opacity: 0.6; }
-  100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.5);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 /* ===== Hero Background Glow ===== */
@@ -1109,14 +1120,195 @@ a.hero-btn-primary:hover {
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45) !important;
     transform: translateY(-1px);
 }
+
 a.hero-btn-whatsapp:hover {
     background: #20bd5a !important;
     box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5) !important;
     transform: translateY(-1px);
 }
+
 a.hero-btn-primary,
 a.hero-btn-whatsapp {
     transition: box-shadow var(--duration-normal) var(--ease-out),
-                transform var(--duration-normal) var(--ease-out),
-                background var(--duration-normal) var(--ease-out);
+        transform var(--duration-normal) var(--ease-out),
+        background var(--duration-normal) var(--ease-out);
+}
+
+/* ============================================================
+   LIGHT MODE CONTRAST FIXES
+   Fixes for elements using inline rgba(255,255,255,...) colors
+   and Tailwind dark-first classes that become invisible on white.
+   ============================================================ */
+
+/* 1. Hero subtitle — inline color: rgba(255,255,255,0.68) */
+[data-theme="light"] .hero-section p[style*="rgba(255,255,255"] {
+    color: var(--text-secondary) !important;
+}
+
+/* 2. Trust stats chips — inline rgba white backgrounds & text */
+[data-theme="light"] .hero-section div[style*="rgba(255,255,255,0.04)"] {
+    background: rgba(15, 23, 42, 0.06) !important;
+    border-color: rgba(15, 23, 42, 0.12) !important;
+}
+
+[data-theme="light"] .hero-section div[style*="rgba(255,255,255,0.04)"] strong[style*="rgba(255,255,255"] {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .hero-section div[style*="rgba(255,255,255,0.04)"] span[style*="rgba(255,255,255"] {
+    color: var(--text-muted) !important;
+}
+
+/* 3. Hero eyebrow pill */
+[data-theme="light"] .hero-eyebrow {
+    background: rgba(15, 23, 42, 0.06) !important;
+    border-color: rgba(15, 23, 42, 0.12) !important;
+    color: var(--text-secondary) !important;
+}
+
+/* 4. BUY/SELL inactive tab — bg-slate-800 text-white/80 */
+[data-theme="light"] .bg-slate-800 {
+    background-color: var(--bg-tertiary) !important;
+}
+
+[data-theme="light"] .bg-slate-800.text-white\/80,
+[data-theme="light"] button.bg-slate-800 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] button.bg-slate-800:hover,
+[data-theme="light"] .bg-slate-700 {
+    background-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+/* 5. Price table — header bg and text */
+[data-theme="light"] .bg-slate-900\/80 {
+    background-color: rgba(15, 23, 42, 0.04) !important;
+}
+
+[data-theme="light"] .bg-slate-900\/80.text-slate-300,
+[data-theme="light"] .bg-slate-900\/80 .text-slate-300,
+[data-theme="light"] thead.text-slate-300,
+[data-theme="light"] thead .text-slate-300 {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .bg-slate-900\/70 {
+    background-color: rgba(15, 23, 42, 0.03) !important;
+}
+
+/* Table asset names in light mode */
+[data-theme="light"] td.text-white {
+    color: var(--text-primary) !important;
+}
+
+/* 6. Footer text and links */
+[data-theme="light"] footer a,
+[data-theme="light"] footer span,
+[data-theme="light"] footer p,
+[data-theme="light"] footer div {
+    color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] footer a:hover {
+    color: var(--text-primary) !important;
+}
+
+/* 7. "Buy/Sell Details" heading — text-slate-200 */
+[data-theme="light"] .text-slate-200 {
+    color: var(--text-primary) !important;
+}
+
+/* 8. "Want more payment methods" text — text-yellow-300 */
+[data-theme="light"] .text-yellow-300 {
+    color: #b45309 !important;
+}
+
+/* 9. "Complete order wizard" subtitle — text-white/70 */
+[data-theme="light"] .text-white\/70 {
+    color: var(--text-secondary) !important;
+}
+
+/* 10. Wizard card inline dark background — keep dark in light mode */
+[data-theme="light"] div[style*="linear-gradient(180deg,#0f1115"] {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+    border-color: var(--border-default) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+/* 11. "jordanmwinukatz" brand text in wizard — white on white fix */
+[data-theme="light"] div[style*='color: "#ffffff"'],
+[data-theme="light"] div[style*="color: \"#ffffff\""],
+[data-theme="light"] .text-center.text-3xl.font-black[style*="#ffffff"] {
+    color: var(--text-primary) !important;
+}
+
+/* 12. Price card Updated timestamp */
+[data-theme="light"] .text-slate-400 {
+    color: var(--text-muted) !important;
+}
+
+/* ============================================================
+   PAYMENT METHOD LOGO CARDS
+   Premium glassmorphic cards with hover lift & glow
+   ============================================================ */
+.pm-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-default);
+    background: var(--bg-surface);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    cursor: default;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out),
+                border-color var(--duration-normal) var(--ease-out) !important;
+    min-width: 110px;
+    min-height: 56px;
+}
+
+.pm-card:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15), 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-color: rgba(16, 185, 129, 0.35);
+}
+
+.pm-card-logo {
+    height: 44px;
+    width: auto;
+    max-width: 140px;
+    object-fit: contain;
+    border-radius: 6px;
+    transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.pm-card:hover .pm-card-logo {
+    transform: scale(1.08);
+}
+
+/* Text fallback (hidden by default, shown if image fails) */
+.pm-card-fallback {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+}
+
+/* ── Light theme adjustments ── */
+[data-theme="light"] .pm-card {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: var(--border-default);
+    box-shadow: var(--shadow-sm);
+}
+
+[data-theme="light"] .pm-card:hover {
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.12), var(--shadow-md);
+    border-color: rgba(16, 185, 129, 0.4);
 }

@@ -90,15 +90,15 @@
     <!-- Preload critical resources -->
     <link rel="preload" href="https://unpkg.com/react@18/umd/react.production.min.js" as="script" crossorigin>
     <link rel="preload" href="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" as="script" crossorigin>
-    <link rel="preload" href="dist/app.js" as="script">
+    <link rel="preload" href="dist/app.js?v=20" as="script">
     <link rel="preload" href="dist/styles.css?v=6" as="style">
-    <link rel="preload" href="dist/theme.css?v=13" as="style">
+    <link rel="preload" href="dist/theme.css?v=15" as="style">
     
     <!-- Optimized Tailwind CSS - pre-built and minified -->
     <link rel="stylesheet" href="dist/styles.css?v=6">
     
     <!-- Design System — Light/Dark theme, premium typography, micro-interactions -->
-    <link rel="stylesheet" href="dist/theme.css?v=13">
+    <link rel="stylesheet" href="dist/theme.css?v=15">
     
     <!-- Font Awesome for social media icons - load async to not block rendering -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" media="print" onload="this.media='all'">
@@ -108,7 +108,7 @@
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js" defer></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" defer></script>
     <!-- App bundle - defer, runs after React; download starts in parallel -->
-    <script src="dist/app.js?v=17" defer></script>
+    <script src="dist/app.js?v=20" defer></script>
     
     <!-- Analytics tracking - load async to not block rendering -->
     <script>
@@ -141,6 +141,126 @@
             to { transform: rotate(360deg); }
         }
     </style>
+
+    <!-- Light mode inline style patcher (fixes React inline styles CSS can't override) -->
+    <script>
+    (function() {
+      var LIGHT_COLORS = {
+        'rgba(255,255,255,0.68)': '#475569',
+        'rgba(255, 255, 255, 0.68)': '#475569',
+        'rgba(255,255,255,0.92)': '#0f172a',
+        'rgba(255, 255, 255, 0.92)': '#0f172a',
+        'rgba(255,255,255,0.62)': '#64748b',
+        'rgba(255, 255, 255, 0.62)': '#64748b',
+        'rgba(255,255,255,0.7)': '#475569',
+        'rgba(255, 255, 255, 0.7)': '#475569',
+        'rgba(255,255,255,0.8)': '#334155',
+        'rgba(255, 255, 255, 0.8)': '#334155',
+        'rgba(255,255,255,0.6)': '#64748b',
+        'rgba(255, 255, 255, 0.6)': '#64748b',
+        '#ffffff': '#0f172a',
+      };
+      var LIGHT_BGS = {
+        'rgba(255,255,255,0.04)': 'rgba(15,23,42,0.06)',
+        'rgba(255, 255, 255, 0.04)': 'rgba(15,23,42,0.06)',
+        'rgba(255,255,255,0.05)': 'rgba(15,23,42,0.06)',
+        'rgba(255, 255, 255, 0.05)': 'rgba(15,23,42,0.06)',
+      };
+      var LIGHT_BORDERS = {
+        'rgba(255,255,255,0.06)': 'rgba(15,23,42,0.12)',
+        'rgba(255, 255, 255, 0.06)': 'rgba(15,23,42,0.12)',
+        'rgba(255,255,255,0.1)': 'rgba(15,23,42,0.12)',
+        'rgba(255, 255, 255, 0.1)': 'rgba(15,23,42,0.12)',
+      };
+
+      // Store original values to restore on dark mode
+      var patched = [];
+
+      function isLight() {
+        return document.documentElement.getAttribute('data-theme') === 'light';
+      }
+
+      function patchElement(el) {
+        var style = el.style;
+        if (!style) return;
+        var origColor = style.color;
+        var origBg = style.backgroundColor || style.background;
+        var origBorder = style.borderColor;
+
+        if (origColor && LIGHT_COLORS[origColor]) {
+          patched.push({ el: el, prop: 'color', orig: origColor });
+          style.setProperty('color', LIGHT_COLORS[origColor], 'important');
+        }
+        if (origBg) {
+          var bgKey = style.background || style.backgroundColor;
+          if (LIGHT_BGS[bgKey]) {
+            patched.push({ el: el, prop: 'background', orig: bgKey });
+            style.setProperty('background', LIGHT_BGS[bgKey], 'important');
+          }
+        }
+        if (origBorder && LIGHT_BORDERS[origBorder]) {
+          patched.push({ el: el, prop: 'borderColor', orig: origBorder });
+          style.setProperty('border-color', LIGHT_BORDERS[origBorder], 'important');
+        }
+      }
+
+      function patchAll() {
+        // Restore old patches first
+        restoreAll();
+        if (!isLight()) return;
+
+        var root = document.getElementById('root');
+        if (!root) return;
+        var all = root.querySelectorAll('*');
+        for (var i = 0; i < all.length; i++) {
+          patchElement(all[i]);
+        }
+      }
+
+      function restoreAll() {
+        for (var i = 0; i < patched.length; i++) {
+          var p = patched[i];
+          p.el.style.removeProperty(p.prop);
+          p.el.style[p.prop] = p.orig;
+        }
+        patched = [];
+      }
+
+      // Run after React renders
+      function init() {
+        // Watch for theme changes on <html>
+        var obs = new MutationObserver(function(muts) {
+          for (var i = 0; i < muts.length; i++) {
+            if (muts[i].attributeName === 'data-theme') {
+              setTimeout(patchAll, 50);
+            }
+          }
+        });
+        obs.observe(document.documentElement, { attributes: true });
+
+        // Watch for React re-renders in #root
+        var root = document.getElementById('root');
+        if (root) {
+          var rootObs = new MutationObserver(function() {
+            if (isLight()) {
+              setTimeout(patchAll, 100);
+            }
+          });
+          rootObs.observe(root, { childList: true, subtree: true });
+        }
+
+        // Initial patch
+        setTimeout(patchAll, 500);
+        setTimeout(patchAll, 1500);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+    </script>
     
     <!--Start of Tawk.to Script - Lazy load after page is interactive -->
     <script type="text/javascript">
@@ -169,5 +289,353 @@
     }
     </script>
     <!--End of Tawk.to Script-->
+
+    <!-- ============================================================
+         MOBILE HAMBURGER NAVIGATION
+         Injected independently of the React bundle.
+         Shows only on screens < 768px (md breakpoint).
+    ============================================================ -->
+    <style>
+      /* Hamburger button — only visible on mobile */
+      #mob-menu-btn {
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background 0.15s;
+        order: -1; /* sit left of theme toggle */
+        z-index: 55;
+      }
+      #mob-menu-btn:hover { background: rgba(255,255,255,0.12); }
+      @media (max-width: 767px) {
+        #mob-menu-btn { display: flex; }
+      }
+
+      /* Overlay backdrop */
+      #mob-nav-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(0,0,0,0.55);
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+        opacity: 0;
+        transition: opacity 0.25s;
+      }
+      #mob-nav-overlay.open {
+        opacity: 1;
+      }
+
+      /* Slide-in drawer */
+      #mob-nav-drawer {
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: min(80vw, 300px);
+        z-index: 201;
+        background: #0a0d14;
+        border-left: 1px solid rgba(255,255,255,0.08);
+        box-shadow: -8px 0 40px rgba(0,0,0,0.6);
+        transform: translateX(100%);
+        transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+        overflow: hidden;
+      }
+      #mob-nav-drawer.open { transform: translateX(0); }
+
+      /* Light theme overrides */
+      [data-theme="light"] #mob-nav-drawer {
+        background: #f8fafc;
+        border-left-color: rgba(15,23,42,0.1);
+        box-shadow: -8px 0 40px rgba(15,23,42,0.15);
+      }
+      [data-theme="light"] #mob-menu-btn {
+        border-color: rgba(15,23,42,0.15);
+        background: rgba(15,23,42,0.06);
+        color: #0f172a;
+      }
+
+      /* Drawer header */
+      .mob-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+      }
+      [data-theme="light"] .mob-drawer-header {
+        border-bottom-color: rgba(15,23,42,0.08);
+      }
+      .mob-drawer-logo {
+        font-size: 15px;
+        font-weight: 700;
+        color: #10b981;
+        letter-spacing: -0.02em;
+      }
+      .mob-drawer-close {
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        border: 1px solid rgba(255,255,255,0.1);
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.7);
+        font-size: 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.15s;
+      }
+      .mob-drawer-close:hover { background: rgba(255,255,255,0.1); }
+      [data-theme="light"] .mob-drawer-close {
+        border-color: rgba(15,23,42,0.1);
+        background: rgba(15,23,42,0.04);
+        color: #475569;
+      }
+
+      /* Nav links */
+      .mob-nav-links {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 12px 0;
+        overflow-y: auto;
+      }
+      .mob-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 14px 22px;
+        color: rgba(255,255,255,0.75);
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        font-family: 'Inter', sans-serif;
+        border-left: 3px solid transparent;
+        transition: color 0.15s, background 0.15s, border-color 0.15s;
+      }
+      .mob-nav-link:hover {
+        color: #fff;
+        background: rgba(255,255,255,0.05);
+        border-left-color: #10b981;
+      }
+      [data-theme="light"] .mob-nav-link { color: #475569; }
+      [data-theme="light"] .mob-nav-link:hover { color: #0f172a; background: rgba(15,23,42,0.05); }
+
+      .mob-nav-link svg {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        opacity: 0.7;
+      }
+      .mob-nav-link:hover svg { opacity: 1; }
+
+      /* Divider */
+      .mob-nav-divider {
+        height: 1px;
+        background: rgba(255,255,255,0.07);
+        margin: 8px 20px;
+      }
+      [data-theme="light"] .mob-nav-divider { background: rgba(15,23,42,0.08); }
+
+      /* Bottom action area */
+      .mob-drawer-footer {
+        padding: 16px 20px;
+        border-top: 1px solid rgba(255,255,255,0.07);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      [data-theme="light"] .mob-drawer-footer { border-top-color: rgba(15,23,42,0.08); }
+
+      .mob-start-trade-btn {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        text-decoration: none;
+        font-family: 'Inter', sans-serif;
+        transition: opacity 0.15s, transform 0.15s;
+        box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+      }
+      .mob-start-trade-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+      .mob-status-badge {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11px;
+        color: rgba(255,255,255,0.5);
+        font-family: 'Inter', sans-serif;
+        justify-content: center;
+      }
+      [data-theme="light"] .mob-status-badge { color: #94a3b8; }
+      .mob-status-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 6px #10b981;
+        animation: mob-pulse 2s infinite;
+      }
+      @keyframes mob-pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.4; }
+      }
+    </style>
+
+    <!-- Overlay -->
+    <div id="mob-nav-overlay" aria-hidden="true"></div>
+
+    <!-- Slide-in drawer -->
+    <div id="mob-nav-drawer" role="dialog" aria-label="Navigation menu" aria-modal="true">
+      <div class="mob-drawer-header">
+        <span class="mob-drawer-logo">JM P2P ⚡</span>
+        <button class="mob-drawer-close" id="mob-drawer-close-btn" aria-label="Close menu">×</button>
+      </div>
+      <nav class="mob-nav-links">
+        <a href="#prices" class="mob-nav-link" data-mob-link>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+          Live Prices
+        </a>
+        <a href="#about" class="mob-nav-link" data-mob-link>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          About
+        </a>
+        <a href="#how" class="mob-nav-link" data-mob-link>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+          How It Works
+        </a>
+        <a href="#why" class="mob-nav-link" data-mob-link>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
+          Why Us
+        </a>
+        <div class="mob-nav-divider"></div>
+        <a href="#contact" class="mob-nav-link" data-mob-link>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 3H3a2 2 0 00-2 2v13a2 2 0 002 2h14l4 4V5a2 2 0 00-2-2z"/></svg>
+          Contact
+        </a>
+      </nav>
+      <div class="mob-drawer-footer">
+        <a href="#order" class="mob-start-trade-btn" data-mob-link id="mob-start-trade">
+          ⚡ Start a Trade
+        </a>
+        <div class="mob-status-badge">
+          <span class="mob-status-dot"></span>
+          Desk online — instant confirmations
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function() {
+      var overlay = document.getElementById('mob-nav-overlay');
+      var drawer  = document.getElementById('mob-nav-drawer');
+      var closeBtn = document.getElementById('mob-drawer-close-btn');
+      var isOpen  = false;
+
+      function openDrawer() {
+        isOpen = true;
+        overlay.style.display = 'block';
+        // Force reflow then add open classes for transition
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            overlay.classList.add('open');
+            drawer.classList.add('open');
+          });
+        });
+        document.body.style.overflow = 'hidden';
+        drawer.setAttribute('aria-hidden', 'false');
+      }
+
+      function closeDrawer() {
+        isOpen = false;
+        overlay.classList.remove('open');
+        drawer.classList.remove('open');
+        document.body.style.overflow = '';
+        drawer.setAttribute('aria-hidden', 'true');
+        // Hide overlay after transition
+        setTimeout(function() {
+          if (!isOpen) overlay.style.display = 'none';
+        }, 300);
+      }
+
+      // Close on overlay click
+      overlay.addEventListener('click', closeDrawer);
+      // Close on X button
+      closeBtn.addEventListener('click', closeDrawer);
+      // Close on Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && isOpen) closeDrawer();
+      });
+
+      // Close on nav link click (smooth scroll happens natively since they're anchors)
+      drawer.querySelectorAll('[data-mob-link]').forEach(function(link) {
+        link.addEventListener('click', function() {
+          closeDrawer();
+          // If clicking "Start a Trade", also try to scroll to / trigger the order section
+          if (link.id === 'mob-start-trade') {
+            setTimeout(function() {
+              var orderSection = document.getElementById('order');
+              if (orderSection) orderSection.scrollIntoView({ behavior: 'smooth' });
+            }, 320);
+          }
+        });
+      });
+
+      // Inject the hamburger button into the React header
+      // We wait for React to render, then use MutationObserver to keep it in place
+      function injectHamburger() {
+        var header = document.querySelector('header');
+        if (!header) return false;
+
+        var btnContainer = header.querySelector('.flex.items-center.gap-2');
+        if (!btnContainer) return false;
+
+        // Don't double-inject
+        if (document.getElementById('mob-menu-btn')) return true;
+
+        var btn = document.createElement('button');
+        btn.id = 'mob-menu-btn';
+        btn.setAttribute('aria-label', 'Open navigation menu');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>';
+        btn.addEventListener('click', function() {
+          if (isOpen) closeDrawer(); else openDrawer();
+          btn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        // Prepend inside the flex container (before theme toggle)
+        btnContainer.insertBefore(btn, btnContainer.firstChild);
+        return true;
+      }
+
+      // Try immediately, then observe for React mount
+      if (!injectHamburger()) {
+        var observer = new MutationObserver(function() {
+          if (injectHamburger()) observer.disconnect();
+        });
+        observer.observe(document.getElementById('root') || document.body, {
+          childList: true, subtree: true
+        });
+      }
+    })();
+    </script>
 </body>
 </html>

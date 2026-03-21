@@ -1530,7 +1530,7 @@ function App() {
       background: "linear-gradient(180deg,#0f172a 0%, #0b1225 100%)"
     }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "bg-black/60 text-white/80 border-b border-white/5 sticky top-0 z-[60]"
+    style: { background: '#131722', borderBottom: '1px solid #1e222d', position: 'sticky', top: 0, zIndex: 60 }
   }, /*#__PURE__*/React.createElement("div", {
     className: "w-full mx-auto px-2 sm:px-4 h-8 sm:h-9 flex items-center gap-2 sm:gap-6 overflow-hidden"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1539,14 +1539,14 @@ function App() {
     className: "scrolling-content text-xs sm:text-sm"
   }, [...apiPrices.slice(0, 2), ...apiPrices.slice(0, 2)].map((p, i) => /*#__PURE__*/React.createElement("span", {
     key: i,
-    className: "mr-6 sm:mr-10"
-  }, p.asset, " ", p.side.toUpperCase(), ": ", fmt(p.rate_tzs), " TZS \u2022 Updated", " ", new Date(p.updated_at).toLocaleTimeString())))), /*#__PURE__*/React.createElement("div", {
+    style: { display: 'inline-flex', alignItems: 'center', gap: '5px', marginRight: '24px' }
+  }, /*#__PURE__*/React.createElement("span", { style: { fontWeight: 600, color: '#d1d4dc' } }, p.asset), /*#__PURE__*/React.createElement("span", { style: { color: p.side.toUpperCase() === 'BUY' ? '#26a69a' : '#ef5350', background: p.side.toUpperCase() === 'BUY' ? 'rgba(38,166,154,0.12)' : 'rgba(239,83,80,0.12)', borderRadius: '3px', padding: '1px 5px', fontWeight: 700, fontSize: '10px' } }, p.side.toUpperCase()), /*#__PURE__*/React.createElement("span", { style: { fontWeight: 600, color: '#d1d4dc' } }, fmt(p.rate_tzs)), /*#__PURE__*/React.createElement("span", { style: { color: '#787b86', fontSize: '10px' } }, "TZS"), /*#__PURE__*/React.createElement("span", { style: { color: '#787b86', fontSize: '10px' } }, "\u2022"), /*#__PURE__*/React.createElement("span", { style: { color: '#787b86', fontSize: '10px' } }, new Date(p.updated_at).toLocaleTimeString()))))), /*#__PURE__*/React.createElement("div", {
     className: "hidden md:block scrolling-wrapper max-w-[50%]"
   }, /*#__PURE__*/React.createElement("div", {
     className: "scrolling-content"
   }, [...ADS, ...ADS].map((a, i) => /*#__PURE__*/React.createElement("span", {
     key: i,
-    className: "ml-10"
+    style: { color: '#787b86', marginLeft: '40px' }
   }, a)))))), /*#__PURE__*/React.createElement("header", {
     className: "sticky top-9 z-50 bg-black text-white border-b border-white/10"
   }, /*#__PURE__*/React.createElement("div", {
@@ -2390,16 +2390,21 @@ function App() {
   }, /*#__PURE__*/React.createElement("h4", {
     className: "text-blue-400 font-extrabold text-lg sm:text-xl"
   }, priceMode === 'buy' ? 'Buy Payment Methods' : 'Sell Payment Methods'), /*#__PURE__*/React.createElement("div", {
-    className: "mt-3 flex flex-wrap justify-center gap-2 sm:gap-3"
+    className: "mt-4 flex flex-wrap justify-center gap-4"
   }, currentPaymentMethods.length === 0 ? /*#__PURE__*/React.createElement("span", {
     className: "text-sm text-slate-400"
-  }, "Loading payment methods...") : currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("span", {
+  }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/Mpesa(vodafone).jpeg", "Tigo Pesa": "/web/img/payments/tigopesa.jpeg", "CRDB Bank": "/web/img/payments/CRDBBANK.jpeg", "NMB Bank": "/web/img/payments/nmbbank.jpeg", "M-pesa Paybill": "/web/img/payments/mpesapaybill.jpeg"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
     key: `${priceMode}-${method}`,
-    className: "px-4 py-2 rounded-lg text-sm font-semibold text-white shadow-sm",
-    style: {
-      background: paymentColor(method)
-    }
-  }, method)))), /*#__PURE__*/React.createElement("div", {
+    className: "pm-card",
+    title: method
+  }, /*#__PURE__*/React.createElement("img", {
+    src: _logoMap[method] || "",
+    alt: method,
+    className: "pm-card-logo",
+    onError: e => { e.target.style.display = "none"; if (e.target.nextSibling) e.target.nextSibling.style.display = "flex"; }
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "pm-card-fallback"
+  }, method))); })())), /*#__PURE__*/React.createElement("div", {
     className: "mt-8 text-center"
   }, /*#__PURE__*/React.createElement("p", {
     className: "text-yellow-300 font-semibold text-lg sm:text-xl"
