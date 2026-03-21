@@ -1,2 +1,5 @@
 uploads/
 .DS_Store
+node_modules/
+dist/app.v2.js
+.env
