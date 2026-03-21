@@ -2393,7 +2393,7 @@ function App() {
     className: "mt-4 flex flex-wrap justify-center gap-4"
   }, currentPaymentMethods.length === 0 ? /*#__PURE__*/React.createElement("span", {
     className: "text-sm text-slate-400"
-  }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/mpesa_voda.png", "Tigo Pesa": "/web/img/payments/tigopesa.png", "CRDB Bank": "/web/img/payments/crdb_bank.png", "NMB Bank": "/web/img/payments/nmb_bank.png", "M-pesa Paybill": "/web/img/payments/mpesa_paybill.png", "Airtel Money Agent": "/web/img/payments/airtel.jpg"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
+  }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/mpesa_voda.png", "M-Pesa": "/web/img/payments/mpesa_voda.png", "Tigo Pesa": "/web/img/payments/tigopesa.png", "TigoPesa": "/web/img/payments/tigopesa.png", "CRDB Bank": "/web/img/payments/crdb_bank.png", "NMB Bank": "/web/img/payments/nmb_bank.png", "M-pesa Paybill": "/web/img/payments/mpesa_paybill.png", "M-Pesa Paybill": "/web/img/payments/mpesa_paybill.png", "Airtel Money Agent": "/web/img/payments/airtel.jpg", "AirtelMoney": "/web/img/payments/airtel.jpg"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
     key: `${priceMode}-${method}`,
     className: "pm-card",
     title: method
