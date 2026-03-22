@@ -1648,21 +1648,7 @@ function App() {
   })), "Logout")) : /*#__PURE__*/React.createElement("button", {
     onClick: () => setAuthOpen(true),
     className: "hidden md:inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-medium border border-white/10 bg-white/5 hover:bg-white/10 transition"
-  }, "Login"), authUser ? /*#__PURE__*/React.createElement("button", {
-    onClick: () => setShowUserDashboard(true),
-    className: "p-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition",
-    title: "My Account"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-5 h-5 sm:w-6 sm:h-6",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-  }))) : /*#__PURE__*/React.createElement("button", {
+  }, "Login"), !authUser ? /*#__PURE__*/React.createElement("button", {
     onClick: () => setAuthOpen(true),
     className: "md:hidden p-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition",
     title: "Login"
@@ -1676,7 +1662,7 @@ function App() {
     strokeLinejoin: "round",
     strokeWidth: 2,
     d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-  })))))), quickOrderOpen && /*#__PURE__*/React.createElement("div", {
+  }))) : null))), quickOrderOpen && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-[120] flex items-center justify-center bg-black/20 backdrop-blur-md px-4 py-8 overflow-hidden",
     onTouchMove: e => {
       // Only prevent if touching the backdrop, not the modal content
@@ -3528,10 +3514,10 @@ function App() {
     className: "absolute inset-0 bg-black/70",
     onClick: () => setShowUserDashboard(false)
   }), /*#__PURE__*/React.createElement("div", {
-    className: "relative z-[121] w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/10 bg-black/95 backdrop-blur-xl shadow-2xl",
+    className: "relative z-[121] w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/10 bg-black/95 backdrop-blur-xl shadow-2xl account-dashboard",
     onClick: e => e.stopPropagation()
   }, /*#__PURE__*/React.createElement("div", {
-    className: "p-6 border-b border-white/10"
+    className: "p-6 border-b border-white/10 account-header"
   }, /*#__PURE__*/React.createElement("div", {
     className: "flex items-center justify-between mb-4"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
@@ -3552,10 +3538,10 @@ function App() {
     strokeWidth: 2,
     d: "M6 18L18 6M6 6l12 12"
   })))), /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-2 border-b border-white/10"
+    className: "flex gap-2 border-b border-white/10 account-tabs"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: () => setDashboardTab('orders'),
-    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 ${dashboardTab === 'orders' ? 'text-yellow-400 border-yellow-400' : 'text-white/60 border-transparent hover:text-white/80'}`
+    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 account-tab ${dashboardTab === 'orders' ? 'text-yellow-400 border-yellow-400 account-tab-active' : 'text-white/60 border-transparent hover:text-white/80'}`
   }, /*#__PURE__*/React.createElement("span", {
     className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("svg", {
@@ -3570,7 +3556,7 @@ function App() {
     d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
   })), "Orders")), /*#__PURE__*/React.createElement("button", {
     onClick: () => setDashboardTab('profile'),
-    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 ${dashboardTab === 'profile' ? 'text-yellow-400 border-yellow-400' : 'text-white/60 border-transparent hover:text-white/80'}`
+    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 account-tab ${dashboardTab === 'profile' ? 'text-yellow-400 border-yellow-400 account-tab-active' : 'text-white/60 border-transparent hover:text-white/80'}`
   }, /*#__PURE__*/React.createElement("span", {
     className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("svg", {
@@ -3585,7 +3571,7 @@ function App() {
     d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
   })), "Profile")), /*#__PURE__*/React.createElement("button", {
     onClick: () => setDashboardTab('settings'),
-    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 ${dashboardTab === 'settings' ? 'text-yellow-400 border-yellow-400' : 'text-white/60 border-transparent hover:text-white/80'}`
+    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 account-tab ${dashboardTab === 'settings' ? 'text-yellow-400 border-yellow-400 account-tab-active' : 'text-white/60 border-transparent hover:text-white/80'}`
   }, /*#__PURE__*/React.createElement("span", {
     className: "flex items-center gap-2"
   }, /*#__PURE__*/React.createElement("svg", {
@@ -3604,7 +3590,8 @@ function App() {
     strokeWidth: 2,
     d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z"
   })), "Settings")))), /*#__PURE__*/React.createElement("div", {
-    className: "p-6 overflow-y-auto max-h-[calc(90vh-180px)]"
+    className: "p-6 overflow-y-auto max-h-[calc(90vh-180px)] account-scroll account-tab-content",
+    key: dashboardTab
   }, dashboardTab === 'orders' && /*#__PURE__*/React.createElement(React.Fragment, null, loadingSubmissions ? /*#__PURE__*/React.createElement("div", {
     className: "text-center py-12"
   }, /*#__PURE__*/React.createElement("div", {
@@ -3612,7 +3599,9 @@ function App() {
   }), /*#__PURE__*/React.createElement("p", {
     className: "mt-4 text-white/60"
   }, "Loading your orders...")) : userSubmissions.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "text-center py-12"
+    className: "text-center py-12 orders-empty-state"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "orders-empty-icon"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-16 h-16 mx-auto text-white/20 mb-4",
     fill: "none",
@@ -3623,11 +3612,14 @@ function App() {
     strokeLinejoin: "round",
     strokeWidth: 2,
     d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-  })), /*#__PURE__*/React.createElement("p", {
-    className: "text-white/60 text-lg"
+  }))), /*#__PURE__*/React.createElement("p", {
+    className: "text-white/60 text-lg orders-empty-title"
   }, "No orders yet"), /*#__PURE__*/React.createElement("p", {
-    className: "text-white/40 text-sm mt-2"
-  }, "Start by placing your first order!")) : /*#__PURE__*/React.createElement("div", {
+    className: "text-white/40 text-sm mt-2 orders-empty-desc"
+  }, "Start by placing your first order!"), /*#__PURE__*/React.createElement("button", {
+    className: "orders-cta-btn",
+    onClick: () => { setShowUserDashboard(false); const el = document.getElementById('prices'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+  }, /*#__PURE__*/React.createElement("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M13 7l5 5m0 0l-5 5m5-5H6" })), "Start Trading")) : /*#__PURE__*/React.createElement("div", {
     className: "space-y-4"
   }, userSubmissions.map(submission => {
     const formData = submission.form_data || {};
@@ -3641,7 +3633,7 @@ function App() {
     const status = submission.submission_status || 'pending';
     return /*#__PURE__*/React.createElement("div", {
       key: submission.id,
-      className: "rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10 transition-colors mb-3"
+      className: "rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10 transition-colors mb-3 order-card"
     }, /*#__PURE__*/React.createElement("div", {
       className: "flex items-start justify-between mb-2"
     }, /*#__PURE__*/React.createElement("div", {
@@ -3739,9 +3731,9 @@ function App() {
   }))), dashboardTab === 'profile' && /*#__PURE__*/React.createElement("div", {
     className: "space-y-6"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-4 pb-6 border-b border-white/10"
+    className: "flex items-center gap-4 pb-6 border-b border-white/10 profile-header"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "relative"
+    className: "relative profile-avatar-ring"
   }, profilePicture ? /*#__PURE__*/React.createElement("img", {
     src: profilePicture.startsWith('http') ? profilePicture : profilePicture.startsWith('uploads/') ? window.location.pathname.split('/').slice(0, -1).join('/') + '/' + profilePicture : window.location.pathname.split('/').slice(0, -1).join('/') + '/uploads/profiles/' + profilePicture,
     alt: authUser.name,
@@ -3844,7 +3836,9 @@ function App() {
     className: "text-sm text-white/60"
   }, authUser.email), uploadingPicture && /*#__PURE__*/React.createElement("p", {
     className: "text-xs text-yellow-400 mt-1"
-  }, "Uploading..."))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
+  }, "Uploading..."))), /*#__PURE__*/React.createElement("div", {
+    className: "profile-form-section"
+  }, /*#__PURE__*/React.createElement("h3", {
     className: "text-lg font-semibold text-white mb-4"
   }, "Profile Information"), /*#__PURE__*/React.createElement("form", {
     onSubmit: async e => {
@@ -3903,7 +3897,7 @@ function App() {
       ...profileForm,
       name: e.target.value
     }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50",
+    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
     required: true,
     disabled: updatingProfile
   })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
@@ -3915,13 +3909,13 @@ function App() {
       ...profileForm,
       email: e.target.value
     }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50",
+    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
     required: true,
     disabled: updatingProfile
   })), /*#__PURE__*/React.createElement("button", {
     type: "submit",
     disabled: updatingProfile || profileForm.name === authUser.name && profileForm.email === authUser.email,
-    className: "px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400 font-semibold text-slate-900 hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+    className: "px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400 font-semibold text-slate-900 hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed account-btn-primary"
   }, updatingProfile ? 'Updating...' : 'Update Profile')))), dashboardTab === 'settings' && /*#__PURE__*/React.createElement("div", {
     className: "space-y-6"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
@@ -3998,7 +3992,7 @@ function App() {
       ...settingsForm,
       currentPassword: e.target.value
     }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50",
+    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
     required: true,
     disabled: changingPassword
   })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
@@ -4010,7 +4004,7 @@ function App() {
       ...settingsForm,
       newPassword: e.target.value
     }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50",
+    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
     placeholder: "Minimum 8 characters",
     required: true,
     disabled: changingPassword
@@ -4023,7 +4017,7 @@ function App() {
       ...settingsForm,
       confirmPassword: e.target.value
     }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50",
+    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
     required: true,
     disabled: changingPassword
   }), settingsForm.confirmPassword && settingsForm.newPassword !== settingsForm.confirmPassword && /*#__PURE__*/React.createElement("p", {
@@ -4031,7 +4025,7 @@ function App() {
   }, "Passwords do not match")), /*#__PURE__*/React.createElement("button", {
     type: "submit",
     disabled: changingPassword || !settingsForm.currentPassword || !settingsForm.newPassword || settingsForm.newPassword !== settingsForm.confirmPassword,
-    className: "px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400 font-semibold text-slate-900 hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+    className: "px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400 font-semibold text-slate-900 hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed account-btn-primary"
   }, changingPassword ? 'Changing...' : 'Change Password'))), /*#__PURE__*/React.createElement("div", {
     className: "pt-6 border-t border-white/10"
   }, /*#__PURE__*/React.createElement("h3", {
@@ -4039,27 +4033,27 @@ function App() {
   }, "Account Information"), /*#__PURE__*/React.createElement("div", {
     className: "space-y-3"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10"
+    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 stat-card"
   }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
     className: "text-sm text-white/60"
   }, "Member Since"), /*#__PURE__*/React.createElement("p", {
-    className: "text-white font-medium"
+    className: "text-white font-medium stat-value"
   }, new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric'
   })))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60"
+    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 stat-card"
+  }, /*#__PURE__*/React.createElement("div", { className: "stat-icon stat-icon-orders" }, /*#__PURE__*/React.createElement("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-white/60 stat-label"
   }, "Total Orders"), /*#__PURE__*/React.createElement("p", {
-    className: "text-white font-medium"
+    className: "text-white font-medium stat-value"
   }, userSubmissions.filter(s => s.submission_type === 'order_form').length))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60"
+    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 stat-card"
+  }, /*#__PURE__*/React.createElement("div", { className: "stat-icon stat-icon-status" }, /*#__PURE__*/React.createElement("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
+    className: "text-sm text-white/60 stat-label"
   }, "Account Status"), /*#__PURE__*/React.createElement("p", {
-    className: "text-green-400 font-medium"
+    className: "text-green-400 font-medium stat-value"
   }, "Active"))))), /*#__PURE__*/React.createElement("div", {
     className: "pt-6 border-t border-white/10"
   }, /*#__PURE__*/React.createElement("h3", {
