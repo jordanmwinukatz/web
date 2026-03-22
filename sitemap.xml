@@ -4,20 +4,12 @@
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
   
-  <!-- Main Page -->
+  <!-- Main Page Canonical -->
   <url>
     <loc>https://jordanmwinukatz.com/</loc>
-    <lastmod>2025-11-19</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  
-  <url>
-    <loc>https://jordanmwinukatz.com/index.html</loc>
-    <lastmod>2025-11-19</lastmod>
+    <lastmod>2026-03-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   
 </urlset>
-
