@@ -57,6 +57,13 @@ foreach ($rows as $row) {
     } elseif (!empty($form['receipt_url'])) {
         $receipts = [$form['receipt_url']];
     }
+    // Normalize relative paths so they resolve from admin/ directory
+    $receipts = array_map(function($url) {
+        if (!empty($url) && strpos($url, 'http') !== 0 && strpos($url, '/') !== 0 && strpos($url, '../') !== 0) {
+            return '../' . $url;
+        }
+        return $url;
+    }, $receipts);
 
     $records[] = [
         'id' => (int)$row['id'],
