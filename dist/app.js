@@ -4103,7 +4103,7 @@ function App() {
     strokeLinejoin: "round",
     strokeWidth: 2,
     d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-  })), "Logout"))))))), lightboxImage && /*#__PURE__*/React.createElement("div", {
+  })), "Logout")))))), lightboxImage && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-[130] flex items-center justify-center",
     onClick: () => setLightboxImage(null)
   }, /*#__PURE__*/React.createElement("div", {
@@ -4116,7 +4116,7 @@ function App() {
     alt: "Payment Proof",
     className: "relative z-[131] max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl",
     onClick: e => e.stopPropagation()
-  }));
+  })));
 }
 
 // Render the app - React 18 uses createRoot
