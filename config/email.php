@@ -19,6 +19,15 @@ class EmailSender {
         return $this->sendEmail($userEmail, $userName, $subject, $htmlBody, $textBody);
     }
     
+    public function sendOrderCompletionEmail($userEmail, $userName, $orderData) {
+        $orderNumber = $orderData['order_number'] ?? $orderData['submission_id'] ?? 'N/A';
+        $subject = 'Order Completed - ' . $orderData['form_data']['order_type'] . ' Order #' . $orderNumber;
+        $htmlBody = $this->getOrderCompletionTemplate($userName, $orderData);
+        $textBody = $this->getOrderCompletionPlainText($orderData);
+        
+        return $this->sendEmail($userEmail, $userName, $subject, $htmlBody, $textBody);
+    }
+    
     public function sendAdminNotification($adminEmail, $orderData) {
         $orderNumber = $orderData['order_number'] ?? $orderData['submission_id'] ?? 'N/A';
         $subject = 'New Order Submitted - Order #' . $orderNumber;
@@ -305,6 +314,102 @@ class EmailSender {
 HTML;
     }
     
+    private function getOrderCompletionTemplate($userName, $orderData) {
+        $formData = $orderData['form_data'];
+        $amount = isset($formData['amount']) ? number_format($formData['amount']) : 'N/A';
+        $currency = $formData['currency'] ?? 'USDT';
+        $orderType = $formData['order_type'] ?? 'Buy';
+        $paymentMethod = $formData['payment_method'] ?? 'N/A';
+        $platform = $formData['platform'] ?? 'N/A';
+        $orderNumber = $orderData['order_number'] ?? $orderData['submission_id'] ?? 'N/A';
+        $date = date('F j, Y \a\t g:i A');
+        
+        return <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Completed</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0b0b0c;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0b0b0c; padding: 40px 20px;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #111827; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;">✅ Order Completed</h1>
+                            <p style="margin: 10px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px;">jordanmwinukatz P2P Trading</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">Hello <strong style="color: #10b981;">{\$userName}</strong>,</p>
+                            
+                            <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 30px;">Good news! Your order <strong style="color: #ffffff;">#{\$orderNumber}</strong> has been fully processed and marked as <strong style="color: #10b981;">Completed</strong>.</p>
+                            
+                            <!-- Order Details Card -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(16, 185, 129, 0.05); border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2); margin-bottom: 30px;">
+                                <tr>
+                                    <td style="padding: 25px;">
+                                        <h2 style="margin: 0 0 20px; color: #10b981; font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 10px;">Order Details</h2>
+                                        
+                                        <table width="100%" cellpadding="8" cellspacing="0">
+                                            <tr>
+                                                <td style="color: #9ca3af; font-size: 14px; width: 40%;">Order ID:</td>
+                                                <td style="color: #ffffff; font-size: 14px; font-weight: 600;">#{\$orderNumber}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #9ca3af; font-size: 14px;">Order Type:</td>
+                                                <td style="color: #ffffff; font-size: 14px; font-weight: 600;">{\$orderType}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #9ca3af; font-size: 14px;">Amount:</td>
+                                                <td style="color: #10b981; font-size: 16px; font-weight: 700;">{\$amount} {\$currency}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #9ca3af; font-size: 14px;">Platform:</td>
+                                                <td style="color: #ffffff; font-size: 14px; font-weight: 600;">{\$platform}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #9ca3af; font-size: 14px;">Payment Method:</td>
+                                                <td style="color: #ffffff; font-size: 14px; font-weight: 600;">{\$paymentMethod}</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="color: #9ca3af; font-size: 14px;">Completion Date:</td>
+                                                <td style="color: #ffffff; font-size: 14px;">{\$date}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">Thank you for trading with us! If you had a good experience, we'd appreciate if you could trade with us again.</p>
+                            
+                            <p style="color: #9ca3af; font-size: 14px; line-height: 1.6; margin: 0;">If you have any questions or if something isn't right, please <a href="mailto:support@jordanmwinukatz.com" style="color: #10b981; text-decoration: none;">contact our support team</a>.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: rgba(255, 255, 255, 0.05); padding: 25px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                            <p style="color: #9ca3af; font-size: 12px; margin: 0 0 10px;">© 2025 jordanmwinukatz P2P Trading. All rights reserved.</p>
+                            <p style="color: #6b7280; font-size: 12px; margin: 0;">support@jordanmwinukatz.com</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+HTML;
+    }
+    
     private function getAdminEmailTemplate($orderData) {
         $formData = $orderData['form_data'];
         $userInfo = $orderData['user_info'];
@@ -440,6 +545,18 @@ HTML;
                "Amount: {$formData['amount']} {$formData['currency']}\n" .
                "Platform: {$formData['platform']}\n" .
                "Payment Method: {$formData['payment_method']}\n";
+    }
+    
+    private function getOrderCompletionPlainText($orderData) {
+        $formData = $orderData['form_data'];
+        return "Order Completed\n\n" .
+               "Good news! Your order #" . ($orderData['order_number'] ?? $orderData['submission_id'] ?? 'N/A') . " has been fully processed and marked as Completed.\n\n" .
+               "Order Details:\n" .
+               "Order Type: {$formData['order_type']}\n" .
+               "Amount: {$formData['amount']} {$formData['currency']}\n" .
+               "Platform: {$formData['platform']}\n" .
+               "Payment Method: {$formData['payment_method']}\n\n" .
+               "Thank you for trading with us!";
     }
     
     private function getAdminPlainText($orderData) {

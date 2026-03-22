@@ -140,6 +140,41 @@ try {
                 $historyStmt = $conn->prepare("INSERT INTO submission_status_history (submission_id, old_status, new_status, admin_user, notes) VALUES (?, ?, ?, ?, ?)");
                 $historyStmt->execute([$submission_id, $currentStatus, 'completed', 'admin', 'Marked completed from order preview']);
 
+                // Fetch data to send completion email
+                if ($currentStatus !== 'completed') {
+                    $orderStmt = $conn->prepare("SELECT order_number, form_data, user_info, user_id FROM user_submissions WHERE id = ?");
+                    $orderStmt->execute([$submission_id]);
+                    $orderData = $orderStmt->fetch(PDO::FETCH_ASSOC);
+                    
+                    if ($orderData) {
+                        $orderData['submission_id'] = $submission_id;
+                        $orderData['form_data'] = json_decode($orderData['form_data'], true) ?: [];
+                        $orderData['user_info'] = json_decode($orderData['user_info'], true) ?: [];
+                        
+                        $userEmail = $orderData['user_info']['email'] ?? null;
+                        $userName = $orderData['user_info']['name'] ?? 'Customer';
+                        
+                        // If no direct user_info email but we have a user_id, try fetching from users table
+                        if (!$userEmail && $orderData['user_id']) {
+                            $userStmt = $conn->prepare("SELECT email, name FROM users WHERE id = ?");
+                            $userStmt->execute([$orderData['user_id']]);
+                            $user = $userStmt->fetch(PDO::FETCH_ASSOC);
+                            if ($user) {
+                                $userEmail = $user['email'];
+                                $userName = $user['name'];
+                            }
+                        }
+                        
+                        if ($userEmail) {
+                            require_once __DIR__ . '/../config/email.php';
+                            if (class_exists('EmailSender')) {
+                                $emailSender = new EmailSender();
+                                $emailSender->sendOrderCompletionEmail($userEmail, $userName, $orderData);
+                            }
+                        }
+                    }
+                }
+
                 $conn->commit();
             } catch (Exception $ex) {
                 $conn->rollBack();
