@@ -325,9 +325,9 @@ foreach ($rows as $row) {
                                                 <?php echo htmlspecialchars(date('M j, Y H:i', strtotime($record['updated_at']))); ?>
                                             </td>
                                             <td class="px-4 py-3">
-                                                <a href="<?php echo htmlspecialchars($previewTarget); ?>" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs hover:bg-emerald-500/30 transition">
+                                                <button onclick="openReviewModal(<?php echo (int)$record['id']; ?>)" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs hover:bg-emerald-500/30 transition cursor-pointer">
                                                     <i class="fas fa-eye"></i> Review
-                                                </a>
+                                                </button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -352,8 +352,114 @@ foreach ($rows as $row) {
         </div>
     </div>
 
+    <!-- Review Modal Overlay -->
+    <div id="review-modal-overlay" class="fixed inset-0 z-[200] hidden" style="background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div id="review-modal" class="relative w-full max-w-lg rounded-2xl border border-white/10 bg-[#0f172a] shadow-2xl overflow-hidden" style="max-height:90vh;overflow-y:auto;">
+                <!-- Modal Header -->
+                <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-[#0f172a]/95 backdrop-blur">
+                    <div class="flex items-center gap-3">
+                        <div id="modal-icon" class="w-9 h-9 rounded-lg flex items-center justify-center text-base bg-emerald-500/15 text-emerald-400">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div>
+                            <h3 id="modal-title" class="text-base font-bold text-white">Order Review</h3>
+                            <p id="modal-subtitle" class="text-xs text-white/50">Read-only view</p>
+                        </div>
+                    </div>
+                    <button onclick="closeReviewModal()" class="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/60 hover:text-white hover:bg-white/10 transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <!-- Modal Body -->
+                <div id="modal-body" class="px-6 py-5 space-y-4">
+                    <div class="text-center text-white/50 py-8">
+                        <i class="fas fa-spinner fa-spin text-2xl mb-2"></i>
+                        <p class="text-sm">Loading order details…</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-    // Search suggestions
+    // ── Order data embedded from PHP ──
+    const orderRecords = <?php echo json_encode($records, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
+
+    function openReviewModal(id) {
+        const record = orderRecords.find(r => r.id === id);
+        if (!record) return;
+
+        const overlay = document.getElementById('review-modal-overlay');
+        const icon = document.getElementById('modal-icon');
+        const title = document.getElementById('modal-title');
+        const subtitle = document.getElementById('modal-subtitle');
+        const body = document.getElementById('modal-body');
+
+        const isSell = record.side.toLowerCase() === 'sell';
+
+        // Header
+        icon.className = `w-9 h-9 rounded-lg flex items-center justify-center text-base ${isSell ? 'bg-rose-500/15 text-rose-400' : 'bg-emerald-500/15 text-emerald-400'}`;
+        icon.innerHTML = isSell ? '<i class="fas fa-hand-holding-usd"></i>' : '<i class="fas fa-shopping-cart"></i>';
+        title.textContent = record.order_number;
+        subtitle.textContent = `${record.side} Order • Completed`;
+
+        // Build info rows
+        const infoRows = [
+            ['Customer', record.user_name],
+            ['Email', record.user_email],
+            ['Platform', record.platform],
+            ['Payment / Payout', record.payment_method],
+        ];
+        if (record.amount_usdt) infoRows.push(['USDT Amount', record.amount_usdt + ' USDT']);
+        if (record.amount_tzs) infoRows.push(['TZS Amount', Number(record.amount_tzs).toLocaleString() + ' TZS']);
+        if (!record.amount_usdt && !record.amount_tzs) infoRows.push(['Amount', record.amount_primary]);
+        infoRows.push(['Created', new Date(record.created_at).toLocaleString()]);
+        infoRows.push(['Updated', new Date(record.updated_at).toLocaleString()]);
+
+        let html = '<div class="rounded-xl border border-white/5 bg-white/[0.02] divide-y divide-white/5">';
+        infoRows.forEach(([label, value]) => {
+            html += `<div class="flex justify-between items-center px-4 py-3 text-sm">
+                <span class="text-white/50">${label}</span>
+                <span class="text-white font-medium text-right">${value || '—'}</span>
+            </div>`;
+        });
+        html += '</div>';
+
+        // Proofs
+        if (record.receipts && record.receipts.length > 0) {
+            html += `<div class="pt-2">
+                <p class="text-xs font-semibold uppercase tracking-wider text-white/40 mb-3">
+                    <i class="fas fa-receipt mr-1"></i> Payment Proofs (${record.receipts.length})
+                </p>
+                <div class="grid grid-cols-3 gap-2">`;
+            record.receipts.forEach((url, i) => {
+                html += `<a href="${url}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden border border-white/10 hover:border-amber-400/40 transition aspect-square relative">
+                    <img src="${url}" alt="Proof ${i+1}" class="w-full h-full object-cover" loading="lazy">
+                    <span class="absolute bottom-1 right-1.5 bg-black/70 text-amber-300 text-[10px] px-1.5 py-0.5 rounded-full">#${i+1}</span>
+                </a>`;
+            });
+            html += '</div></div>';
+        }
+
+        body.innerHTML = html;
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeReviewModal() {
+        document.getElementById('review-modal-overlay').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    // Close on overlay click
+    document.getElementById('review-modal-overlay').addEventListener('click', function(e) {
+        if (e.target === this || e.target === this.firstElementChild) closeReviewModal();
+    });
+    // Close on Escape
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReviewModal(); });
+
+    // ── Search suggestions ──
     const searchInput = document.getElementById('completed-search-input');
     const suggestionsBox = document.getElementById('completed-search-suggestions');
     let searchTimeout;
@@ -380,7 +486,7 @@ foreach ($rows as $row) {
                                 <span class="text-sm font-semibold text-emerald-400">${s.order_number}</span>
                                 <span class="text-xs text-white/50 capitalize">${s.hint} &bull; ${s.status}</span>
                             </div>
-                        `).join('') + '<div class="p-2 border-b-0 border-transparent"></div>'; // padding buffer for round corners
+                        `).join('') + '<div class="p-2 border-b-0 border-transparent"></div>';
                         suggestionsBox.classList.remove('hidden');
                     } else if (data.success) {
                         suggestionsBox.innerHTML = '<div class="p-3 text-xs text-white/50">No matches found</div>';
@@ -391,8 +497,6 @@ foreach ($rows as $row) {
                 }
             }, 300);
         });
-        
-        // Hide when clicking outside
         document.addEventListener('click', (e) => {
             if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
                 suggestionsBox.classList.add('hidden');
