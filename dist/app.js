@@ -1374,6 +1374,17 @@ function App() {
     }
   }, [quickOrderOpen]);
 
+  // Lock body scroll when account dashboard is open
+  useEffect(() => {
+    if (showUserDashboard) {
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalStyle;
+      };
+    }
+  }, [showUserDashboard]);
+
   // Fetch user submissions when logged in
   const fetchUserSubmissions = async () => {
     if (!authUser || !authUser.id) return;
