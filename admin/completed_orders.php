@@ -274,8 +274,8 @@ foreach ($rows as $row) {
                                 <tbody class="divide-y divide-white/5">
                                     <?php foreach ($records as $record): 
                                         $previewTarget = strtolower($record['side']) === 'sell'
-                                            ? '../sell%20order.html?id=' . $record['id'] . '&readonly=1'
-                                            : '../buy%20order.html?id=' . $record['id'] . '&readonly=1';
+                                            ? '../sell-order.html?id=' . $record['id'] . '&readonly=1'
+                                            : '../buy-order.html?id=' . $record['id'] . '&readonly=1';
                                         $proofCount = count($record['receipts']);
                                     ?>
                                         <tr class="hover:bg-white/5 transition">
