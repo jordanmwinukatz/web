@@ -24,7 +24,8 @@ if ($statusFilter !== 'all') {
     $params[] = $statusFilter;
 }
 if (!empty($search)) {
-    $where[] = "(us.order_number LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.name')) LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.email')) LIKE ?)";
+    $where[] = "(us.id LIKE ? OR us.order_number LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.name')) LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.email')) LIKE ?)";
+    $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
     $params[] = "%$search%";
@@ -193,8 +194,23 @@ function timeAgoSub($datetime) {
         .search-box {
             display: flex; align-items: center; gap: 8px;
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 10px; padding: 8px 14px;
+            border-radius: 10px; padding: 8px 14px; position: relative;
         }
+        .search-suggestions {
+            position: absolute; top: calc(100% + 4px); left: 0; right: 0;
+            background: rgba(15,23,42,0.95); backdrop-filter: blur(8px);
+            border: 1px solid var(--border-subtle); border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 1000;
+            max-height: 300px; overflow-y: auto; display: none; flex-direction: column; text-align: left;
+        }
+        .search-suggestion-item {
+            padding: 10px 14px; font-size: 13px; color: #f1f5f9; cursor: pointer;
+            border-bottom: 1px solid rgba(255,255,255,0.04); display: flex; flex-direction: column; gap: 2px;
+        }
+        .search-suggestion-item:last-child { border-bottom: none; }
+        .search-suggestion-item:hover { background: rgba(255,255,255,0.05); }
+        .search-suggestion-title { font-weight: 600; color: #facc15; }
+        .search-suggestion-subtitle { color: var(--text-muted); font-size: 11px; text-transform: capitalize; }
         .search-box i { color: var(--text-muted); font-size: 14px; }
         .search-box input {
             background: transparent; border: none; outline: none; color: #f1f5f9;
@@ -388,8 +404,9 @@ function timeAgoSub($datetime) {
                 <div class="topbar-actions">
                     <form method="GET" class="search-box">
                         <i class="fas fa-search"></i>
-                        <input type="text" name="search" placeholder="Search orders, names..." value="<?= htmlspecialchars($search) ?>">
+                        <input type="text" id="main-search-input" name="search" placeholder="Search orders, names..." value="<?= htmlspecialchars($search) ?>" autocomplete="off">
                         <?php if ($statusFilter !== 'all'): ?><input type="hidden" name="status" value="<?= htmlspecialchars($statusFilter) ?>"><?php endif; ?>
+                        <div id="main-search-suggestions" class="search-suggestions"></div>
                     </form>
                 </div>
             </div>
@@ -719,6 +736,44 @@ function timeAgoSub($datetime) {
         }
     })();
     <?php endif; ?>
+
+    // Search suggestions
+    const searchInput = document.getElementById('main-search-input');
+    const suggestionsBox = document.getElementById('main-search-suggestions');
+    let searchTimeout;
+
+    if (searchInput && suggestionsBox) {
+        searchInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            clearTimeout(searchTimeout);
+            if (val.length < 2) {
+                suggestionsBox.style.display = 'none';
+                return;
+            }
+            searchTimeout = setTimeout(async () => {
+                const res = await apiCall({ action: 'get_suggestions', query: val });
+                if (res.success && res.suggestions.length > 0) {
+                    suggestionsBox.innerHTML = res.suggestions.map(s => `
+                        <div class="search-suggestion-item" onclick="window.location.href='?search=${s.id}'">
+                            <span class="search-suggestion-title">${s.order_number}</span>
+                            <span class="search-suggestion-subtitle">${s.hint} &bull; ${s.status}</span>
+                        </div>
+                    `).join('');
+                    suggestionsBox.style.display = 'flex';
+                } else if (res.success) {
+                    suggestionsBox.innerHTML = '<div style="padding:10px 14px;font-size:12px;color:#94a3b8;">No matches found</div>';
+                    suggestionsBox.style.display = 'flex';
+                }
+            }, 300);
+        });
+        
+        // Hide when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.style.display = 'none';
+            }
+        });
+    }
     </script>
 </body>
 </html>

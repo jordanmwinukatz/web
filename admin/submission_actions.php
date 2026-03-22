@@ -103,6 +103,43 @@ try {
             ]);
             break;
 
+        case 'get_suggestions':
+            $q = trim($input['query'] ?? '');
+            if (strlen($q) < 2) {
+                echo json_encode(['success' => true, 'suggestions' => []]);
+                exit;
+            }
+            $stmt = $pdo->prepare("
+                SELECT id, order_number, submission_status, 
+                       JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.name')) as user_name,
+                       JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.email')) as user_email
+                FROM user_submissions 
+                WHERE id LIKE ? 
+                   OR order_number LIKE ? 
+                   OR JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.name')) LIKE ? 
+                   OR JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.email')) LIKE ?
+                ORDER BY updated_at DESC 
+                LIMIT 5
+            ");
+            $like = "%$q%";
+            $stmt->execute([$like, $like, $like, $like]);
+            $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Sanitize and format
+            $suggestions = array_map(function($r) {
+                $orderNum = $r['order_number'] ?: 'ORD-' . str_pad($r['id'], 6, '0', STR_PAD_LEFT);
+                $name = $r['user_name'] ?: 'Unknown';
+                return [
+                    'id' => $r['id'],
+                    'order_number' => $orderNum,
+                    'status' => $r['submission_status'],
+                    'hint' => $name
+                ];
+            }, $results);
+
+            echo json_encode(['success' => true, 'suggestions' => $suggestions]);
+            break;
+
         default:
             echo json_encode(['success' => false, 'error' => 'Unknown action']);
     }

@@ -7,9 +7,27 @@ $pdo = $db->getConnection();
 
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 200;
 $limit = max(1, min(500, $limit));
+$search = $_GET['search'] ?? '';
 
-$stmt = $pdo->prepare("SELECT id, order_number, submission_type, form_data, user_info, created_at, updated_at FROM user_submissions WHERE submission_status = 'completed' ORDER BY updated_at DESC LIMIT ?");
-$stmt->bindValue(1, $limit, PDO::PARAM_INT);
+$sql = "SELECT id, order_number, submission_type, form_data, user_info, created_at, updated_at FROM user_submissions WHERE submission_status = 'completed'";
+$params = [];
+
+if (!empty($search)) {
+    $sql .= " AND (id LIKE ? OR order_number LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.name')) LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(user_info, '$.email')) LIKE ?)";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+    $params[] = "%$search%";
+}
+
+$sql .= " ORDER BY updated_at DESC LIMIT ?";
+$stmt = $pdo->prepare($sql);
+
+$paramIndex = 1;
+foreach ($params as $param) {
+    $stmt->bindValue($paramIndex++, $param, PDO::PARAM_STR);
+}
+$stmt->bindValue($paramIndex, $limit, PDO::PARAM_INT);
 $stmt->execute();
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -212,15 +230,24 @@ foreach ($rows as $row) {
                             <h2 class="text-xl font-semibold">Completed Orders</h2>
                             <p class="text-sm text-white/60">Showing the most recent <?php echo htmlspecialchars((string)$limit); ?> records.</p>
                         </div>
-                        <form method="get" class="flex items-center gap-2">
-                            <label class="text-sm text-white/60">Show</label>
-                            <select name="limit" onchange="this.form.submit()" class="bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/60">
-                                <?php foreach ([50, 100, 200, 300, 500] as $opt): ?>
-                                    <option value="<?php echo $opt; ?>" <?php if ($opt === $limit) echo 'selected'; ?>><?php echo $opt; ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <span class="text-sm text-white/60">entries</span>
-                        </form>
+                        <div class="flex flex-col md:flex-row items-end md:items-center gap-4">
+                            <form method="get" class="flex items-center gap-2 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 focus-within:ring-2 focus-within:ring-emerald-400/60 relative">
+                                <i class="fas fa-search text-white/40 text-sm"></i>
+                                <input type="text" id="completed-search-input" name="search" value="<?php echo htmlspecialchars($search); ?>" placeholder="Search orders, names..." class="bg-transparent border-none outline-none text-sm text-white placeholder-white/40 w-48 xl:w-64" autocomplete="off">
+                                <?php if ($limit !== 200): ?><input type="hidden" name="limit" value="<?php echo $limit; ?>"><?php endif; ?>
+                                <div id="completed-search-suggestions" class="absolute top-full left-0 right-0 mt-2 bg-slate-800 border border-white/10 rounded-xl shadow-2xl overflow-hidden hidden z-[100] max-h-72 overflow-y-auto w-full min-w-[280px]"></div>
+                            </form>
+                            <form method="get" class="flex items-center gap-2">
+                                <?php if ($search !== ''): ?><input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>"><?php endif; ?>
+                                <label class="text-sm text-white/60">Show</label>
+                                <select name="limit" onchange="this.form.submit()" class="bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400/60">
+                                    <?php foreach ([50, 100, 200, 300, 500] as $opt): ?>
+                                        <option value="<?php echo $opt; ?>" <?php if ($opt === $limit) echo 'selected'; ?>><?php echo $opt; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <span class="text-sm text-white/60">entries</span>
+                            </form>
+                        </div>
                     </div>
 
                     <?php if (empty($records)): ?>
@@ -324,5 +351,54 @@ foreach ($rows as $row) {
             </main>
         </div>
     </div>
+
+    <script>
+    // Search suggestions
+    const searchInput = document.getElementById('completed-search-input');
+    const suggestionsBox = document.getElementById('completed-search-suggestions');
+    let searchTimeout;
+
+    if (searchInput && suggestionsBox) {
+        searchInput.addEventListener('input', function() {
+            const val = this.value.trim();
+            clearTimeout(searchTimeout);
+            if (val.length < 2) {
+                suggestionsBox.classList.add('hidden');
+                return;
+            }
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const res = await fetch('submission_actions.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ action: 'get_suggestions', query: val })
+                    });
+                    const data = await res.json();
+                    if (data.success && data.suggestions.length > 0) {
+                        suggestionsBox.innerHTML = data.suggestions.map(s => `
+                            <div class="p-3 border-b border-white/5 hover:bg-white/5 cursor-pointer flex flex-col gap-0.5 transition" onclick="window.location.href='?search=${s.id}'">
+                                <span class="text-sm font-semibold text-emerald-400">${s.order_number}</span>
+                                <span class="text-xs text-white/50 capitalize">${s.hint} &bull; ${s.status}</span>
+                            </div>
+                        `).join('') + '<div class="p-2 border-b-0 border-transparent"></div>'; // padding buffer for round corners
+                        suggestionsBox.classList.remove('hidden');
+                    } else if (data.success) {
+                        suggestionsBox.innerHTML = '<div class="p-3 text-xs text-white/50">No matches found</div>';
+                        suggestionsBox.classList.remove('hidden');
+                    }
+                } catch (e) {
+                    console.error('Search error', e);
+                }
+            }, 300);
+        });
+        
+        // Hide when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                suggestionsBox.classList.add('hidden');
+            }
+        });
+    }
+    </script>
 </body>
 </html>
