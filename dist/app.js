@@ -441,6 +441,7 @@ function App() {
   const [showUserDashboard, setShowUserDashboard] = useState(false);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
   const [dashboardTab, setDashboardTab] = useState('orders'); // 'orders' | 'profile' | 'settings'
+  const [lightboxImage, setLightboxImage] = useState(null);
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   const wizardEmailRef = useRef(null);
   const wizardUidRef = useRef(null);
@@ -3704,13 +3705,10 @@ function App() {
       return /*#__PURE__*/React.createElement("a", {
         key: idx,
         href: imageHref,
-        target: "_blank",
-        rel: "noopener noreferrer",
         className: "block relative group",
         onClick: e => {
           e.preventDefault();
-          // Open image in new tab
-          window.open(imageHref, '_blank');
+          setLightboxImage(imageHref);
         }
       }, /*#__PURE__*/React.createElement("img", {
         src: imageSrc,
@@ -4105,7 +4103,20 @@ function App() {
     strokeLinejoin: "round",
     strokeWidth: 2,
     d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-  })), "Logout")))))));
+  })), "Logout"))))))), lightboxImage && /*#__PURE__*/React.createElement("div", {
+    className: "fixed inset-0 z-[130] flex items-center justify-center",
+    onClick: () => setLightboxImage(null)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "absolute inset-0 bg-black/90"
+  }), /*#__PURE__*/React.createElement("button", {
+    onClick: e => { e.stopPropagation(); setLightboxImage(null); },
+    className: "absolute top-4 right-4 z-[131] w-10 h-10 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-colors"
+  }, /*#__PURE__*/React.createElement("svg", { className: "w-6 h-6", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M6 18L18 6M6 6l12 12" }))), /*#__PURE__*/React.createElement("img", {
+    src: lightboxImage,
+    alt: "Payment Proof",
+    className: "relative z-[131] max-w-[90vw] max-h-[90vh] object-contain rounded-lg shadow-2xl",
+    onClick: e => e.stopPropagation()
+  }));
 }
 
 // Render the app - React 18 uses createRoot
