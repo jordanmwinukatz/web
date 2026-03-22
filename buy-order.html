@@ -4,234 +4,260 @@
   <meta charset="UTF-8" />
   <title>Admin Buy Order</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --bg-primary: #0b1225;
+      --bg-card: rgba(255,255,255,0.04);
+      --border-subtle: rgba(255,255,255,0.08);
+      --text-primary: #f1f5f9;
+      --text-secondary: rgba(148,163,184,1);
+      --text-muted: rgba(100,116,139,1);
+      --accent-yellow: #facc15;
+      --accent-cyan: #22d3ee;
+      --accent-green: #34d399;
+      --accent-red: #f87171;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
-      background: linear-gradient(135deg, #0a0f1f, #1a237e, #283593);
-      font-family: 'Poppins', sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 40px;
-      color: #fff;
+      padding: 40px 20px;
     }
     .card {
-      border-radius: 20px;
-      padding: 40px;
-      width: min(520px, 100%);
-      background: linear-gradient(160deg, #0f172a, #1e293b, #2c3e50);
-      box-shadow: 0 0 30px rgba(0, 128, 255, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
-      border: 1px solid rgba(59, 130, 246, 0.5);
+      border-radius: 16px;
+      padding: 32px;
+      width: min(540px, 100%);
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
       backdrop-filter: blur(12px);
-      transition: all 0.3s ease;
+      transition: all 0.2s;
     }
-    .card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 45px rgba(59, 130, 246, 0.6), 0 0 25px rgba(255, 215, 0, 0.3);
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 8px;
     }
+    .card-header-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+    }
+    .card-header-icon.buy { background: rgba(52,211,153,0.15); color: var(--accent-green); }
+    .card-header-icon.sell { background: rgba(250,204,21,0.15); color: var(--accent-yellow); }
     .step-title {
-      font-size: 2.2rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      background: linear-gradient(90deg, #ffd700, #4fc3f7, #80ffdb);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 18px;
-      text-align: center;
-      letter-spacing: 1px;
+      color: var(--text-primary);
     }
     .step-desc {
-      color: #facc15;
-      margin-bottom: 30px;
-      font-size: 1.05rem;
-      text-align: center;
-      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
-    p {
-      margin: 10px 0;
-      font-size: 1.05rem;
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 14px;
     }
-    .label {
-      font-weight: 600;
-      color: #4fc3f7;
-    }
-    .value {
-      color: #f9fafb;
-      font-weight: 500;
-    }
-    .value-amount {
-      color: #22c55e;
-      font-weight: 600;
-    }
+    .info-row:last-of-type { border-bottom: none; }
+    .label { color: var(--text-muted); font-weight: 500; }
+    .value { color: var(--text-primary); font-weight: 500; }
+    .value-amount { color: var(--accent-green); font-weight: 700; }
     .copy-btn {
-      margin-left: 10px;
-      background: rgba(79, 195, 247, 0.2);
-      border: 1px solid rgba(79, 195, 247, 0.4);
-      color: #e0f2fe;
-      padding: 5px 10px;
-      border-radius: 8px;
+      margin-left: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 6px;
       cursor: pointer;
-      font-size: 0.85rem;
-      transition: 0.3s;
+      font-size: 11px;
+      font-family: inherit;
+      transition: all 0.15s;
     }
-    .copy-btn:hover {
-      background: rgba(79, 195, 247, 0.35);
-      transform: scale(1.05);
-    }
+    .copy-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
     .btn {
       width: 100%;
-      padding: 14px 16px;
-      border-radius: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1rem;
-      transition: 0.3s;
+      font-size: 14px;
+      transition: all 0.2s;
       border: none;
+      font-family: inherit;
     }
-    .btn-blue {
-      background: linear-gradient(90deg, #00b4d8, #0077b6, #023e8a);
-      color: #fff;
-      box-shadow: 0 8px 25px rgba(0, 180, 216, 0.4);
+    .btn-primary {
+      background: rgba(52,211,153,0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(52,211,153,0.3);
     }
-    .btn-blue:hover {
-      transform: scale(1.04);
-      box-shadow: 0 8px 35px rgba(0, 180, 216, 0.6);
+    .btn-primary:hover { background: rgba(52,211,153,0.25); }
+    .btn-danger {
+      background: rgba(239,68,68,0.15);
+      color: var(--accent-red);
     }
-    .btn-red {
-      background: linear-gradient(90deg, #ef4444, #b91c1c);
-      color: #fff;
-      box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-    }
-    .btn-red:hover {
-      transform: scale(1.04);
-      box-shadow: 0 8px 35px rgba(239, 68, 68, 0.6);
-    }
+    .btn-danger:hover { background: rgba(239,68,68,0.25); }
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(148, 163, 184, 0.3);
-      color: #e2e8f0;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
     }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.25);
-      transform: scale(1.03);
-    }
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
     .actions {
       display: flex;
       gap: 10px;
-      margin-top: 30px;
+      margin-top: 24px;
     }
     .status-banner {
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-subtle);
       border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 0.9rem;
-      color: #cbd5f5;
-      margin-bottom: 18px;
+      padding: 10px 16px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
     }
+    .status-banner i { color: var(--accent-cyan); }
     .status-error {
-      border-color: rgba(239, 68, 68, 0.4);
-      color: #fecaca;
-      background: rgba(153, 27, 27, 0.2);
+      border-color: rgba(239,68,68,0.3);
+      color: #fca5a5;
+      background: rgba(239,68,68,0.1);
     }
-    .hidden {
-      display: none !important;
+    .status-error i { color: var(--accent-red); }
+    .hidden { display: none !important; }
+    .detail-section {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-top: 16px;
+    }
+    .detail-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px;
     }
     .proof-section {
-      margin-top: 18px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(148, 163, 184, 0.15);
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-subtle);
     }
     .proof-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
     }
     .proof-thumb {
       position: relative;
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(79, 195, 247, 0.2);
-      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.4);
+      border: 1px solid var(--border-subtle);
+      aspect-ratio: 1;
+      cursor: pointer;
+      transition: all 0.2s;
     }
+    .proof-thumb:hover { border-color: rgba(250,204,21,0.4); transform: scale(1.02); }
     .proof-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.3s ease;
-    }
-    .proof-thumb:hover img {
-      transform: scale(1.05);
     }
     .proof-thumb span {
       position: absolute;
-      bottom: 6px;
-      right: 8px;
-      background: rgba(15, 23, 42, 0.8);
+      bottom: 4px;
+      right: 6px;
+      background: rgba(15,23,42,0.8);
       border-radius: 999px;
       padding: 2px 8px;
-      font-size: 0.75rem;
-      color: #e0f2fe;
-      letter-spacing: 0.5px;
+      font-size: 10px;
+      color: var(--accent-yellow);
     }
-    #step2 {
-      display: none;
+    #step2 { display: none; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-bottom: 20px; font-size: 13px; color: var(--text-muted);
+      text-decoration: none; transition: color 0.15s;
     }
+    .back-link:hover { color: var(--text-primary); }
   </style>
 </head>
 <body>
 
   <!-- STEP 1 -->
   <div class="card" id="step1">
-    <h1 class="step-title">Confirm Buyer Payment</h1>
-    <p class="step-desc">Verify that the buyer’s payment has been received and details match before proceeding.</p>
+    <a href="admin/completed_orders.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+    <div class="card-header">
+      <div class="card-header-icon buy"><i class="fas fa-shopping-cart"></i></div>
+      <h1 class="step-title">Confirm Buyer Payment</h1>
+    </div>
+    <p class="step-desc">Verify that the buyer's payment has been received and details match before proceeding.</p>
 
-    <div id="status" class="status-banner">Loading order details…</div>
+    <div id="status" class="status-banner"><i class="fas fa-spinner fa-spin"></i> Loading order details…</div>
 
-    <p><span class="label">Order #:</span> <span id="order-number" class="value">—</span></p>
-    <p><span class="label">Buyer:</span> <span id="buyer-handle" class="value">—</span></p>
-    <p><span class="label">Verified Name:</span> <span id="buyer-name" class="value">—</span></p>
-    <p><span class="label">Email:</span> <span id="buyer-email" class="value">—</span></p>
-    <p><span class="label">Payment Method:</span> <span id="payment-method" class="value">—</span></p>
-    <p><span class="label">Fiat Amount:</span> <span id="fiat-amount" class="value-amount">—</span></p>
+    <div class="detail-section">
+      <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i>Customer Info</div>
+      <div class="info-row"><span class="label">Order #</span><span id="order-number" class="value">—</span></div>
+      <div class="info-row"><span class="label">Buyer</span><span id="buyer-handle" class="value">—</span></div>
+      <div class="info-row"><span class="label">Verified Name</span><span id="buyer-name" class="value">—</span></div>
+      <div class="info-row"><span class="label">Email</span><span id="buyer-email" class="value">—</span></div>
+      <div class="info-row"><span class="label">Payment Method</span><span id="payment-method" class="value">—</span></div>
+      <div class="info-row"><span class="label">Fiat Amount</span><span id="fiat-amount" class="value-amount">—</span></div>
+    </div>
 
     <div id="proof-section" class="proof-section hidden">
-      <p><span class="label">Payment Proofs:</span> <span id="proof-count" class="value">0</span></p>
+      <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i>Payment Proofs (<span id="proof-count">0</span>)</div>
       <div id="proof-grid" class="proof-grid"></div>
     </div>
 
-    <button class="btn btn-blue" id="next-btn" onclick="goToStep2()">
-      ✅ Payment Verified – Continue
+    <button class="btn btn-primary" id="next-btn" onclick="goToStep2()" style="margin-top:20px;">
+      <i class="fas fa-check-circle" style="margin-right:6px;"></i> Payment Verified – Continue
     </button>
-    </div>
+  </div>
 
   <!-- STEP 2 -->
   <div class="card" id="step2">
-    <h1 class="step-title">Send Crypto to Buyer</h1>
-    <p class="step-desc">Review the buyer’s platform details and release the crypto securely.</p>
+    <div class="card-header">
+      <div class="card-header-icon buy"><i class="fas fa-paper-plane"></i></div>
+      <h1 class="step-title">Send Crypto to Buyer</h1>
+    </div>
+    <p class="step-desc">Review the buyer's platform details and release the crypto securely.</p>
 
-    <p><span class="label">Platform:</span> <span id="platform-name" class="value">—</span></p>
-    <p>
-      <span class="label">Platform UID:</span>
-      <span id="platform-uid" class="value">—</span>
-      <button class="copy-btn" data-copy="platform-uid">Copy</button>
-    </p>
-    <p>
-      <span class="label">Platform Email:</span>
-      <span id="platform-email" class="value">—</span>
-      <button class="copy-btn" data-copy="platform-email">Copy</button>
-    </p>
-    <p>
-      <span class="label">Amount to Send:</span>
-      <span id="crypto-amount" class="value-amount">—</span>
-      <button class="copy-btn" data-copy="crypto-amount">Copy</button>
-    </p>
+    <div class="detail-section">
+      <div class="detail-label"><i class="fas fa-exchange-alt" style="margin-right:6px;"></i>Transfer Details</div>
+      <div class="info-row"><span class="label">Platform</span><span id="platform-name" class="value">—</span></div>
+      <div class="info-row">
+        <span class="label">Platform UID</span>
+        <span><span id="platform-uid" class="value">—</span><button class="copy-btn" data-copy="platform-uid">Copy</button></span>
+      </div>
+      <div class="info-row">
+        <span class="label">Platform Email</span>
+        <span><span id="platform-email" class="value">—</span><button class="copy-btn" data-copy="platform-email">Copy</button></span>
+      </div>
+      <div class="info-row">
+        <span class="label">Amount to Send</span>
+        <span><span id="crypto-amount" class="value-amount">—</span><button class="copy-btn" data-copy="crypto-amount">Copy</button></span>
+      </div>
+    </div>
 
     <div class="actions" id="actions-row">
-      <button class="btn btn-red" id="complete-btn" onclick="completeOrder(this)">✅ Send Crypto Completed</button>
+      <button class="btn btn-primary" id="complete-btn" onclick="completeOrder(this)">
+        <i class="fas fa-check-circle" style="margin-right:6px;"></i> Send Crypto Completed
+      </button>
       <button class="btn btn-secondary" onclick="backToStep1()">Back</button>
     </div>
   </div>

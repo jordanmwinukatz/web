@@ -4,203 +4,256 @@
   <meta charset="UTF-8" />
   <title>Admin Seller Payout</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --bg1: #1a1a1a;
-      --bg2: #262626;
-      --bg3: #404040;
-      --gold: #facc15;
-      --blue-label: #3b82f6;
-      --white: #ffffff;
-      --green: #22c55e;
+      --bg-primary: #0b1225;
+      --bg-card: rgba(255,255,255,0.04);
+      --border-subtle: rgba(255,255,255,0.08);
+      --text-primary: #f1f5f9;
+      --text-secondary: rgba(148,163,184,1);
+      --text-muted: rgba(100,116,139,1);
+      --accent-yellow: #facc15;
+      --accent-cyan: #22d3ee;
+      --accent-green: #34d399;
+      --accent-red: #f87171;
     }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
-      background: radial-gradient(circle at top, var(--bg1) 0%, var(--bg2) 40%, var(--bg3) 90%);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 40px 20px;
-      color: #fff;
     }
     .card {
-      border-radius: 20px;
-      padding: 40px;
+      border-radius: 16px;
+      padding: 32px;
       width: min(540px, 100%);
-      background: linear-gradient(135deg, #2d2d2d 0%, #3a3a3a 40%, #1f1f1f 100%);
-      box-shadow: 0 0 50px rgba(212, 175, 55, 0.6);
-      border: 1px solid rgba(212, 175, 55, 0.4);
-      backdrop-filter: blur(10px);
-      transition: 0.3s ease;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      backdrop-filter: blur(12px);
+      transition: all 0.2s;
+    }
+    .card-header {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 8px;
+    }
+    .card-header-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      background: rgba(250,204,21,0.15); color: var(--accent-yellow);
     }
     .step-title {
-      font-size: 2rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      background: linear-gradient(90deg, #facc15, #fbbf24, #f59e0b);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      margin-bottom: 20px;
+      color: var(--text-primary);
     }
     .step-desc {
-      color: #d1d5db;
-      margin-bottom: 32px;
-      font-size: 1.05rem;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
-    p {
-      margin: 0 0 10px;
-      font-size: 1rem;
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 14px;
     }
-    .blue-label {
-      color: var(--blue-label);
-      font-weight: 600;
+    .info-row:last-of-type { border-bottom: none; }
+    .label { color: var(--text-muted); font-weight: 500; }
+    .value { color: var(--text-primary); font-weight: 500; }
+    .value-amount { color: var(--accent-green); font-weight: 700; }
+    .copy-btn {
+      margin-left: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
+      padding: 4px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 11px;
+      font-family: inherit;
+      transition: all 0.15s;
     }
-    .value {
-      color: var(--white);
-      font-weight: 500;
-    }
-    .value-amount {
-      color: var(--green);
-      font-weight: 600;
-    }
-    .green-amount {
-      color: var(--green);
-      font-weight: 600;
-    }
+    .copy-btn:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
     .btn {
       width: 100%;
-      padding: 14px 16px;
-      border-radius: 16px;
+      padding: 12px 16px;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
-      font-size: 1rem;
-      transition: 0.2s;
-    }
-    .btn-gold {
-      background: linear-gradient(90deg, #facc15, #fbbf24);
+      font-size: 14px;
+      transition: all 0.2s;
       border: none;
-      color: #1a1a1a;
-      box-shadow: 0 8px 25px rgba(251, 191, 36, 0.45);
+      font-family: inherit;
     }
-    .btn-gold:hover {
-      background: linear-gradient(90deg, #fbbf24, #f59e0b);
+    .btn-primary {
+      background: rgba(52,211,153,0.15);
+      color: var(--accent-green);
+      border: 1px solid rgba(52,211,153,0.3);
     }
-    .btn-green {
-      background: #22c55e;
-      border: none;
-      color: #fff;
-      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.45);
+    .btn-primary:hover { background: rgba(52,211,153,0.25); }
+    .btn-warning {
+      background: rgba(250,204,21,0.15);
+      color: var(--accent-yellow);
+      border: 1px solid rgba(250,204,21,0.3);
     }
-    .btn-green:hover {
-      background: #16a34a;
-    }
+    .btn-warning:hover { background: rgba(250,204,21,0.25); }
     .btn-secondary {
-      background: rgba(45, 45, 45, 0.8);
-      border: 1px solid rgba(250, 204, 21, 0.3);
-      color: #f5f5f5;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
     }
-    .copy-btn {
-      background: rgba(64, 64, 64, 0.7);
-      border: 1px solid rgba(250, 204, 21, 0.4);
-      color: #fde68a;
-      padding: 4px 12px;
-      border-radius: 7px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      margin-left: 8px;
+    .btn-secondary:hover { background: rgba(255,255,255,0.1); color: var(--text-primary); }
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
     }
     .status-banner {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(250, 204, 21, 0.25);
-      border-radius: 12px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
       padding: 10px 16px;
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.8);
+      font-size: 13px;
+      color: var(--text-secondary);
       margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
     }
+    .status-banner i { color: var(--accent-cyan); }
     .status-error {
-      background: rgba(127, 29, 29, 0.35);
-      border-color: rgba(248, 113, 113, 0.4);
-      color: #fecaca;
+      border-color: rgba(239,68,68,0.3);
+      color: #fca5a5;
+      background: rgba(239,68,68,0.1);
     }
-    .hidden {
-      display: none !important;
+    .status-error i { color: var(--accent-red); }
+    .hidden { display: none !important; }
+    .detail-section {
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      padding: 16px;
+      border: 1px solid rgba(255,255,255,0.05);
+      margin-top: 16px;
+    }
+    .detail-label {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 12px;
     }
     .proof-section {
-      margin-top: 18px;
+      margin-top: 16px;
       padding-top: 16px;
-      border-top: 1px solid rgba(250, 204, 21, 0.15);
+      border-top: 1px solid var(--border-subtle);
     }
     .proof-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px;
-      margin-top: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
     }
     .proof-thumb {
       position: relative;
-      border-radius: 12px;
+      border-radius: 10px;
       overflow: hidden;
-      border: 1px solid rgba(250, 204, 21, 0.4);
-      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-subtle);
+      aspect-ratio: 1;
+      cursor: pointer;
+      transition: all 0.2s;
     }
+    .proof-thumb:hover { border-color: rgba(250,204,21,0.4); transform: scale(1.02); }
     .proof-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-    .proof-thumb:hover img {
-      transform: scale(1.05);
+      display: block;
     }
     .proof-thumb span {
       position: absolute;
-      bottom: 6px;
-      right: 8px;
-      padding: 2px 8px;
+      bottom: 4px;
+      right: 6px;
+      background: rgba(15,23,42,0.8);
       border-radius: 999px;
-      background: rgba(0, 0, 0, 0.65);
-      color: #fde68a;
-      font-size: 0.75rem;
-      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      font-size: 10px;
+      color: var(--accent-yellow);
     }
-    #step2 {
-      display: none;
+    #step2 { display: none; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      margin-bottom: 20px; font-size: 13px; color: var(--text-muted);
+      text-decoration: none; transition: color 0.15s;
     }
+    .back-link:hover { color: var(--text-primary); }
   </style>
 </head>
 <body>
   <div class="card" id="step1">
-    <h1 class="step-title">Confirm Seller Transfer</h1>
-    <p class="step-desc">Verify that the seller’s crypto was received successfully before proceeding with payment.</p>
-    <div id="status" class="status-banner">Loading order details…</div>
-    <p><span class="blue-label">Order #:</span> <span id="order-number" class="value">—</span></p>
-    <p><span class="blue-label">Seller:</span> <span id="seller-name" class="value">—</span></p>
-    <p><span class="blue-label">Platform:</span> <span id="platform-name" class="value">—</span></p>
-    <p><span class="blue-label">Recipient Email:</span> <span id="recipient-email" class="value">—</span></p>
-    <p><span class="blue-label">Recipient UID:</span> <span id="recipient-uid" class="value">—</span></p>
-    <p><span class="blue-label">Amount Sent:</span> <span id="crypto-amount" class="value-amount">—</span></p>
+    <a href="admin/completed_orders.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+    <div class="card-header">
+      <div class="card-header-icon"><i class="fas fa-hand-holding-usd"></i></div>
+      <h1 class="step-title">Confirm Seller Transfer</h1>
+    </div>
+    <p class="step-desc">Verify that the seller's crypto was received successfully before proceeding with payment.</p>
+    <div id="status" class="status-banner"><i class="fas fa-spinner fa-spin"></i> Loading order details…</div>
+
+    <div class="detail-section">
+      <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i>Seller Info</div>
+      <div class="info-row"><span class="label">Order #</span><span id="order-number" class="value">—</span></div>
+      <div class="info-row"><span class="label">Seller</span><span id="seller-name" class="value">—</span></div>
+      <div class="info-row"><span class="label">Platform</span><span id="platform-name" class="value">—</span></div>
+      <div class="info-row"><span class="label">Recipient Email</span><span id="recipient-email" class="value">—</span></div>
+      <div class="info-row"><span class="label">Recipient UID</span><span id="recipient-uid" class="value">—</span></div>
+      <div class="info-row"><span class="label">Amount Sent</span><span id="crypto-amount" class="value-amount">—</span></div>
+    </div>
+
     <div id="proof-section" class="proof-section hidden">
-      <p><span class="blue-label">Proof Attachments:</span> <span id="proof-count" class="value">0</span></p>
+      <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i>Proof Attachments (<span id="proof-count">0</span>)</div>
       <div id="proof-grid" class="proof-grid"></div>
     </div>
-    <button class="btn btn-gold" id="next-btn" onclick="goToStep2()">✅ Confirm & Continue</button>
+
+    <button class="btn btn-warning" id="next-btn" onclick="goToStep2()" style="margin-top:20px;">
+      <i class="fas fa-check-circle" style="margin-right:6px;"></i> Confirm & Continue
+    </button>
   </div>
 
   <div class="card" id="step2">
-    <h1 class="step-title">Pay the Seller</h1>
-    <p class="step-desc">Send the payment to the seller’s account and mark the order as complete after transfer.</p>
-    <p><span class="blue-label">Payout Channel:</span> <span id="payout-channel" class="value">—</span></p>
-    <p><span class="blue-label">Payout Name:</span> <span id="pay-name" class="value">—</span>
-      <button class="copy-btn" data-copy="pay-name">Copy</button></p>
-    <p><span class="blue-label">Account Number:</span> <span id="pay-number" class="value">—</span>
-      <button class="copy-btn" data-copy="pay-number">Copy</button></p>
-    <p><span class="blue-label">Amount to Pay:</span> <span id="pay-amount" class="value">—</span>
-      <button class="copy-btn" data-copy="pay-amount">Copy</button></p>
-    <div style="display:flex;gap:10px;margin-top:24px;" id="actions-row">
-      <button class="btn btn-green" id="complete-btn" onclick="completeOrder(this)">✅ Mark Payout Done</button>
+    <div class="card-header">
+      <div class="card-header-icon"><i class="fas fa-money-bill-wave"></i></div>
+      <h1 class="step-title">Pay the Seller</h1>
+    </div>
+    <p class="step-desc">Send the payment to the seller's account and mark the order as complete after transfer.</p>
+
+    <div class="detail-section">
+      <div class="detail-label"><i class="fas fa-wallet" style="margin-right:6px;"></i>Payout Details</div>
+      <div class="info-row"><span class="label">Payout Channel</span><span id="payout-channel" class="value">—</span></div>
+      <div class="info-row">
+        <span class="label">Payout Name</span>
+        <span><span id="pay-name" class="value">—</span><button class="copy-btn" data-copy="pay-name">Copy</button></span>
+      </div>
+      <div class="info-row">
+        <span class="label">Account Number</span>
+        <span><span id="pay-number" class="value">—</span><button class="copy-btn" data-copy="pay-number">Copy</button></span>
+      </div>
+      <div class="info-row">
+        <span class="label">Amount to Pay</span>
+        <span><span id="pay-amount" class="value-amount">—</span><button class="copy-btn" data-copy="pay-amount">Copy</button></span>
+      </div>
+    </div>
+
+    <div class="actions" id="actions-row">
+      <button class="btn btn-primary" id="complete-btn" onclick="completeOrder(this)">
+        <i class="fas fa-check-circle" style="margin-right:6px;"></i> Mark Payout Done
+      </button>
       <button class="btn btn-secondary" onclick="backToStep1()">Back</button>
     </div>
   </div>
@@ -236,7 +289,7 @@
     function setStatus(message, isError = false) {
       const statusEl = document.getElementById("status");
       if (!statusEl) return;
-      statusEl.textContent = message;
+      statusEl.innerHTML = (isError ? '<i class="fas fa-exclamation-triangle"></i> ' : '<i class="fas fa-info-circle"></i> ') + message;
       statusEl.classList.toggle("status-error", isError);
       statusEl.classList.toggle("hidden", !message);
     }
@@ -364,17 +417,10 @@
       setText("seller-name", user.name || form.name || "—");
       setText("platform-name", form.platform || form.exchange || form.platform_name || "—");
       
-      // Recipient details (where seller sent USDT to) - these are the platform recipient details
-      // For Binance, the recipient details are hardcoded in the frontend
       const platform = (form.platform || form.exchange || form.platform_name || "").toLowerCase();
       
-      // Default recipient details for Binance (matches WIZARD_SELL_RECEIVE_MAP in dist/app.js)
       let recipientEmail = "jordanmwinuka@protonmail.com";
       let recipientUid = "36847668";
-      
-      // You can add mappings for other platforms here if needed in the future
-      // if (platform.includes("bitget")) { ... }
-      // if (platform.includes("bybit")) { ... }
       
       setText("recipient-email", recipientEmail);
       setText("recipient-uid", recipientUid);
@@ -386,20 +432,17 @@
       setText("pay-name", form.payout_name || form.payoutName || form.accountName || user.name || "—");
       setText("pay-number", form.payout_account || form.accountNumber || form.payoutAccount || form.paymentAccount || "—");
       
-      // For Step 2, use the same logic - prefer amount_tzs for sell orders
       let payoutAmountStep2 = form.amount_tzs || form.tzs;
       if (!payoutAmountStep2) {
         const payoutFromField = form.payout_amount || form.fiatAmount || form.amountFiat;
         if (payoutFromField) {
           const numPayout = Number(payoutFromField);
-          // If payout_amount is > 1000, it's likely TZS
           if (numPayout > 1000) {
             payoutAmountStep2 = payoutFromField;
           }
         }
       }
       
-      // Format with commas for readability in Step 2
       const formattedPayoutAmount = payoutAmountStep2 ? Number(payoutAmountStep2).toLocaleString() : "—";
       setText("pay-amount", formattedPayoutAmount !== "—" ? `${formattedPayoutAmount} TZS` : "—");
 
