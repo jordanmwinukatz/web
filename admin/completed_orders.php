@@ -325,7 +325,7 @@ foreach ($rows as $row) {
                                                 <?php echo htmlspecialchars(date('M j, Y H:i', strtotime($record['updated_at']))); ?>
                                             </td>
                                             <td class="px-4 py-3">
-                                                <a href="<?php echo htmlspecialchars($previewTarget); ?>" target="_blank" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs hover:bg-emerald-500/30 transition">
+                                                <a href="<?php echo htmlspecialchars($previewTarget); ?>" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/20 border border-emerald-500/40 text-emerald-200 text-xs hover:bg-emerald-500/30 transition">
                                                     <i class="fas fa-eye"></i> Review
                                                 </a>
                                             </td>
