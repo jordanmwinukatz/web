@@ -389,6 +389,14 @@ foreach ($rows as $row) {
         </div>
     </div>
 
+    <!-- Proof Image Lightbox -->
+    <div id="proof-lightbox" class="fixed inset-0 z-[300] hidden items-center justify-center" style="background:rgba(0,0,0,0.92);display:none;" onclick="closeLightbox()">
+        <button onclick="event.stopPropagation();closeLightbox()" class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-white text-lg hover:bg-white/20 transition z-10">
+            <i class="fas fa-times"></i>
+        </button>
+        <img id="lightbox-img" src="" alt="Proof" style="max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain;" onclick="event.stopPropagation()">
+    </div>
+
     <script>
     // ── Order data embedded from PHP ──
     const orderRecords = <?php echo json_encode($records, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT); ?>;
@@ -441,10 +449,11 @@ foreach ($rows as $row) {
                 </p>
                 <div class="grid grid-cols-3 gap-2">`;
             record.receipts.forEach((url, i) => {
-                html += `<a href="${url}" target="_blank" rel="noopener" class="block rounded-lg overflow-hidden border border-white/10 hover:border-amber-400/40 transition aspect-square relative">
+                html += `<div onclick="openLightbox('${url.replace(/'/g, "\\'")}')"
+                    class="block rounded-lg overflow-hidden border border-white/10 hover:border-amber-400/40 transition aspect-square relative cursor-pointer">
                     <img src="${url}" alt="Proof ${i+1}" class="w-full h-full object-cover" loading="lazy">
                     <span class="absolute bottom-1 right-1.5 bg-black/70 text-amber-300 text-[10px] px-1.5 py-0.5 rounded-full">#${i+1}</span>
-                </a>`;
+                </div>`;
             });
             html += '</div></div>';
         }
@@ -459,12 +468,31 @@ foreach ($rows as $row) {
         document.body.style.overflow = '';
     }
 
+    // ── Lightbox for proof images ──
+    function openLightbox(url) {
+        const lb = document.getElementById('proof-lightbox');
+        const img = document.getElementById('lightbox-img');
+        img.src = url;
+        lb.style.display = 'flex';
+    }
+    function closeLightbox() {
+        const lb = document.getElementById('proof-lightbox');
+        lb.style.display = 'none';
+        document.getElementById('lightbox-img').src = '';
+    }
+
     // Close on overlay click
     document.getElementById('review-modal-overlay').addEventListener('click', function(e) {
         if (e.target === this || e.target === this.firstElementChild) closeReviewModal();
     });
     // Close on Escape
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeReviewModal(); });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            const lb = document.getElementById('proof-lightbox');
+            if (lb.style.display === 'flex') { closeLightbox(); }
+            else { closeReviewModal(); }
+        }
+    });
 
     // ── Search suggestions ──
     const searchInput = document.getElementById('completed-search-input');
