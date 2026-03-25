@@ -3,12 +3,12 @@
 # Enable Rewrite Engine
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteBase /
+    # RewriteBase /
     
     # API Router (MVC)
     RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_URI} ^/api/(.+)\.php$ [NC]
-    RewriteCond %{REQUEST_URI} !^/api/index\.php$ [NC]
+    RewriteCond %{REQUEST_URI} /api/(.+)\.php$ [NC]
+    RewriteCond %{REQUEST_URI} !/api/index\.php$ [NC]
     RewriteRule ^api/(.+)\.php$ api/index.php?route=$1 [L,QSA]
     
     # Force HTTPS (uncomment when SSL is configured)

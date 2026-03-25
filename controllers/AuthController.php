@@ -24,7 +24,7 @@ try {
         throw new Exception('Invalid JSON input');
     }
 
-    $action = $input['action'] ?? '';
+    $action = $_GET['action'] ?? $input['action'] ?? '';
     
     if ($action === 'register') {
         // Start output buffering early to prevent any output
