@@ -45,6 +45,12 @@ try {
         throw new Exception('Upload error code ' . $file['error'] . ': ' . $errorMsg);
     }
 
+    // Validate file size (max 5MB)
+    $maxSizeBytes = 5 * 1024 * 1024;
+    if ($file['size'] > $maxSizeBytes) {
+        throw new Exception('File size exceeds 5MB limit');
+    }
+
     $allowed = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif'];
     
     // Try mime_content_type first
@@ -94,8 +100,8 @@ try {
     $isWritable = is_writable($dir);
     if (!$isWritable) {
         // Try to change permissions to be more permissive
-        @chmod($dir, 0777);
-        @chmod(dirname($dir), 0777);
+        @chmod($dir, 0755);
+        @chmod(dirname($dir), 0755);
         
         // Wait a moment for permissions to take effect
         usleep(100000); // 0.1 second
@@ -130,7 +136,7 @@ try {
         error_log('  Current user: ' . ($currentUser ?: 'unknown'));
         error_log('  Process user: ' . ($processUser ? ($processUser['name'] ?? 'unknown') : 'unknown'));
         
-        throw new Exception('Upload directory is not writable: ' . $dir);
+        throw new Exception('Upload directory is not writable. Please contact administrator.');
     }
 
     $name = 'proof_' . date('Ymd_His') . '_' . bin2hex(random_bytes(4)) . '.' . $ext;

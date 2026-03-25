@@ -178,6 +178,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $input = json_decode($raw_input, true);
     
     if (isset($input['action'])) {
+        // Rate limiting for tracking actions (max 120 events per minute per IP)
+        $trackingActions = ['track_event', 'track_page_view', 'track_wizard_step'];
+        if (in_array($input['action'], $trackingActions)) {
+            $rateLimitFile = sys_get_temp_dir() . '/analytics_rate_' . md5($_SERVER['REMOTE_ADDR'] ?? 'unknown') . '.json';
+            $now = time();
+            $rateData = [];
+            if (file_exists($rateLimitFile)) {
+                $rateData = json_decode(file_get_contents($rateLimitFile), true) ?: [];
+            }
+            // Clean old entries (older than 60 seconds)
+            $rateData = array_filter($rateData, function($t) use ($now) { return $t > ($now - 60); });
+            if (count($rateData) >= 120) {
+                http_response_code(429);
+                echo json_encode(['success' => false, 'error' => 'Too many requests']);
+                exit;
+            }
+            $rateData[] = $now;
+            @file_put_contents($rateLimitFile, json_encode($rateData));
+        }
+        
+        // Force server-side IP address to prevent spoofing
+        if (isset($input['data']) && is_array($input['data'])) {
+            $input['data']['ip_address'] = $_SERVER['REMOTE_ADDR'] ?? null;
+        }
+        
         switch($input['action']) {
             case 'track_event':
                 echo json_encode($analytics->trackEvent($input['data']));

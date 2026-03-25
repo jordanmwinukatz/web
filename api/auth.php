@@ -468,6 +468,11 @@ try {
         ]);
         
     } elseif ($action === 'change_password') {
+        // Require authenticated session
+        require_once 'auth_middleware.php';
+        require_auth();
+        $userId = get_current_user_id();
+
         $currentPassword = $input['currentPassword'] ?? '';
         $newPassword = $input['newPassword'] ?? '';
         
@@ -479,15 +484,9 @@ try {
             throw new Exception('New password must be at least 8 characters');
         }
         
-        // Get user from email (assuming they're logged in and we have their email in authUser)
-        // In production, get from session. For now, require email in request
-        $userEmail = $input['email'] ?? null;
-        if (!$userEmail) {
-            throw new Exception('Email is required for password change');
-        }
-        
-        $stmt = $pdo->prepare('SELECT id, password_hash FROM users WHERE email = ?');
-        $stmt->execute([$userEmail]);
+        // Get user from session (not from client-supplied email)
+        $stmt = $pdo->prepare('SELECT id, password_hash FROM users WHERE id = ?');
+        $stmt->execute([$userId]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if (!$user) {
