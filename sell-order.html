@@ -194,6 +194,84 @@
       text-decoration: none; transition: color 0.15s;
     }
     .back-link:hover { color: var(--text-primary); }
+
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 480px) {
+      body {
+        padding: 16px 10px;
+        align-items: flex-start;
+      }
+      .card {
+        padding: 20px 16px;
+        border-radius: 12px;
+        width: 100%;
+      }
+      .step-title {
+        font-size: 1.2rem;
+      }
+      .step-desc {
+        font-size: 0.82rem;
+        margin-bottom: 16px;
+      }
+      .card-header {
+        gap: 10px;
+      }
+      .card-header-icon {
+        width: 34px;
+        height: 34px;
+        font-size: 15px;
+      }
+      .info-row {
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 8px 0;
+        font-size: 13px;
+      }
+      .info-row .value,
+      .info-row .value-amount {
+        font-size: 13px;
+      }
+      .detail-section {
+        padding: 12px;
+      }
+      .detail-label {
+        font-size: 9px;
+      }
+      .actions {
+        margin-top: 16px;
+      }
+      .btn {
+        padding: 11px 14px;
+        font-size: 13px;
+      }
+      .proof-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 8px;
+      }
+      .status-banner {
+        font-size: 12px;
+        padding: 8px 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      body {
+        padding: 12px 6px;
+      }
+      .card {
+        padding: 16px 12px;
+      }
+      .step-title {
+        font-size: 1.1rem;
+      }
+      .info-row {
+        font-size: 12px;
+      }
+      .copy-btn {
+        padding: 3px 8px;
+        font-size: 10px;
+      }
+    }
   </style>
 </head>
 <body>
