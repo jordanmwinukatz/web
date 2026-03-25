@@ -5,11 +5,9 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
 require_once '../config/database.php';
+require_once 'cors.php';
 
 header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: POST');
-header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -214,8 +212,11 @@ try {
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id'];
         
-        // Set admin session if this is the admin user
-        if ($email === 'jordanmwinukatz@gmail.com') {
+        // Set admin session if user has is_admin flag in DB
+        $adminCheck = $pdo->prepare('SELECT is_admin FROM users WHERE id = ?');
+        $adminCheck->execute([$user['id']]);
+        $adminRow = $adminCheck->fetch(PDO::FETCH_ASSOC);
+        if ($adminRow && (int)$adminRow['is_admin'] === 1) {
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_user'] = [
                 'id' => $user['id'],
