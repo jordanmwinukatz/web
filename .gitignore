@@ -4,3 +4,5 @@ node_modules/
 dist/app.v2.js
 .env
 *.sql
+rowCount
+getMessage

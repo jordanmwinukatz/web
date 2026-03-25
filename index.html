@@ -112,8 +112,8 @@
     
     <!-- Analytics tracking - load async to not block rendering -->
     <script>
-      // cache-busting version for static assets
-      window.__assetVersion = Date.now();
+      // Static asset version — update on each deploy
+      window.__assetVersion = '2026.03.25.1';
       (function() {
         var a = document.createElement('script');
         a.src = 'js/analytics.js?v=' + window.__assetVersion;

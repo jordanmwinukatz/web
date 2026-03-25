@@ -171,6 +171,34 @@ try {
         exit;
         
     } elseif ($action === 'login') {
+        // Rate limiting: max 5 failed attempts per 15 minutes per IP
+        $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $rateLimitFile = sys_get_temp_dir() . '/login_rate_' . md5($ip) . '.json';
+        $maxAttempts = 5;
+        $windowSeconds = 900; // 15 minutes
+        $now = time();
+        $attempts = [];
+
+        if (file_exists($rateLimitFile)) {
+            $attempts = json_decode(file_get_contents($rateLimitFile), true) ?: [];
+            // Keep only attempts within the window
+            $attempts = array_filter($attempts, function($t) use ($now, $windowSeconds) {
+                return $t > ($now - $windowSeconds);
+            });
+        }
+
+        if (count($attempts) >= $maxAttempts) {
+            $oldestAttempt = min($attempts);
+            $retryAfter = ($oldestAttempt + $windowSeconds) - $now;
+            http_response_code(429);
+            echo json_encode([
+                'success' => false,
+                'error' => 'Too many login attempts. Please try again in ' . ceil($retryAfter / 60) . ' minutes.',
+                'retry_after' => $retryAfter
+            ]);
+            exit;
+        }
+
         $email = trim($input['email'] ?? '');
         $password = $input['password'] ?? '';
         
@@ -202,7 +230,15 @@ try {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if (!$user || !password_verify($password, $user['password_hash'])) {
+            // Record failed attempt for rate limiting
+            $attempts[] = $now;
+            @file_put_contents($rateLimitFile, json_encode(array_values($attempts)));
             throw new Exception('Invalid email or password');
+        }
+        
+        // Successful login — clear rate limit file
+        if (file_exists($rateLimitFile)) {
+            @unlink($rateLimitFile);
         }
         
         // Start session for all users
