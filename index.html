@@ -129,11 +129,50 @@
 </head>
 <body>
     <div id="root">
-        <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-primary, #0c1121);">
-            <div style="text-align: center;">
-                <div style="border: 4px solid #10b981; border-top-color: transparent; border-radius: 50%; width: 44px; height: 44px; animation: spin 0.8s linear infinite; margin: 0 auto;"></div>
-                <p style="color: var(--text-secondary, #94a3b8); margin-top: 16px; font-size: 14px; font-family: 'Inter', sans-serif; letter-spacing: -0.01em;">Loading...</p>
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-primary, #0f172a);">
+            <!-- Premium Geometric Logo -->
+            <div style="position: relative; width: 60px; height: 60px; margin-bottom: 28px; animation: pulse-glow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;">
+                <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5));">
+                    <!-- Outer Hexagon -->
+                    <path d="M50 5 L89 27.5 L89 72.5 L50 95 L11 72.5 L11 27.5 Z" stroke="url(#crypto-gradient)" stroke-width="6" stroke-linejoin="round"/>
+                    <!-- Inner wireframe lines -->
+                    <path d="M50 5 L50 50 M11 27.5 L50 50 M89 27.5 L50 50 M11 72.5 L50 50 M89 72.5 L50 50 M50 95 L50 50" stroke="url(#crypto-gradient)" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+                    <!-- Center Core -->
+                    <circle cx="50" cy="50" r="8" fill="#10b981"/>
+                    <defs>
+                        <linearGradient id="crypto-gradient" x1="10" y1="5" x2="90" y2="95" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#34d399"/>
+                            <stop offset="1" stop-color="#047857"/>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <!-- Subtle spinning aura ring -->
+                <div style="position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border: 2px solid transparent; border-top-color: rgba(16, 185, 129, 0.4); border-left-color: rgba(16, 185, 129, 0.1); border-radius: 50%; animation: spin 1.5s linear infinite;"></div>
             </div>
+            
+            <!-- Branding & Bouncing Dots -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <h2 style="color: var(--text-primary, #f8fafc); font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.05em; margin: 0;">JM P2P</h2>
+                <span style="display: flex; gap: 4px; margin-top: 6px;">
+                    <span style="width: 4px; height: 4px; border-radius: 50%; background-color: #10b981; animation: loading-dot 1.4s infinite ease-in-out both;"></span>
+                    <span style="width: 4px; height: 4px; border-radius: 50%; background-color: #10b981; animation: loading-dot 1.4s infinite ease-in-out both; animation-delay: 0.2s;"></span>
+                    <span style="width: 4px; height: 4px; border-radius: 50%; background-color: #10b981; animation: loading-dot 1.4s infinite ease-in-out both; animation-delay: 0.4s;"></span>
+                </span>
+            </div>
+            
+            <!-- Sophisticated subtext -->
+            <p style="color: var(--text-secondary, #94a3b8); margin-top: 12px; font-size: 13px; font-family: 'Inter', sans-serif; font-weight: 500; letter-spacing: 0.02em;">Initializing trading engine...</p>
+            
+            <style>
+                @keyframes pulse-glow {
+                    0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5)); opacity: 1; }
+                    50% { transform: scale(1.03); filter: drop-shadow(0 0 16px rgba(16, 185, 129, 0.8)); opacity: 0.85; }
+                }
+                @keyframes loading-dot {
+                    0%, 80%, 100% { transform: translateY(0); opacity: 0.3; }
+                    40% { transform: translateY(-4px); opacity: 1; }
+                }
+            </style>
         </div>
     </div>
     <style>
