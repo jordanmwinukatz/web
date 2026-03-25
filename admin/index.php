@@ -928,6 +928,9 @@ function timeAgo($datetime) {
                 <a href="#settings-section" class="sidebar-link">
                     <i class="fas fa-cog"></i> Settings
                 </a>
+                <a href="#payment-api-section" class="sidebar-link">
+                    <i class="fas fa-credit-card"></i> Payment API
+                </a>
             </nav>
 
             <div class="sidebar-footer">
@@ -1121,6 +1124,62 @@ function timeAgo($datetime) {
                         <button id="p2pSaveBtn" class="config-save-btn">Save</button>
                     </form>
                     <p class="config-note">Note: Frontend polls every 30s; server caches for 15s.</p>
+                </div>
+
+                <!-- Payment API Settings -->
+                <div id="payment-api-section" class="glass-card-static config-section">
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+                        <h3 class="config-title" style="margin-bottom:0;">Payment API Configuration</h3>
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <span id="payApiStatusDot" style="width:8px;height:8px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
+                            <span id="payApiStatusText" style="font-size:12px;color:var(--text-muted);font-weight:600;">Disabled</span>
+                        </div>
+                    </div>
+                    <form onsubmit="savePaymentApiConfig(event)">
+                        <div style="margin-bottom:20px;">
+                            <label class="config-label">Enable Payment API</label>
+                            <label style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+                                <input type="checkbox" id="payApiEnabled" style="width:18px;height:18px;accent-color:#10b981;cursor:pointer;" />
+                                <span style="font-size:13px;color:var(--text-secondary);" id="payApiToggleLabel">API is disabled</span>
+                            </label>
+                        </div>
+                        <div class="config-grid">
+                            <div>
+                                <label class="config-label">Provider Name</label>
+                                <input id="payApiProvider" type="text" class="config-input" placeholder="e.g. AzamPay, TigoPesa, M-Pesa" />
+                            </div>
+                            <div>
+                                <label class="config-label">API Base URL</label>
+                                <input id="payApiUrl" type="url" class="config-input" placeholder="https://api.provider.com/v1" />
+                            </div>
+                            <div>
+                                <label class="config-label">API Key</label>
+                                <input id="payApiKey" type="text" class="config-input" placeholder="Your API key" />
+                            </div>
+                            <div>
+                                <label class="config-label">API Secret</label>
+                                <div style="position:relative;">
+                                    <input id="payApiSecret" type="password" class="config-input" placeholder="Your API secret" style="padding-right:40px;" />
+                                    <button type="button" onclick="toggleSecretVisibility()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:14px;" title="Toggle visibility">
+                                        <i id="secretEyeIcon" class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="config-label">Callback URL</label>
+                                <input id="payApiCallback" type="url" class="config-input" placeholder="https://yoursite.com/api/payment_callback" />
+                            </div>
+                            <div>
+                                <label class="config-label">Notes</label>
+                                <input id="payApiNotes" type="text" class="config-input" placeholder="Internal notes (optional)" />
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:12px;margin-top:20px;">
+                            <button id="payApiSaveBtn" class="config-save-btn"><i class="fas fa-save" style="margin-right:6px;"></i>Save Settings</button>
+                            <span id="payApiSaveStatus" style="font-size:12px;color:var(--accent-emerald);display:none;"><i class="fas fa-check-circle"></i> Saved</span>
+                        </div>
+                    </form>
+                    <p class="config-note" style="margin-top:16px;"><i class="fas fa-info-circle" style="margin-right:4px;"></i> Configure your payment provider credentials here. The "Pay via API" button on the sell order page will use these settings to trigger payouts. Secrets are stored server-side and masked in the UI.</p>
                 </div>
 
                 <!-- Additional Tools Section -->
@@ -1478,6 +1537,98 @@ function timeAgo($datetime) {
         }
 
         document.addEventListener('DOMContentLoaded', loadP2PConfig);
+
+        // ── Payment API config ──
+        function updatePayApiStatus(enabled) {
+            const dot = document.getElementById('payApiStatusDot');
+            const text = document.getElementById('payApiStatusText');
+            const label = document.getElementById('payApiToggleLabel');
+            if (enabled) {
+                dot.style.background = '#10b981';
+                text.textContent = 'Enabled';
+                text.style.color = '#10b981';
+                label.textContent = 'API is enabled';
+            } else {
+                dot.style.background = '#ef4444';
+                text.textContent = 'Disabled';
+                text.style.color = 'var(--text-muted)';
+                label.textContent = 'API is disabled';
+            }
+        }
+
+        document.getElementById('payApiEnabled').addEventListener('change', function() {
+            updatePayApiStatus(this.checked);
+        });
+
+        function toggleSecretVisibility() {
+            const inp = document.getElementById('payApiSecret');
+            const icon = document.getElementById('secretEyeIcon');
+            if (inp.type === 'password') {
+                inp.type = 'text';
+                icon.className = 'fas fa-eye-slash';
+            } else {
+                inp.type = 'password';
+                icon.className = 'fas fa-eye';
+            }
+        }
+
+        async function loadPaymentApiConfig() {
+            try {
+                const res = await fetch('../api/payment_api.php');
+                const j = await res.json();
+                if (j.success && j.data) {
+                    const d = j.data;
+                    document.getElementById('payApiEnabled').checked = !!d.enabled;
+                    document.getElementById('payApiProvider').value = d.provider || '';
+                    document.getElementById('payApiUrl').value = d.api_url || '';
+                    document.getElementById('payApiKey').value = d.api_key || '';
+                    document.getElementById('payApiSecret').value = d.api_secret || '';
+                    document.getElementById('payApiSecret').placeholder = d.has_secret ? '••••••••••••••••••••' : 'Your API secret';
+                    document.getElementById('payApiCallback').value = d.callback_url || '';
+                    document.getElementById('payApiNotes').value = d.notes || '';
+                    updatePayApiStatus(!!d.enabled);
+                }
+            } catch(e) { console.error('Failed to load payment API config', e); }
+        }
+
+        async function savePaymentApiConfig(ev) {
+            ev.preventDefault();
+            const btn = document.getElementById('payApiSaveBtn');
+            const statusEl = document.getElementById('payApiSaveStatus');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i>Saving...';
+            statusEl.style.display = 'none';
+            try {
+                const body = {
+                    action: 'save',
+                    enabled: document.getElementById('payApiEnabled').checked,
+                    provider: document.getElementById('payApiProvider').value.trim(),
+                    api_url: document.getElementById('payApiUrl').value.trim(),
+                    api_key: document.getElementById('payApiKey').value.trim(),
+                    api_secret: document.getElementById('payApiSecret').value.trim(),
+                    callback_url: document.getElementById('payApiCallback').value.trim(),
+                    notes: document.getElementById('payApiNotes').value.trim(),
+                };
+                const res = await fetch('../api/payment_api.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(body)
+                });
+                const j = await res.json();
+                if (!j.success) throw new Error(j.error || 'Failed to save');
+                statusEl.style.display = 'inline';
+                setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+                // Reload to reflect masked secret
+                await loadPaymentApiConfig();
+            } catch(e) {
+                alert('Error saving Payment API config: ' + e.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save" style="margin-right:6px;"></i>Save Settings';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPaymentApiConfig);
     </script>
 </body>
 </html>

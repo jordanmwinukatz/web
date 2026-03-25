@@ -250,11 +250,18 @@
       </div>
     </div>
 
-    <div class="actions" id="actions-row">
+    <div id="api-payment-status" class="status-banner hidden"></div>
+
+    <div class="actions" id="actions-row" style="flex-direction:column;gap:12px;">
+      <button class="btn btn-warning" id="api-pay-btn" onclick="triggerApiPayment(this)">
+        <i class="fas fa-bolt" style="margin-right:6px;"></i> Pay via API
+      </button>
       <button class="btn btn-primary" id="complete-btn" onclick="completeOrder(this)">
         <i class="fas fa-check-circle" style="margin-right:6px;"></i> Mark Payout Done
       </button>
-      <button class="btn btn-secondary" onclick="backToStep1()">Back</button>
+      <button class="btn btn-secondary" onclick="backToStep1()">
+        <i class="fas fa-arrow-left" style="margin-right:6px;"></i> Back
+      </button>
     </div>
   </div>
 
@@ -262,8 +269,115 @@
     const state = {
       submissionId: null,
       submission: null,
-      readonly: false
+      readonly: false,
+      apiEnabled: false
     };
+
+    // Check if payment API is enabled on load
+    async function checkPaymentApiStatus() {
+      try {
+        const res = await fetch('./api/payment_api.php');
+        const j = await res.json();
+        if (j.success && j.data) {
+          state.apiEnabled = !!j.data.enabled;
+          const btn = document.getElementById('api-pay-btn');
+          if (btn) {
+            if (!state.apiEnabled) {
+              btn.style.opacity = '0.5';
+              btn.title = 'Payment API is disabled. Configure it in Admin → Settings → Payment API.';
+            } else {
+              btn.style.opacity = '1';
+              btn.title = 'Send payout via ' + (j.data.provider || 'configured API');
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('Could not check payment API status', e);
+      }
+    }
+
+    function setApiPaymentStatus(message, isError = false, isSuccess = false) {
+      const el = document.getElementById('api-payment-status');
+      if (!el) return;
+      if (!message) { el.classList.add('hidden'); return; }
+      let icon = 'fa-info-circle';
+      el.classList.remove('status-error', 'hidden');
+      el.style.borderColor = '';
+      el.style.color = '';
+      el.style.background = '';
+      if (isError) {
+        el.classList.add('status-error');
+        icon = 'fa-exclamation-triangle';
+      } else if (isSuccess) {
+        el.style.borderColor = 'rgba(16,185,129,0.3)';
+        el.style.color = '#6ee7b7';
+        el.style.background = 'rgba(16,185,129,0.1)';
+        icon = 'fa-check-circle';
+      }
+      el.innerHTML = '<i class="fas ' + icon + '"></i> ' + message;
+      el.classList.remove('hidden');
+    }
+
+    async function triggerApiPayment(btn) {
+      if (state.readonly) {
+        alert('This order is archived and cannot be modified.');
+        return;
+      }
+      if (!state.submissionId) {
+        alert('Missing submission context.');
+        return;
+      }
+
+      const form = state.submission?.form_data || {};
+      const amount = form.amount_tzs || form.tzs || form.payout_amount || form.fiatAmount || form.amountFiat || 0;
+      const accountNumber = form.payout_account || form.accountNumber || form.payoutAccount || form.paymentAccount || '';
+      const accountName = form.payout_name || form.payoutName || form.accountName || '';
+      const channel = form.payout_channel || form.payoutChannel || form.paymentMethod || '';
+
+      if (!amount || Number(amount) <= 0) {
+        setApiPaymentStatus('Cannot trigger payment: no valid payout amount found for this order.', true);
+        return;
+      }
+      if (!accountNumber) {
+        setApiPaymentStatus('Cannot trigger payment: no account number found for this order.', true);
+        return;
+      }
+
+      if (!confirm(`Send ${Number(amount).toLocaleString()} TZS to ${accountName || accountNumber} via API?`)) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right:6px;"></i> Processing...';
+      setApiPaymentStatus('Sending payment request...', false);
+
+      try {
+        const res = await fetch('./api/payment_api.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'trigger_payment',
+            submission_id: state.submissionId,
+            amount: Number(amount),
+            account_number: accountNumber,
+            account_name: accountName,
+            channel: channel
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          setApiPaymentStatus('✅ Payment sent successfully! Ref: ' + (data.reference || 'N/A'), false, true);
+          // Auto-mark as completed
+          setTimeout(() => completeOrder(document.getElementById('complete-btn')), 1500);
+        } else {
+          setApiPaymentStatus(data.error || 'Payment failed. Use manual payout below.', true);
+        }
+      } catch (error) {
+        console.error(error);
+        setApiPaymentStatus('Network error: ' + error.message + '. Use manual payout below.', true);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-bolt" style="margin-right:6px;"></i> Pay via API';
+      }
+    }
 
     function getCachedSubmission(id) {
       try {
@@ -479,15 +593,20 @@
       }
     }
 
-    document.addEventListener("DOMContentLoaded", loadSubmission);
+    document.addEventListener("DOMContentLoaded", () => {
+      loadSubmission();
+      checkPaymentApiStatus();
+    });
 
     function applyReadonlyMode() {
       const nextBtn = document.getElementById("next-btn");
       const actionsRow = document.getElementById("actions-row");
       const step2 = document.getElementById("step2");
+      const apiBtn = document.getElementById("api-pay-btn");
       if (nextBtn) nextBtn.classList.add("hidden");
       if (actionsRow) actionsRow.classList.add("hidden");
       if (step2) step2.classList.add("hidden");
+      if (apiBtn) apiBtn.classList.add("hidden");
     }
   </script>
 </body>
