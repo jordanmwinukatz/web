@@ -248,6 +248,10 @@ try {
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id'];
         
+        // Initialize CSRF token
+        require_once __DIR__ . '/csrf.php';
+        csrf_init();
+        
         // Set admin session if user has is_admin flag in DB
         $adminCheck = $pdo->prepare('SELECT is_admin FROM users WHERE id = ?');
         $adminCheck->execute([$user['id']]);

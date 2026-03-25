@@ -884,6 +884,7 @@ function timeAgo($datetime) {
             .topbar-actions { gap: 6px; }
         }
     </style>
+    <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
 </head>
 <body>
     <audio id="notifSound" src="assets/audio/mixkit-urgent-simple-tone-loop-2976.wav" preload="none"></audio>

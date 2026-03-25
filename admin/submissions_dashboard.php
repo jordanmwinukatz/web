@@ -364,6 +364,7 @@ function timeAgoSub($datetime) {
             .detail-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
 </head>
 <body>
     <button class="sidebar-toggle" onclick="document.querySelector('.admin-sidebar').classList.toggle('open');document.querySelector('.sidebar-overlay').classList.toggle('open');"><i class="fas fa-bars"></i></button>

@@ -13,6 +13,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+require_once __DIR__ . '/csrf.php';
+csrf_init();
+csrf_verify();
+
 /**
  * Requires a valid user session.
  * Halts execution and returns 401 JSON if unauthorized.

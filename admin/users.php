@@ -191,6 +191,7 @@ function timeAgo($datetime) {
         .empty-state { padding: 60px 20px; text-align: center; color: var(--text-muted); }
         .empty-state i { font-size: 40px; margin-bottom: 16px; opacity: 0.5; }
     </style>
+    <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
 </head>
 <body>
     <div class="admin-layout">

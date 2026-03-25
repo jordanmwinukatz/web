@@ -191,6 +191,7 @@ foreach ($rows as $row) {
             .admin-topbar { padding: 0 20px 0 72px; }
         }
     </style>
+    <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
 </head>
 <body class="bg-[#0b1225] text-white min-h-screen">
     <button class="sidebar-toggle" onclick="document.querySelector('.admin-sidebar').classList.toggle('open');document.querySelector('.sidebar-overlay').classList.toggle('open');"><i class="fas fa-bars"></i></button>
