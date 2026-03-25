@@ -243,9 +243,9 @@ try {
         session_regenerate_id(true);
         $_SESSION['user_id'] = $user['id'];
         
-        // Initialize CSRF token
-        require_once __DIR__ . '/csrf.php';
-        csrf_init();
+        // 1) Verify CSRF Token
+        require_once __DIR__ . '/../core/csrf.php';
+        if (!verify_csrf_token($csrf_token)) {;
         
         // Set admin session if user has is_admin flag in DB
         $adminCheck = $pdo->prepare('SELECT is_admin FROM users WHERE id = ?');
@@ -424,7 +424,7 @@ try {
         
     } elseif ($action === 'update_profile') {
         // Update user profile (name and/or email)
-        require_once 'auth_middleware.php';
+        require_once __DIR__ . '/../core/auth_middleware.php';
         require_auth();
         
         $email = trim($input['email'] ?? '');
@@ -504,8 +504,8 @@ try {
         ]);
         
     } elseif ($action === 'change_password') {
-        // Require authenticated session
-        require_once 'auth_middleware.php';
+        // Standard auth validation handled inside logic now
+        require_once __DIR__ . '/../core/auth_middleware.php';
         require_auth();
         $userId = get_current_user_id();
 

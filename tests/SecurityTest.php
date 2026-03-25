@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../api/csrf.php';
+require_once __DIR__ . '/../config/env.php';
+Env::load();
+require_once __DIR__ . '/../core/csrf.php';
 
 class SecurityTest {
     

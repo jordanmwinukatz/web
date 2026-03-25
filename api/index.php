@@ -11,7 +11,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
-require_once __DIR__ . '/cors.php';
+require_once __DIR__ . '/../core/cors.php';
 require_once __DIR__ . '/../core/Router.php';
 require_once __DIR__ . '/../core/Controller.php';
 require_once __DIR__ . '/../core/Model.php';
@@ -30,6 +30,12 @@ $router->register('submissions', 'SubmissionController');
 $router->register('upload', 'UploadController');
 $router->register('upload_profile', 'UploadController');
 $router->register('analytics', 'AnalyticsController');
+$router->register('binance_price', 'PricingController');
+$router->register('set_override_price', 'PricingController');
+$router->register('p2p_config', 'ConfigController');
+$router->register('payment_api', 'PaymentApiController');
+$router->register('payment_accounts', 'UserPaymentAccountController');
+$router->register('health', 'HealthController');
 
 // Retrieve the requested route from the rewrite
 $route = $_GET['route'] ?? null;
