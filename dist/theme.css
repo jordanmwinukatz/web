@@ -65,6 +65,19 @@
     --text-inverse: #0f172a;
     --text-on-accent: #ffffff;
 
+    /* React Inline Style Mapping Variables */
+    --color-text-68: rgba(255,255,255,0.68);
+    --color-text-92: rgba(255,255,255,0.92);
+    --color-text-62: rgba(255,255,255,0.62);
+    --color-text-70: rgba(255,255,255,0.7);
+    --color-text-80: rgba(255,255,255,0.8);
+    --color-text-60: rgba(255,255,255,0.6);
+    --color-text-white: #ffffff;
+    --color-bg-04: rgba(255,255,255,0.04);
+    --color-bg-05: rgba(255,255,255,0.05);
+    --color-border-06: rgba(255,255,255,0.06);
+    --color-border-10: rgba(255,255,255,0.1);
+
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
@@ -119,6 +132,19 @@
     --text-muted: #94a3b8;
     --text-inverse: #f8fafc;
     --text-on-accent: #ffffff;
+
+    /* React Inline Style Mapping Variables */
+    --color-text-68: #475569;
+    --color-text-92: #0f172a;
+    --color-text-62: #64748b;
+    --color-text-70: #475569;
+    --color-text-80: #334155;
+    --color-text-60: #64748b;
+    --color-text-white: #0f172a;
+    --color-bg-04: rgba(15,23,42,0.06);
+    --color-bg-05: rgba(15,23,42,0.06);
+    --color-border-06: rgba(15,23,42,0.12);
+    --color-border-10: rgba(15,23,42,0.12);
 
     --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
     --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.08), 0 2px 4px rgba(15, 23, 42, 0.04);

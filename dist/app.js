@@ -235,7 +235,7 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
     /* ── Buy / Sell toggle ── */
     /*#__PURE__*/React.createElement("div", {
     style: {
-      display: 'flex', background: 'rgba(255,255,255,0.05)',
+      display: 'flex', background: 'var(--color-bg-05)',
       borderRadius: '12px', padding: '5px', marginBottom: '16px'
     }
   },
@@ -268,7 +268,7 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
     onChange: e => setAmount(e.target.value),
     style: {
       width: '100%', boxSizing: 'border-box',
-      background: 'rgba(255,255,255,0.05)',
+      background: 'var(--color-bg-05)',
       border: '1px solid rgba(255,255,255,0.12)',
       borderRadius: '14px', padding: '15px 14px',
       color: '#f1f5f9', fontSize: '15px', fontWeight: 500, outline: 'none',
@@ -290,7 +290,7 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
     onChange: e => { setFromCcy(e.target.value); setToCcy(e.target.value === 'USDT' ? 'TZS' : 'USDT'); setAmount(''); },
     style: {
       width: '100%',
-      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+      background: 'var(--color-border-06)', border: '1px solid rgba(255,255,255,0.12)',
       borderRadius: '14px', padding: '15px 12px', color: '#f1f5f9',
       fontSize: '15px', fontWeight: 600, outline: 'none', cursor: 'pointer',
       appearance: 'none'
@@ -323,7 +323,7 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
     onChange: e => { setToCcy(e.target.value); setFromCcy(e.target.value === 'TZS' ? 'USDT' : 'TZS'); setAmount(''); },
     style: {
       width: '100%',
-      background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)',
+      background: 'var(--color-border-06)', border: '1px solid rgba(255,255,255,0.12)',
       borderRadius: '14px', padding: '15px 12px', color: '#f1f5f9',
       fontSize: '15px', fontWeight: 600, outline: 'none', cursor: 'pointer',
       appearance: 'none'
@@ -2205,7 +2205,7 @@ function App() {
       margin: '0 0 22px 0',
       fontSize: '15px',
       lineHeight: 1.6,
-      color: 'rgba(255,255,255,0.68)',
+      color: 'var(--color-text-68)',
       maxWidth: '520px'
     }
   }, "Public rates. Private speed. A premium P2P desk built for trust, clarity, and instant settlement."),
@@ -2260,15 +2260,15 @@ function App() {
       style: {
         display: 'flex', gap: '8px', alignItems: 'baseline',
         padding: '8px 10px', borderRadius: '999px',
-        background: 'rgba(255,255,255,0.04)',
+        background: 'var(--color-bg-04)',
         border: '1px solid rgba(255,255,255,0.06)'
       }
     },
           /*#__PURE__*/React.createElement("strong", {
-      style: { color: 'rgba(255,255,255,0.92)', fontSize: '14px' }
+      style: { color: 'var(--color-text-92)', fontSize: '14px' }
     }, item.val),
           /*#__PURE__*/React.createElement("span", {
-      style: { color: 'rgba(255,255,255,0.62)', fontSize: '12px' }
+      style: { color: 'var(--color-text-62)', fontSize: '12px' }
     }, item.label)
     )
     )
