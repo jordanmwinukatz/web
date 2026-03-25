@@ -1,0 +1,93 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    # We need a MySQL service to run our tests against
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: u234315390_main
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.2'
+        extensions: pdo, pdo_mysql
+
+    - name: Configure Testing Environment
+      run: |
+        # Create a .env file for the testing environment
+        cat << 'EOF' > .env
+        APP_ENV=testing
+        APP_DEBUG=true
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_DATABASE=u234315390_main
+        DB_USERNAME=root
+        DB_PASSWORD=root
+        EOF
+
+    - name: Wait for MySQL
+      run: |
+        while ! mysqladmin ping -h 127.0.0.1 -uroot -proot --silent; do
+          sleep 1
+        done
+
+    - name: Run Database Migrations
+      run: php bin/migrate.php
+
+    - name: Execute Autonomous Test Suite
+      run: php bin/test.php
+
+  deploy:
+    name: Deploy to Production
+    needs: test
+    runs-on: ubuntu-latest
+    # Only deploy on push to main (not PRs)
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Sync files to Production via FTP
+      # Example uses an FTP action (can be replaced with SFTP/SSH based on Hostinger configuration)
+      # Action will silently skip or fail if secrets are not configured,
+      # which prevents the pipeline from breaking immediately out of the box.
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      if: env.FTP_SERVER != ''
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        exclude: |
+          **/.git*
+          **/.git*/**
+          tests/**
+          bin/**
+          database/**
+          *.md
+          .github/**
+          .env.example

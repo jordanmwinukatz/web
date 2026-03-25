@@ -62,7 +62,14 @@ class Env {
      */
     public static function get($key, $default = null) {
         if (!self::$loaded) self::load();
-        return self::$vars[$key] ?? $_ENV[$key] ?? getenv($key) ?: $default;
+        
+        // 12-factor app methodology: System env vars override .env file vars
+        $val = $_ENV[$key] ?? getenv($key);
+        if ($val !== false && $val !== null) {
+            return $val;
+        }
+        
+        return self::$vars[$key] ?? $default;
     }
 }
 ?>

@@ -3,7 +3,7 @@
 // Returns 200 OK if the app and database are reachable.
 // Usage: GET /api/health.php
 
-require_once 'cors.php';
+require_once __DIR__ . '/cors.php';
 header('Content-Type: application/json');
 
 $status = ['status' => 'ok', 'timestamp' => time()];
@@ -11,7 +11,7 @@ $httpCode = 200;
 
 // Check database connectivity
 try {
-    require_once '../config/database.php';
+    require_once __DIR__ . '/../config/database.php';
     $db = new Database();
     $conn = $db->getConnection();
     $stmt = $conn->query('SELECT 1');
