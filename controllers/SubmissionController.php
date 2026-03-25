@@ -1,16 +1,15 @@
 <?php
-// Enable error reporting for debugging
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
+/**
+ * controllers/SubmissionController.php
+ */
 
-require_once 'cors.php';
+class SubmissionController extends Controller {
 
-header('Content-Type: application/json');
-
+    public function handle($input) {
+        $method = $_SERVER['REQUEST_METHOD'];
+        
 try {
-    require_once '../config/database.php';
-    require_once 'auth_middleware.php';
+    // Requires handled by Front Controller
     
     $database = new Database();
     $conn = $database->getConnection();
@@ -716,5 +715,7 @@ try {
         'success' => false,
         'error' => 'A server error occurred. Please try again or contact support if the problem persists.'
     ]);
+}
+}
 }
 ?>

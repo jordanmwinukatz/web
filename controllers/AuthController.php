@@ -1,20 +1,15 @@
 <?php
-// Disable error display for production, but log errors
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
+/**
+ * controllers/AuthController.php
+ */
 
-require_once '../config/database.php';
-require_once 'cors.php';
+class AuthController extends Controller {
 
-header('Content-Type: application/json');
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['success' => false, 'error' => 'Only POST requests allowed']);
-    exit;
-}
-
+    public function handle($input) {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            $this->error('Only POST requests allowed', 405);
+        }
+        
 try {
     $db = new Database();
     $pdo = $db->getConnection();
@@ -766,3 +761,7 @@ try {
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
 }
+
+}
+}
+?>
