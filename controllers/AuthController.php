@@ -27,25 +27,19 @@ try {
     $action = $_GET['action'] ?? $input['action'] ?? '';
     
     if ($action === 'register') {
-        // Start output buffering early to prevent any output
-        ob_start();
-        
         $name = trim($input['name'] ?? '');
         $email = trim($input['email'] ?? '');
         $password = $input['password'] ?? '';
         
         if (empty($name)) {
-            ob_clean();
             throw new Exception('Name is required');
         }
         
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            ob_clean();
             throw new Exception('Invalid email format');
         }
         
         if (strlen($password) < 8) {
-            ob_clean();
             throw new Exception('Password must be at least 8 characters');
         }
         
@@ -54,7 +48,6 @@ try {
         $stmt->execute([$email]);
         $existingUser = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($existingUser) {
-            ob_clean();
             throw new Exception('Email already registered. Please log in instead or use a different email address.');
         }
         
@@ -85,7 +78,6 @@ try {
         $userId = $pdo->lastInsertId();
         
         // Send admin notification about new user registration (no verification email sent)
-        ob_start();
         try {
             $emailPath = __DIR__ . '/../config/email.php';
             if (file_exists($emailPath)) {
@@ -132,8 +124,6 @@ try {
             error_log('Fatal error in email sending: ' . $e->getMessage());
             // Don't fail registration if email has fatal error
         }
-        // Discard any output that might have been generated
-        ob_end_clean();
         
         // Get created user with profile_picture column
         try {
@@ -155,8 +145,6 @@ try {
         // Add email_verified status to response (automatically verified)
         $newUser['email_verified'] = true;
         
-        // Ensure clean JSON output
-        ob_clean();
         echo json_encode([
             'success' => true,
             'user' => $newUser,
@@ -743,17 +731,14 @@ try {
     
 } catch (Exception $e) {
     http_response_code(400);
-    // Ensure clean JSON output
-    ob_clean();
     echo json_encode([
         'success' => false,
         'error' => $e->getMessage()
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     exit;
-} catch (Error $e) {
-    // Catch fatal errors (PHP 7+)
+} catch (Throwable $e) {
+    // Catch fatal errors and ErrorExceptions (PHP 7+)
     http_response_code(500);
-    ob_clean();
     error_log('Auth API Fatal Error: ' . $e->getMessage());
     echo json_encode([
         'success' => false,
