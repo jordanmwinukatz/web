@@ -400,6 +400,418 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
   );
 }
 
+const PhoneMockupSection = () => {
+  React.useEffect(() => {
+    window.atsecOk = function() {
+      var f = document.getElementById('atsec-form');
+      var m = document.getElementById('atsec-ok');
+      var emailInp = f.querySelector('input[type="email"]');
+      var email = emailInp ? emailInp.value : '';
+      var btn = f.querySelector('button');
+
+      if (!email || !f || !m) return;
+      if (btn) { btn.disabled = true; btn.innerText = 'Sending...'; }
+
+      var sessionId = localStorage.getItem('session_id');
+      if (!sessionId) {
+          sessionId = 'sess_' + Math.random().toString(36).substring(2, 15);
+          localStorage.setItem('session_id', sessionId);
+      }
+
+      var csrfMatch = document.cookie.match(/X-CSRF-TOKEN=([^;]+)/);
+      var csrfToken = csrfMatch ? csrfMatch[1] : '';
+
+      fetch('api/index.php?route=submissions', {
+          method: 'POST',
+          headers: { 
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': csrfToken
+          },
+          body: JSON.stringify({
+              action: 'create_submission',
+              session_id: sessionId,
+              submission_type: 'app_waitlist',
+              form_data: { email: email },
+              user_info: { email: email }
+          })
+      })
+      .then(res => res.json())
+      .then(data => {
+          if (data.success) {
+              f.style.transition = 'opacity .3s'; 
+              f.style.opacity = '0';
+              setTimeout(() => {
+                  f.style.display = 'none'; 
+                  m.style.display = 'block';
+                  m.style.opacity = '0'; 
+                  m.style.transition = 'opacity .4s';
+                  setTimeout(() => { m.style.opacity = '1'; }, 10);
+              }, 300);
+          } else {
+              alert(data.error || 'Failed to join waitlist. Please try again.');
+              if (btn) { btn.disabled = false; btn.innerText = 'Notify Me'; }
+          }
+      })
+      .catch(err => {
+          console.error(err);
+          alert('Network error. Please try again later.');
+          if (btn) { btn.disabled = false; btn.innerText = 'Notify Me'; }
+      });
+    };
+    return () => { delete window.atsecOk; };
+  }, []);
+
+  return /*#__PURE__*/React.createElement("div", {
+    dangerouslySetInnerHTML: {
+    __html: `
+    <style>
+      .app-teaser-section {
+        padding: 6rem 1.5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .app-teaser-section::before {
+        content: '';
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 700px; height: 700px;
+        background: radial-gradient(circle, rgba(234,179,8,0.07) 0%, transparent 70%);
+        pointer-events: none;
+      }
+      .app-teaser-section * {
+        box-sizing: border-box;
+      }
+      .app-teaser-inner {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: center;
+      }
+      .app-teaser-inner > div {
+        min-width: 0;
+        max-width: 100%;
+      }
+      @media (max-width: 860px) {
+        .app-teaser-section { padding: 4rem 1rem; width: 100%; overflow: hidden; }
+        .app-teaser-inner { grid-template-columns: 1fr; text-align: center; gap: 2rem; width: 100%; }
+        .app-teaser-h2 { font-size: clamp(2rem, 8vw, 2.5rem); word-break: break-word; }
+        .app-teaser-pills { justify-content: center !important; }
+        .atsec-badge-left, .atsec-badge-right { display: none !important; }
+        .app-teaser-phone-wrap { padding: 10px 0; transform: scale(0.8); transform-origin: top center; margin-bottom: -100px; width: 100%; }
+        .app-teaser-notify-form { width: 100%; max-width: 100%; flex-direction: column; align-items: stretch; justify-content: center; }
+        .app-teaser-notify-form input { min-width: 0; width: 100%; text-align: center; }
+        .app-teaser-desc { width: 100%; max-width: 100%; margin-left: auto; margin-right: auto; padding: 0 5px; }
+      }
+
+      /* Left text */
+      .app-teaser-eyebrow {
+        display: inline-flex; align-items: center; gap: 7px;
+        background: rgba(234,179,8,0.1);
+        color: #eab308;
+        border: 1px solid rgba(234,179,8,0.25);
+        border-radius: 100px;
+        font-size: 0.72rem; font-weight: 700;
+        letter-spacing: 1.2px; text-transform: uppercase;
+        padding: 6px 14px;
+        margin-bottom: 1.5rem;
+      }
+      .app-teaser-eyebrow-dot {
+        width: 6px; height: 6px; border-radius: 50%;
+        background: #eab308;
+        animation: atsec-pulse 2s infinite;
+      }
+      @keyframes atsec-pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+      .app-teaser-h2 {
+        font-size: clamp(2rem, 3.2vw, 2.9rem);
+        font-weight: 800; line-height: 1.1;
+        color: #f8fafc; margin-bottom: 1.25rem;
+        letter-spacing: -0.025em;
+      }
+      .app-teaser-h2 em {
+        font-style: normal;
+        background: linear-gradient(135deg, #facc15, #eab308);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      .app-teaser-desc {
+        font-size: 1rem; color: #94a3b8;
+        line-height: 1.75; margin-bottom: 2rem;
+        max-width: 440px;
+      }
+      .app-teaser-pills {
+        display: flex; gap: 0.65rem; flex-wrap: wrap;
+        margin-bottom: 2.25rem;
+      }
+      .app-teaser-pill {
+        display: flex; align-items: center; gap: 7px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-radius: 10px; padding: 8px 14px;
+        font-size: 0.82rem; font-weight: 600; color: #cbd5e1;
+      }
+      .app-teaser-notify-form {
+        display: flex; gap: 0.65rem;
+        max-width: 440px; flex-wrap: wrap;
+      }
+      .app-teaser-notify-form input {
+        flex: 1; min-width: 160px;
+        padding: 11px 16px; border-radius: 11px;
+        background: rgba(15,23,42,0.75);
+        border: 1px solid rgba(255,255,255,0.08);
+        color: white; font-size: 0.9rem; outline: none;
+        transition: border-color 0.2s;
+      }
+      .app-teaser-notify-form input:focus { border-color: rgba(234,179,8,0.5); }
+      .app-teaser-notify-form input::placeholder { color: #475569; }
+      .app-teaser-notify-btn {
+        padding: 11px 22px; border-radius: 11px;
+        background: linear-gradient(135deg,#facc15,#eab308);
+        color: #422006; font-weight: 700; font-size: 0.88rem;
+        border: none; cursor: pointer; white-space: nowrap;
+        box-shadow: 0 8px 20px rgba(234,179,8,0.25);
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      .app-teaser-notify-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(234,179,8,0.35); }
+      .app-teaser-success {
+        display: none; color: #facc15;
+        font-weight: 500; font-size: 0.9rem; padding: 10px 0;
+      }
+
+      /* Right phone */
+      .app-teaser-phone-wrap {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 60px 90px;
+        perspective: 1200px;
+      }
+      .atsec-phone {
+        width: 260px; height: 545px;
+        background: #0c1424;
+        border-radius: 44px;
+        border: 5px solid #1e293b;
+        box-shadow:
+          0 0 0 1px rgba(255,255,255,0.04),
+          -22px 28px 60px rgba(0,0,0,0.7),
+          inset 0 0 30px rgba(234,179,8,0.06);
+        transform: rotateY(-12deg) rotateX(4deg);
+        animation: atsec-float 7s ease-in-out infinite;
+        overflow: hidden;
+        display: flex; flex-direction: column;
+        position: relative; flex-shrink: 0;
+      }
+      .atsec-phone::before {
+        content: ''; position: absolute; inset: 0;
+        background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, transparent 60%);
+        z-index: 6; pointer-events: none; border-radius: inherit;
+      }
+      @keyframes atsec-float {
+        0%,100%{ transform: rotateY(-12deg) rotateX(4deg) translateY(0); }
+        50%    { transform: rotateY(-8deg)  rotateX(6deg) translateY(-16px); }
+      }
+      .atsec-island {
+        position: absolute; top: 12px; left: 50%;
+        transform: translateX(-50%);
+        width: 88px; height: 25px;
+        background: #000; border-radius: 13px; z-index: 10;
+      }
+      .atsec-statusbar {
+        padding: 10px 18px 0;
+        margin-top: 28px;
+        display: flex; justify-content: space-between; align-items: center;
+        font-size: 0.65rem; color: rgba(255,255,255,0.55); font-weight: 600;
+        flex-shrink: 0; z-index: 5;
+      }
+      .atsec-header {
+        padding: 8px 18px 14px;
+        background: linear-gradient(180deg, rgba(234,179,8,0.1) 0%, transparent 100%);
+        flex-shrink: 0;
+      }
+      .atsec-hdr-row { display: flex; justify-content: space-between; align-items: center; }
+      .atsec-greeting { font-size: 0.7rem; color: #64748b; font-weight: 500; }
+      .atsec-username { font-size: 0.9rem; font-weight: 700; color: #f1f5f9; }
+      .atsec-avatar { width: 34px; height: 34px; border-radius: 50%; background: linear-gradient(135deg,#facc15,#eab308); }
+      .atsec-balance-card {
+        background: linear-gradient(135deg, rgba(234,179,8,0.16) 0%, rgba(202,138,4,0.08) 100%);
+        border: 1px solid rgba(234,179,8,0.2);
+        border-radius: 18px; padding: 14px 15px;
+        margin: 0 14px 10px; flex-shrink: 0;
+      }
+      .atsec-bal-label { font-size: 0.65rem; color: #64748b; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+      .atsec-bal-amount { font-size: 1.6rem; font-weight: 800; color: #f1f5f9; line-height: 1.1; margin: 3px 0; letter-spacing: -0.03em; }
+      .atsec-bal-change { font-size: 0.7rem; color: #eab308; font-weight: 600; }
+      .atsec-bal-btns { display: flex; gap: 7px; margin-top: 10px; }
+      .atsec-bal-btn {
+        flex: 1; padding: 7px; border-radius: 9px;
+        text-align: center; font-size: 0.74rem; font-weight: 700;
+        color: #422006; background: #eab308;
+      }
+      .atsec-bal-btn.outline {
+        background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.8);
+        border: 1px solid rgba(255,255,255,0.1);
+      }
+      .atsec-mkt-hdr {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 0 14px 6px; flex-shrink: 0;
+      }
+      .atsec-mkt-title { font-size: 0.82rem; font-weight: 700; color: #f1f5f9; }
+      .atsec-mkt-see { font-size: 0.68rem; color: #eab308; font-weight: 600; }
+      .atsec-coins {
+        flex: 1; overflow: hidden;
+        padding: 0 14px 14px;
+        display: flex; flex-direction: column; gap: 7px;
+      }
+      .atsec-cr {
+        display: flex; align-items: center; justify-content: space-between;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.04);
+        border-radius: 13px; padding: 9px 11px;
+      }
+      .atsec-cl { display: flex; align-items: center; gap: 8px; }
+      .atsec-ci {
+        width: 33px; height: 33px; border-radius: 9px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 0.95rem; font-weight: 800;
+      }
+      .atsec-cn { font-size: 0.78rem; font-weight: 700; color: #f1f5f9; }
+      .atsec-cs { font-size: 0.66rem; color: #64748b; }
+      .atsec-cvr { text-align: right; }
+      .atsec-cp { font-size: 0.78rem; font-weight: 700; color: #f1f5f9; }
+      .atsec-cc { font-size: 0.67rem; font-weight: 600; }
+      .atsec-up { color: #eab308; } .atsec-dn { color: #f87171; }
+
+      /* Floating badges anchored to the phone-wrap padding */
+      .atsec-badge {
+        position: absolute;
+        background: rgba(10,16,28,0.92);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 14px;
+        padding: 10px 16px;
+        display: flex; align-items: center; gap: 10px;
+        box-shadow: 0 12px 36px rgba(0,0,0,0.55);
+        color: white; z-index: 30;
+        white-space: nowrap;
+      }
+      .atsec-bic {
+        width: 32px; height: 32px; border-radius: 50%;
+        display: flex; align-items: center; justify-content: center;
+        font-weight: bold; flex-shrink: 0; font-size: 0.9rem;
+      }
+      .atsec-bn { font-weight: 700; font-size: 0.82rem; }
+      .atsec-bs { font-size: 0.68rem; color: #94a3b8; }
+      .atsec-badge-left {
+        left: 0; top: 25%;
+        animation: atsec-fb 8s ease-in-out infinite alternate;
+      }
+      .atsec-badge-right {
+        right: 0; bottom: 28%;
+        animation: atsec-fb 9s ease-in-out infinite alternate-reverse;
+      }
+      @keyframes atsec-fb { 0%{transform:translateY(0)} 100%{transform:translateY(-12px)} }
+    </style>
+
+    <section class="app-teaser-section">
+      <div class="app-teaser-inner">
+
+        <!-- Left -->
+        <div>
+          <div class="app-teaser-eyebrow">
+            <span class="app-teaser-eyebrow-dot"></span>
+            Official Mobile App
+          </div>
+          <h2 class="app-teaser-h2">Trade crypto from<br><em>anywhere</em> in minutes.</h2>
+          <p class="app-teaser-desc">The JM P2P mobile app is almost here — a native trading experience for Tanzania with instant M-Pesa, Tigo Pesa, CRDB &amp; NMB support, right in your pocket.</p>
+          <div class="app-teaser-pills">
+            <div class="app-teaser-pill">⚡ Lightning Fast</div>
+            <div class="app-teaser-pill">🔒 Bank-grade Security</div>
+            <div class="app-teaser-pill">📱 iOS &amp; Android</div>
+          </div>
+          <form class="app-teaser-notify-form" id="atsec-form" onsubmit="event.preventDefault();atsecOk();">
+            <input type="email" placeholder="your@email.com" required>
+            <button type="submit" class="app-teaser-notify-btn">Notify Me</button>
+          </form>
+          <div class="app-teaser-success" id="atsec-ok">🎉 Awesome — you're on the list!</div>
+        </div>
+
+        <!-- Right: phone -->
+        <div class="app-teaser-phone-wrap">
+
+          <div class="atsec-badge atsec-badge-left">
+            <div class="atsec-bic" style="background:#eab308;color:#422006;">
+              <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+            </div>
+            <div><div class="atsec-bn">Instant Settlement</div><div class="atsec-bs">M-Pesa · Tigo Pesa · CRDB</div></div>
+          </div>
+
+          <div class="atsec-badge atsec-badge-right">
+            <div class="atsec-bic" style="background:#0ea5e9;color:#fff;">💸</div>
+            <div><div class="atsec-bn">Zero App Fees</div><div class="atsec-bs">On selected pairs</div></div>
+          </div>
+
+          <div class="atsec-phone">
+            <div class="atsec-island"></div>
+            <div class="atsec-statusbar"><span>9:41</span><span>5G ▮▮▮</span></div>
+            <div class="atsec-header">
+              <div class="atsec-hdr-row">
+                <div><div class="atsec-greeting">Good morning 👋</div><div class="atsec-username">Jordan M.</div></div>
+                <div class="atsec-avatar"></div>
+              </div>
+            </div>
+            <div class="atsec-balance-card">
+              <div class="atsec-bal-label">Total Portfolio Value</div>
+              <div class="atsec-bal-amount">$3,240.50</div>
+              <div class="atsec-bal-change">↑ +$48.20 today (1.51%)</div>
+              <div class="atsec-bal-btns">
+                <div class="atsec-bal-btn">Buy Crypto</div>
+                <div class="atsec-bal-btn outline">Sell Crypto</div>
+              </div>
+            </div>
+            <div class="atsec-mkt-hdr">
+              <div class="atsec-mkt-title">Market</div>
+              <div class="atsec-mkt-see">See all →</div>
+            </div>
+            <div class="atsec-coins">
+              <div class="atsec-cr">
+                <div class="atsec-cl">
+                  <div class="atsec-ci" style="background:rgba(245,158,11,.15);color:#f59e0b;">₿</div>
+                  <div><div class="atsec-cn">Bitcoin</div><div class="atsec-cs">BTC</div></div>
+                </div>
+                <div class="atsec-cvr"><div class="atsec-cp">$64,230</div><div class="atsec-cc atsec-up">+2.45%</div></div>
+              </div>
+              <div class="atsec-cr">
+                <div class="atsec-cl">
+                  <div class="atsec-ci" style="background:rgba(14,165,233,.15);color:#0ea5e9;">₮</div>
+                  <div><div class="atsec-cn">Tether</div><div class="atsec-cs">USDT</div></div>
+                </div>
+                <div class="atsec-cvr"><div class="atsec-cp">$1.00</div><div class="atsec-cc atsec-up">+0.01%</div></div>
+              </div>
+              <div class="atsec-cr">
+                <div class="atsec-cl">
+                  <div class="atsec-ci" style="background:rgba(139,92,246,.15);color:#8b5cf6;">Ξ</div>
+                  <div><div class="atsec-cn">Ethereum</div><div class="atsec-cs">ETH</div></div>
+                </div>
+                <div class="atsec-cvr"><div class="atsec-cp">$3,450</div><div class="atsec-cc atsec-dn">-0.85%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    `
+  }
+});
+};
+
+
+
 /* =========================
    MAIN APP
    ========================= */
@@ -1202,12 +1614,12 @@ function App() {
         if (!cancelled) {
           const buyPrice = buyData?.success && buyData?.price !== undefined ? Number(buyData.price) : null;
           const sellPrice = sellData?.success && sellData?.price !== undefined ? Number(sellData.price) : null;
-          const buyMin = parseAmount(buyData?.minAmount);
-          const buyMax = parseAmount(buyData?.maxAmount);
-          const buyAvailable = parseAmount(buyData?.availableFiat);
-          const sellMin = parseAmount(sellData?.minAmount);
-          const sellMax = parseAmount(sellData?.maxAmount);
-          const sellAvailable = parseAmount(sellData?.availableFiat);
+          const buyMin = parseAmount(buyData?.limits?.minFiat ?? buyData?.minAmount);
+          const buyMax = parseAmount(buyData?.limits?.maxFiat ?? buyData?.maxAmount);
+          const buyAvailable = parseAmount(buyData?.limits?.availableFiat ?? buyData?.availableFiat);
+          const sellMin = parseAmount(sellData?.limits?.minFiat ?? sellData?.minAmount);
+          const sellMax = parseAmount(sellData?.limits?.maxFiat ?? sellData?.maxAmount);
+          const sellAvailable = parseAmount(sellData?.limits?.availableFiat ?? sellData?.availableFiat);
           const buyMaxCandidates = [buyAvailable, buyMax].filter(v => typeof v === 'number' && v > 0);
           const sellMaxCandidates = [sellAvailable, sellMax].filter(v => typeof v === 'number' && v > 0);
           const nextBuyMinTzs = buyMin ?? liveMinTzs;
@@ -1580,9 +1992,7 @@ function App() {
     href: "#how",
     className: "hover:text-white"
   }, "How It Works"), /*#__PURE__*/React.createElement("a", {
-    href: "#why",
-    className: "hover:text-white"
-  }, "Why Us"), /*#__PURE__*/React.createElement("a", {
+
     href: "#contact",
     className: "hover:text-white"
   }, "Contact")), /*#__PURE__*/React.createElement("div", {
@@ -2351,34 +2761,34 @@ function App() {
   }, priceMode === 'buy' ? 'Buy Details' : 'Sell Details'), /*#__PURE__*/React.createElement("div", {
     className: "mt-4 bg-slate-900/70 border border-white/10 rounded-2xl overflow-hidden"
   }, /*#__PURE__*/React.createElement("table", {
-    className: "w-full text-sm sm:text-base"
+    className: "w-full text-xs sm:text-sm md:text-base"
   }, /*#__PURE__*/React.createElement("thead", {
-    className: "bg-slate-900/80 text-slate-300 uppercase tracking-wide text-xs sm:text-sm"
+    className: "bg-slate-900/80 text-slate-300 uppercase tracking-wide text-[10px] sm:text-xs md:text-sm"
   }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
-    className: "px-4 py-3 text-left"
+    className: "px-2 py-2 sm:px-4 sm:py-3 text-left"
   }, "Asset"), /*#__PURE__*/React.createElement("th", {
-    className: "px-4 py-3 text-left"
+    className: "px-2 py-2 sm:px-4 sm:py-3 text-left"
   }, "Price (TZS)"), /*#__PURE__*/React.createElement("th", {
-    className: "px-4 py-3 text-left"
+    className: "px-2 py-2 sm:px-4 sm:py-3 text-left"
   }, "Limits"), /*#__PURE__*/React.createElement("th", {
-    className: "px-4 py-3 text-center"
+    className: "px-2 py-2 sm:px-4 sm:py-3 text-center"
   }, "Action"))), /*#__PURE__*/React.createElement("tbody", null, offerDetails[priceMode].map(row => /*#__PURE__*/React.createElement("tr", {
     key: `${priceMode}-${row.asset}`,
     className: "border-t border-white/5"
   }, /*#__PURE__*/React.createElement("td", {
-    className: "px-4 py-3 font-semibold text-white"
+    className: "px-2 py-2 sm:px-4 sm:py-3 font-semibold text-white"
   }, row.asset), /*#__PURE__*/React.createElement("td", {
-    className: "px-4 py-3 font-semibold",
+    className: "px-2 py-2 sm:px-4 sm:py-3 font-semibold",
     style: {
       color: priceMode === 'buy' ? '#22c55e' : '#f97316'
     }
   }, row.price), /*#__PURE__*/React.createElement("td", {
-    className: "px-4 py-3 text-white/80"
+    className: "px-2 py-2 sm:px-4 sm:py-3 text-white/80"
   }, row.limit), /*#__PURE__*/React.createElement("td", {
-    className: "px-4 py-3 text-center"
+    className: "px-2 py-2 sm:px-4 sm:py-3 text-center"
   }, /*#__PURE__*/React.createElement("button", {
     type: "button",
-    className: "row-btn px-4 py-2 rounded-md font-semibold text-white transition",
+    className: "row-btn px-2 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold text-[11px] sm:text-xs md:text-sm text-white transition",
     style: {
       background: priceMode === 'buy' ? '#22c55e' : '#f97316'
     },
@@ -2388,7 +2798,7 @@ function App() {
   }, /*#__PURE__*/React.createElement("h4", {
     className: "text-blue-400 font-extrabold text-lg sm:text-xl"
   }, priceMode === 'buy' ? 'Buy Payment Methods' : 'Sell Payment Methods'), /*#__PURE__*/React.createElement("div", {
-    className: "mt-4 flex flex-wrap justify-center gap-4"
+    className: "mt-4 flex flex-wrap justify-center gap-2 sm:gap-4"
   }, currentPaymentMethods.length === 0 ? /*#__PURE__*/React.createElement("span", {
     className: "text-sm text-slate-400"
   }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/mpesa_voda.png", "M-Pesa": "/web/img/payments/mpesa_voda.png", "M-pesa": "/web/img/payments/mpesa_voda.png", "Tigo Pesa": "/web/img/payments/tigopesa.png", "TigoPesa": "/web/img/payments/tigopesa.png", "CRDB Bank": "/web/img/payments/crdb_bank.png", "NMB Bank": "/web/img/payments/nmb_bank.png", "M-pesa Paybill": "/web/img/payments/mpesa_paybill.png", "M-Pesa Paybill": "/web/img/payments/mpesa_paybill.png", "Airtel Money Agent": "/web/img/payments/airtel.png", "AirtelMoney": "/web/img/payments/airtel.png", "Airtel Money": "/web/img/payments/airtel.png"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
@@ -2456,47 +2866,7 @@ function App() {
     key: i
   }, /*#__PURE__*/React.createElement(CardHeader, null, /*#__PURE__*/React.createElement(CardTitle, null, s.title)), /*#__PURE__*/React.createElement(CardContent, {
     className: "text-sm text-white/70"
-  }, s.desc))))), /*#__PURE__*/React.createElement(Section, {
-    id: "why"
-  }, /*#__PURE__*/React.createElement(Title, {
-    k: "Why Choose Us",
-    sub: "Credibility, speed, and round-the-clock support."
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "grid md:grid-cols-4 gap-5"
-  }, [{
-    title: "Instant Transactions",
-    desc: "Rapid confirmations on major platforms."
-  }, {
-    title: "Trusted & Verified",
-    desc: "Transparent flows and clean records."
-  }, {
-    title: "24/7 Support",
-    desc: "Live chat assistance whenever you need it."
-  }, {
-    title: "Best Market Rates",
-    desc: "Competitive, clearly displayed spreads."
-  }].map((b, i) => /*#__PURE__*/React.createElement(Card, {
-    key: i
-  }, /*#__PURE__*/React.createElement(CardHeader, null, /*#__PURE__*/React.createElement(CardTitle, null, b.title)), /*#__PURE__*/React.createElement(CardContent, {
-    className: "text-sm text-white/70"
-  }, b.desc))))), /*#__PURE__*/React.createElement(Section, {
-    id: "comments"
-  }, /*#__PURE__*/React.createElement(Title, {
-    k: "Community Comments",
-    sub: "Public feedback (mock) \u2014 Auth required to post."
-  }), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(CardContent, null, /*#__PURE__*/React.createElement("div", {
-    className: "text-sm"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "font-semibold"
-  }, "Guest"), " \u2022 ", /*#__PURE__*/React.createElement("span", {
-    className: "text-white/60"
-  }, "just now")), /*#__PURE__*/React.createElement("div", {
-    className: "mt-1 text-white/80"
-  }, "Great rates and quick response!"), /*#__PURE__*/React.createElement("div", {
-    className: "mt-3"
-  }, /*#__PURE__*/React.createElement(Button, {
-    onClick: () => alert("Login required (mock)")
-  }, "Add Comment"))))), /*#__PURE__*/React.createElement(Section, {
+  }, s.desc))))), /*#__PURE__*/React.createElement(PhoneMockupSection, null), /*#__PURE__*/React.createElement(Section, {
     id: "contact"
   }, /*#__PURE__*/React.createElement("div", {
     className: "max-w-6xl mx-auto"
