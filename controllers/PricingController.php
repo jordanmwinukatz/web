@@ -124,6 +124,16 @@ class PricingController extends Controller {
                         $maxAmount = $availableFiat;
                     }
 
+                    $methods = [];
+                    if (isset($adv['tradeMethods']) && is_array($adv['tradeMethods'])) {
+                        foreach ($adv['tradeMethods'] as $m) {
+                            $mName = $m['payType'] ?? $m['identifier'] ?? '';
+                            if ($mName && !in_array($mName, $methods)) {
+                                $methods[] = $mName;
+                            }
+                        }
+                    }
+
                     if ($price > 0) {
                         $result = [
                             'success' => true,
@@ -136,6 +146,7 @@ class PricingController extends Controller {
                                 'maxFiat' => $maxAmount,
                                 'availableFiat' => $availableFiat,
                             ],
+                            'paymentMethods' => $methods,
                             'cached' => true
                         ];
                         file_put_contents($cacheFile, json_encode($result));
@@ -186,6 +197,16 @@ class PricingController extends Controller {
                             $maxAmount = $availableFiat;
                         }
 
+                        $methods = [];
+                        if (isset($adv['tradeMethods']) && is_array($adv['tradeMethods'])) {
+                            foreach ($adv['tradeMethods'] as $m) {
+                                $mName = $m['payType'] ?? $m['identifier'] ?? '';
+                                if ($mName && !in_array($mName, $methods)) {
+                                    $methods[] = $mName;
+                                }
+                            }
+                        }
+
                         if ($price > 0) {
                             $result = [
                                 'success' => true,
@@ -198,6 +219,7 @@ class PricingController extends Controller {
                                     'maxFiat' => $maxAmount,
                                     'availableFiat' => $availableFiat,
                                 ],
+                                'paymentMethods' => $methods,
                                 'cached' => true
                             ];
                             file_put_contents($cacheFile, json_encode($result));

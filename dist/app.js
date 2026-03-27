@@ -716,7 +716,7 @@ const PhoneMockupSection = () => {
       @keyframes atsec-fb { 0%{transform:translateY(0)} 100%{transform:translateY(-12px)} }
     </style>
 
-    <section class="app-teaser-section">
+    <section id="mobile-app" class="app-teaser-section">
       <div class="app-teaser-inner">
 
         <!-- Left -->
@@ -1447,7 +1447,7 @@ function App() {
   };
   const formatRangeTzs = (min, max) => {
     if (min === null || min === undefined || max === null || max === undefined) return '—';
-    return `${fmt(Math.round(min))} - ${fmt(Math.round(max))} TZS`;
+    return `${Number(Math.round(min)).toLocaleString()} - ${Number(Math.round(max)).toLocaleString()} TZS`;
   };
   const normalizePaymentKey = value => (value || '').toString().toLowerCase().replace(/[^a-z0-9]/g, '');
   const PAYMENT_COLORS = {
@@ -2801,12 +2801,12 @@ function App() {
     className: "mt-4 flex flex-wrap justify-center gap-2 sm:gap-4"
   }, currentPaymentMethods.length === 0 ? /*#__PURE__*/React.createElement("span", {
     className: "text-sm text-slate-400"
-  }, "Loading payment methods...") : (() => { const _logoMap = {"M-pesa (Vodafone)": "/web/img/payments/mpesa_voda.png", "M-Pesa": "/web/img/payments/mpesa_voda.png", "M-pesa": "/web/img/payments/mpesa_voda.png", "Tigo Pesa": "/web/img/payments/tigopesa.png", "TigoPesa": "/web/img/payments/tigopesa.png", "CRDB Bank": "/web/img/payments/crdb_bank.png", "NMB Bank": "/web/img/payments/nmb_bank.png", "M-pesa Paybill": "/web/img/payments/mpesa_paybill.png", "M-Pesa Paybill": "/web/img/payments/mpesa_paybill.png", "Airtel Money Agent": "/web/img/payments/airtel.png", "AirtelMoney": "/web/img/payments/airtel.png", "Airtel Money": "/web/img/payments/airtel.png"}; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
+  }, "Loading payment methods...") : (() => { const getPaymentLogo = m => { const l = (m||"").toLowerCase(); if(l.includes('voda') || l.includes('mpesa')) return "/web/img/payments/mpesa_voda.png"; if(l.includes('tigo')) return "/web/img/payments/tigopesa.png"; if(l.includes('airtel')) return "/web/img/payments/airtel.png"; if(l.includes('crdb')) return "/web/img/payments/crdb_bank.png"; if(l.includes('nmb')) return "/web/img/payments/nmb_bank.png"; if(l.includes('halo')) return "/web/img/payments/halopesa.png"; return ""; }; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
     key: `${priceMode}-${method}`,
     className: "pm-card",
     title: method
   }, /*#__PURE__*/React.createElement("img", {
-    src: _logoMap[method] || "",
+    src: getPaymentLogo(method),
     alt: method,
     className: "pm-card-logo",
     onError: e => { e.target.style.display = "none"; if (e.target.nextSibling) e.target.nextSibling.style.display = "flex"; }
