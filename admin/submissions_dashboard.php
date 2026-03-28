@@ -45,6 +45,10 @@ $countsStmt = $pdo->query("
 ");
 $counts = $countsStmt->fetch(PDO::FETCH_ASSOC);
 
+// Get max ID for polling
+$maxIdStmt = $pdo->query("SELECT MAX(id) FROM user_submissions");
+$maxId = $maxIdStmt->fetchColumn() ?: 0;
+
 // Submissions list
 $sql = "SELECT us.id, us.order_number, us.submission_type, us.submission_status,
                us.form_data,
@@ -774,7 +778,48 @@ function timeAgoSub($datetime) {
                 suggestionsBox.style.display = 'none';
             }
         });
+        });
     }
+
+    // New Order Audio Polling Script
+    let lastSeenOrderId = <?= $maxId ?>;
+    function playNotificationSound() {
+        try {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.type = 'sine';
+            oscillator.frequency.setValueAtTime(587.33, audioCtx.currentTime); // D5
+            oscillator.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.1); // A5
+            gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, audioCtx.currentTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1);
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 1);
+        } catch(e) { console.log(e); }
+    }
+
+    setInterval(() => {
+        fetch('api_check_orders.php?last_id=' + lastSeenOrderId)
+            .then(res => res.json())
+            .then(data => {
+                if (data.has_new) {
+                    playNotificationSound();
+                    lastSeenOrderId = data.max_id;
+                    const toast = document.createElement('div');
+                    toast.innerHTML = `
+                        <div style="position:fixed; bottom:24px; right:24px; background:linear-gradient(135deg, #facc15, #fbbf24); color:#0f172a; padding:16px 24px; border-radius:12px; font-weight:700; box-shadow:0 10px 25px rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; gap:12px; cursor:pointer; font-family:'Inter',sans-serif; text-transform:uppercase; letter-spacing:0.5px; transition: transform 0.2s;" onclick="location.reload()" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-bell text-xl"></i>
+                            ${data.new_count} New Order(s) Received! Click to refresh.
+                        </div>
+                    `;
+                    document.body.appendChild(toast);
+                    document.title = `(${data.new_count}) New Orders! - Admin Panel`;
+                }
+            }).catch(console.error);
+    }, 15000);
     </script>
 </body>
 </html>
