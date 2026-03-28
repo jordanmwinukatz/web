@@ -2035,9 +2035,9 @@ function App() {
   }, "View Prices")), authUser ? /*#__PURE__*/React.createElement("div", {
     className: "hidden md:flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("button", {
-    onClick: authUser.email === 'jordanmwinukatz@gmail.com' ? () => window.location.href = 'admin/index.php' : () => setShowUserDashboard(true),
+    onClick: (authUser.is_admin || authUser.email === 'jordanmwinukatz@gmail.com' || authUser.email === 'thiongowen7@gmail.com') ? () => window.location.href = 'admin/index.php' : () => setShowUserDashboard(true),
     className: "inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium border border-white/10 bg-white/5 hover:bg-white/10 transition",
-    title: authUser.email === 'jordanmwinukatz@gmail.com' ? "Admin Dashboard" : "View my orders"
+    title: (authUser.is_admin || authUser.email === 'jordanmwinukatz@gmail.com' || authUser.email === 'thiongowen7@gmail.com') ? "Admin Dashboard" : "View my orders"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-4 h-4",
     fill: "none",
@@ -2047,7 +2047,7 @@ function App() {
     strokeLinecap: "round",
     strokeLinejoin: "round",
     strokeWidth: 2,
-    d: authUser.email === 'jordanmwinukatz@gmail.com' ? "M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+    d: (authUser.is_admin || authUser.email === 'jordanmwinukatz@gmail.com' || authUser.email === 'thiongowen7@gmail.com') ? "M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
   })), /*#__PURE__*/React.createElement("span", null, authUser.name)), /*#__PURE__*/React.createElement("button", {
     onClick: async () => {
       try {
@@ -3721,7 +3721,7 @@ function App() {
           if (!j.success) throw new Error(j.error || 'Login failed');
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));
-          if (j.user && j.user.email === 'jordanmwinukatz@gmail.com') {
+          if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongowen7@gmail.com')) {
             setAuthOpen(false);
             return;
           }
@@ -3762,7 +3762,7 @@ function App() {
           if (!j.success) throw new Error(j.error || 'Registration failed');
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));
-          if (j.user && j.user.email === 'jordanmwinukatz@gmail.com') {
+          if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongowen7@gmail.com')) {
             setAuthOpen(false);
             return;
           }

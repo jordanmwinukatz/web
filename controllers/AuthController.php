@@ -257,12 +257,18 @@ try {
             $colCheckVerified = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'email_verified'");
             $hasEmailVerified = $colCheckVerified && $colCheckVerified->fetch();
             
+            $colCheckAdmin = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'is_admin'");
+            $hasIsAdmin = $colCheckAdmin && $colCheckAdmin->fetch();
+            
             $selectFields = ['id', 'name', 'email'];
             if ($hasProfilePic) {
                 $selectFields[] = 'profile_picture';
             }
             if ($hasEmailVerified) {
                 $selectFields[] = 'email_verified';
+            }
+            if ($hasIsAdmin) {
+                $selectFields[] = 'is_admin';
             }
             
             $stmt = $pdo->prepare('SELECT ' . implode(', ', $selectFields) . ' FROM users WHERE id = ?');
@@ -274,9 +280,12 @@ try {
         $stmt->execute([$user['id']]);
         $userWithPicture = $stmt->fetch(PDO::FETCH_ASSOC);
         
-        // Ensure email_verified is boolean
+        // Ensure email_verified and is_admin are properly typed
         if (isset($userWithPicture['email_verified'])) {
             $userWithPicture['email_verified'] = (bool)$userWithPicture['email_verified'];
+        }
+        if (isset($userWithPicture['is_admin'])) {
+            $userWithPicture['is_admin'] = (bool)$userWithPicture['is_admin'];
         }
         
         echo json_encode([
