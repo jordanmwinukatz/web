@@ -217,24 +217,14 @@ try {
                     }
                 }
 
-                // Send notification email to admin
-                try {
-                    $emailSender->sendAdminNotification(
-                        'jordanmwinukatz@gmail.com',
-                        $orderData
-                    );
-                } catch (Exception $e) {
-                    error_log('Failed to send admin email: ' . $e->getMessage());
-                }
-
-                // Send notification email to secondary admin
-                try {
-                    $emailSender->sendAdminNotification(
-                        'jordanmwinuka@gmail.com',
-                        $orderData
-                    );
-                } catch (Exception $e) {
-                    error_log('Failed to send email to jordanmwinuka@gmail.com: ' . $e->getMessage());
+                // Send notification to all admins
+                $adminEmails = ['jordanmwinukatz@gmail.com', 'jordanmwinuka@gmail.com', 'thiongowen7@gmail.com'];
+                foreach ($adminEmails as $adminEmail) {
+                    try {
+                        $emailSender->sendAdminNotification($adminEmail, $orderData);
+                    } catch (Exception $e) {
+                        error_log("Failed to send admin email to $adminEmail: " . $e->getMessage());
+                    }
                 }
             }
 
