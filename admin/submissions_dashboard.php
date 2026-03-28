@@ -383,8 +383,8 @@ function timeAgoSub($datetime) {
                 <div class="sidebar-section-label">Main</div>
                 <a href="index.php" class="sidebar-link"><i class="fas fa-home"></i> Dashboard</a>
                 <a href="dashboard_real.php" class="sidebar-link"><i class="fas fa-chart-line"></i> Analytics</a>
-                <a href="submissions_dashboard.php" class="sidebar-link active"><i class="fas fa-clipboard-list"></i> Submissions</a>
-                <a href="completed_orders.php" class="sidebar-link"><i class="fas fa-clipboard-check"></i> Completed Orders</a>
+                <a href="submissions_dashboard.php" class="sidebar-link <?= ($statusFilter !== 'completed') ? 'active' : '' ?>"><i class="fas fa-clipboard-list"></i> Submissions</a>
+                <a href="completed_orders.php" class="sidebar-link <?= ($statusFilter === 'completed') ? 'active' : '' ?>"><i class="fas fa-clipboard-check"></i> Completed Orders</a>
                 <div class="sidebar-section-label">Management</div>
                 <a href="#" class="sidebar-link" style="opacity:0.4;cursor:default;"><i class="fas fa-user-cog"></i> Users</a>
                 <a href="index.php#settings-section" class="sidebar-link"><i class="fas fa-cog"></i> Settings</a>
