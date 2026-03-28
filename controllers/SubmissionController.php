@@ -29,14 +29,7 @@ try {
         
         $action = $input['action'] ?? '';
 
-        // Ensure unread tracking column exists
-        try {
-            $colCheck = $conn->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_submissions' AND COLUMN_NAME = 'admin_viewed'");
-            if ($colCheck && !$colCheck->fetch()) {
-                $conn->exec("ALTER TABLE user_submissions ADD COLUMN admin_viewed TINYINT(1) NOT NULL DEFAULT 0, ADD COLUMN admin_viewed_at TIMESTAMP NULL DEFAULT NULL");
-            }
-        } catch (Exception $e) { /* ignore */ }
-        
+
         // Handle different POST actions
         if ($action === 'get_submission') {
             require_admin();
@@ -178,6 +171,76 @@ try {
             echo json_encode(['success' => true]);
             exit;
         }
+
+        if ($action === 'send_order_emails') {
+            $submission_id = $input['submission_id'] ?? '';
+            if (!$submission_id) {
+                throw new Exception('Submission ID is required');
+            }
+
+            // Get order details
+            $stmt = $conn->prepare("SELECT order_number, form_data, user_info FROM user_submissions WHERE id = ? AND submission_type = 'order_form'");
+            $stmt->execute([$submission_id]);
+            $orderDataRaw = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$orderDataRaw) {
+                // Not an order form or not found, silently exit
+                echo json_encode(['success' => true]);
+                exit;
+            }
+
+            // Decode
+            $formData = json_decode($orderDataRaw['form_data'], true) ?: [];
+            $userInfo = json_decode($orderDataRaw['user_info'], true) ?: [];
+
+            $orderData = [
+                'submission_id' => $submission_id,
+                'order_number' => $orderDataRaw['order_number'],
+                'form_data' => $formData,
+                'user_info' => $userInfo
+            ];
+
+            require_once __DIR__ . '/../config/email.php';
+            if (class_exists('EmailSender')) {
+                $emailSender = new EmailSender();
+
+                // Send confirmation email to user
+                if (!empty($userInfo['email']) && $userInfo['email'] !== 'N/A') {
+                    try {
+                        $emailSender->sendOrderConfirmation(
+                            $userInfo['email'],
+                            $userInfo['name'] ?? 'Customer',
+                            $orderData
+                        );
+                    } catch (Exception $e) {
+                        error_log('Failed to send user email: ' . $e->getMessage());
+                    }
+                }
+
+                // Send notification email to admin
+                try {
+                    $emailSender->sendAdminNotification(
+                        'jordanmwinukatz@gmail.com',
+                        $orderData
+                    );
+                } catch (Exception $e) {
+                    error_log('Failed to send admin email: ' . $e->getMessage());
+                }
+
+                // Send notification email to secondary admin
+                try {
+                    $emailSender->sendAdminNotification(
+                        'jordanmwinuka@gmail.com',
+                        $orderData
+                    );
+                } catch (Exception $e) {
+                    error_log('Failed to send email to jordanmwinuka@gmail.com: ' . $e->getMessage());
+                }
+            }
+
+            echo json_encode(['success' => true]);
+            exit;
+        }
         
         // Original submission creation logic
         $required_fields = ['session_id', 'submission_type', 'form_data'];
@@ -187,45 +250,7 @@ try {
             }
         }
         
-        // Ensure table exists
-        $conn->exec("CREATE TABLE IF NOT EXISTS user_submissions (
-            id INT AUTO_INCREMENT PRIMARY KEY,
-            session_id VARCHAR(255),
-            user_id INT NULL,
-            order_number VARCHAR(20) NULL,
-            submission_type VARCHAR(100),
-            form_data JSON,
-            user_info JSON,
-            submission_status VARCHAR(50) DEFAULT 'pending',
-            admin_notes TEXT,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            INDEX idx_user_id (user_id),
-            INDEX idx_session_id (session_id),
-            INDEX idx_order_number (order_number)
-        )");
-        
-        // Ensure user_id column exists (for existing tables)
-        try {
-            $colCheck = $conn->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_submissions' AND COLUMN_NAME = 'user_id'");
-            if ($colCheck && !$colCheck->fetch()) {
-                $conn->exec("ALTER TABLE user_submissions ADD COLUMN user_id INT NULL AFTER session_id, ADD INDEX idx_user_id (user_id)");
-            }
-        } catch (Exception $e) {
-            // Column might already exist or table structure is fine, continue
-            error_log('Column check note: ' . $e->getMessage());
-        }
-        
-        // Ensure order_number column exists (for existing tables)
-        try {
-            $colCheck = $conn->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'user_submissions' AND COLUMN_NAME = 'order_number'");
-            if ($colCheck && !$colCheck->fetch()) {
-                $conn->exec("ALTER TABLE user_submissions ADD COLUMN order_number VARCHAR(20) NULL AFTER user_id, ADD INDEX idx_order_number (order_number)");
-            }
-        } catch (Exception $e) {
-            // Column might already exist or table structure is fine, continue
-            error_log('Column check note: ' . $e->getMessage());
-        }
+
         
         // Function to generate unique alphanumeric order number
         function generateOrderNumber($conn) {
@@ -426,64 +451,28 @@ try {
         // Return order_number if available, otherwise fallback to submission_id
         $return_id = $orderNumber ? $orderNumber : $submission_id;
         
-        // Send emails for order submissions
-        if ($input['submission_type'] === 'order_form') {
-            require_once '../config/email.php';
-            $emailSender = new EmailSender();
-            
-            $userInfo = $input['user_info'] ?? [];
-            $formData = $input['form_data'] ?? [];
-            
-            $orderData = [
-                'submission_id' => $submission_id,
-                'order_number' => $orderNumber,
-                'form_data' => $formData,
-                'user_info' => $userInfo
-            ];
-            
-            // Send confirmation email to user
-            if (!empty($userInfo['email']) && $userInfo['email'] !== 'N/A') {
-                try {
-                    $emailSender->sendOrderConfirmation(
-                        $userInfo['email'],
-                        $userInfo['name'] ?? 'Customer',
-                        $orderData
-                    );
-                } catch (Exception $e) {
-                    // Log error but don't fail the submission
-                    error_log('Failed to send user email: ' . $e->getMessage());
-                }
-            }
-            
-            // Send notification email to admin
-            try {
-                $emailSender->sendAdminNotification(
-                    'jordanmwinukatz@gmail.com',
-                    $orderData
-                );
-            } catch (Exception $e) {
-                // Log error but don't fail the submission
-                error_log('Failed to send admin email: ' . $e->getMessage());
-            }
-            
-            // Send notification email to jordanmwinuka@gmail.com
-            try {
-                $emailSender->sendAdminNotification(
-                    'jordanmwinuka@gmail.com',
-                    $orderData
-                );
-            } catch (Exception $e) {
-                // Log error but don't fail the submission
-                error_log('Failed to send email to jordanmwinuka@gmail.com: ' . $e->getMessage());
-            }
-        }
-        
-        echo json_encode([
+        $responseJson = json_encode([
             'success' => true,
             'submission_id' => $submission_id,
             'order_number' => $orderNumber,
             'message' => 'Submission created successfully'
         ]);
+        
+        // Fast response: close connection so frontend doesn't wait for emails
+        ignore_user_abort(true);
+        ob_start();
+        echo $responseJson;
+        header('Connection: close');
+        header('Content-Length: ' . ob_get_length());
+        ob_end_flush();
+        @ob_flush();
+        flush();
+        if (function_exists('fastcgi_finish_request')) {
+            fastcgi_finish_request();
+        }
+
+        // Ensure script exits after background processing
+        exit;
         
     } elseif ($method === 'GET') {
         $action = $_GET['action'] ?? '';
@@ -718,4 +707,3 @@ try {
 }
 }
 }
-?>

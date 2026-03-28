@@ -64,4 +64,3 @@ class ConfigController extends Controller {
         rename($tmp, $file);
     }
 }
-?>

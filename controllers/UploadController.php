@@ -89,28 +89,16 @@ try {
         }
     }
 
-    // Check directory is writable - try to make it writable if not
+    // Check directory is writable
     $isWritable = is_writable($dir);
     if (!$isWritable) {
-        // Try to change permissions to be more permissive
+        // Try to change permissions
         @chmod($dir, 0755);
         @chmod(dirname($dir), 0755);
-        
-        // Wait a moment for permissions to take effect
-        usleep(100000); // 0.1 second
-        
         $isWritable = is_writable($dir);
     }
     
-    // Final check - try to actually write a test file
-    if (!$isWritable) {
-        $testFile = $dir . '/.write_test_' . time() . '.tmp';
-        $testResult = @file_put_contents($testFile, 'test');
-        if ($testResult !== false) {
-            @unlink($testFile);
-            $isWritable = true; // We can write, so treat as writable
-        }
-    }
+
     
     if (!$isWritable) {
         // Get detailed error information
@@ -259,28 +247,16 @@ try {
         }
     }
 
-    // Check directory is writable - try to make it writable if not
+    // Check directory is writable
     $isWritable = is_writable($dir);
     if (!$isWritable) {
-        // Try to change permissions to be more permissive
+        // Try to change permissions
         @chmod($dir, 0755);
         @chmod(dirname($dir), 0755);
-        
-        // Wait a moment for permissions to take effect
-        usleep(100000); // 0.1 second
-        
         $isWritable = is_writable($dir);
     }
     
-    // Final check - try to actually write a test file
-    if (!$isWritable) {
-        $testFile = $dir . '/.write_test_' . time() . '.tmp';
-        $testResult = @file_put_contents($testFile, 'test');
-        if ($testResult !== false) {
-            @unlink($testFile);
-            $isWritable = true; // We can write, so treat as writable
-        }
-    }
+
     
     if (!$isWritable) {
         // Get detailed error information
@@ -334,4 +310,3 @@ try {
         }
     }
 }
-?>

@@ -72,4 +72,3 @@ class Env {
         return self::$vars[$key] ?? $default;
     }
 }
-?>

@@ -205,4 +205,3 @@ class PaymentApiController extends Controller {
         rename($tmp, $file);
     }
 }
-?>

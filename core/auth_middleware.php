@@ -65,4 +65,3 @@ function require_admin() {
 function get_current_user_id() {
     return $_SESSION['user_id'] ?? null;
 }
-?>

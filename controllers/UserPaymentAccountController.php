@@ -112,4 +112,3 @@ class UserPaymentAccountController extends Controller {
         $this->error('Method not allowed', 405);
     }
 }
-?>

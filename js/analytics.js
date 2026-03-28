@@ -54,6 +54,7 @@ class AnalyticsTracker {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
                 },
                 body: JSON.stringify({
                     action: action,

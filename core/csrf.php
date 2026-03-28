@@ -49,6 +49,17 @@ function csrf_verify() {
     $sessionToken = $_SESSION['csrf_token'] ?? null;
     $headerToken  = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
 
+    // If the session token is missing or user is not logged in, the session likely expired
+    if (!isset($_SESSION['user_id']) && !in_array($action ?? '', ['login', 'register'])) {
+        http_response_code(401);
+        header('Content-Type: application/json');
+        echo json_encode([
+            'success' => false,
+            'error'   => 'Session expired. Please log in again.'
+        ]);
+        exit;
+    }
+
     if (!$sessionToken || !$headerToken || !hash_equals($sessionToken, $headerToken)) {
         http_response_code(403);
         header('Content-Type: application/json');
@@ -59,4 +70,3 @@ function csrf_verify() {
         exit;
     }
 }
-?>

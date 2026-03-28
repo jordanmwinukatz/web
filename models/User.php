@@ -27,4 +27,3 @@ class User extends Model {
         return $stmt->execute([$newPasswordHash, $userId]);
     }
 }
-?>

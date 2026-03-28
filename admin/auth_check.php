@@ -18,4 +18,3 @@ if (!$isAuthenticated) {
     header('Location: ../index.html?login=1');
     exit();
 }
-?>

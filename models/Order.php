@@ -20,4 +20,3 @@ class Order extends Model {
         return (int)($row['c'] ?? 0);
     }
 }
-?>

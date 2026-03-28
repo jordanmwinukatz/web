@@ -35,6 +35,7 @@ window.submissions = {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
                 },
                 body: JSON.stringify(submissionData)
             });
@@ -55,6 +56,22 @@ window.submissions = {
                 // Use order_number if available (for order_form), otherwise use submission_id
                 const returnId = result.order_number || result.submission_id;
                 console.log('Submission tracked successfully:', returnId);
+                
+                // Fire and forget email dispatch if it's an order
+                if (submissionType === 'order_form' && result.submission_id) {
+                    fetch('api/index.php?route=submissions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
+                        },
+                        body: JSON.stringify({
+                            action: 'send_order_emails',
+                            submission_id: result.submission_id
+                        })
+                    }).catch(e => console.error('Background email dispatch error:', e));
+                }
+                
                 return returnId;
             } else {
                 const errorMsg = result.error || 'Unknown error';
@@ -180,7 +197,7 @@ window.submissions = {
     showSuccessMessage: function(submissionId) {
         // Create a success notification
         const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+        notification.className = 'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-[9999]';
         notification.innerHTML = `
             <div class="flex items-center space-x-2">
                 <i class="fas fa-check-circle"></i>
@@ -201,7 +218,7 @@ window.submissions = {
         const isVerificationError = error && (error.includes('EMAIL_VERIFICATION_REQUIRED') || error.includes('verify your email'));
         
         const notification = document.createElement('div');
-        notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-50 max-w-md';
+        notification.className = 'fixed top-4 right-4 bg-red-600 text-white px-6 py-3 rounded-lg shadow-lg z-[9999] max-w-md';
         
         if (isVerificationError) {
             const errorMsg = error.replace('EMAIL_VERIFICATION_REQUIRED: ', '');

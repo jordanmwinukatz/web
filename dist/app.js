@@ -1185,6 +1185,9 @@ function App() {
         fd.append('file', file);
         const uploadRes = await fetch('api/upload.php', {
           method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
+          },
           body: fd
         });
         if (!uploadRes.ok) {
@@ -1274,7 +1277,15 @@ function App() {
       console.error('Error submitting order:', error);
       console.error('Error stack:', error.stack);
       const errorMessage = error.message || 'Unknown error occurred';
-      alert('Error submitting order: ' + errorMessage + '\n\nPlease check the browser console for more details.');
+      
+      if (errorMessage.includes('status 401') || errorMessage.includes('Session expired')) {
+        localStorage.removeItem('authUser');
+        setAuthUser(null);
+        setAuthOpen(true);
+        alert('Your login session has expired. Please log in again, then re-submit your order.');
+      } else {
+        alert('Error submitting order: ' + errorMessage + '\n\nPlease check the browser console for more details.');
+      }
       setIsSubmitting(false);
     }
   };
@@ -1350,6 +1361,9 @@ function App() {
       fd.append('file', receiptFile);
       const up = await fetch('api/upload.php', {
         method: 'POST',
+        headers: {
+          'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
+        },
         body: fd
       });
       const upJson = await up.json();
@@ -1370,7 +1384,8 @@ function App() {
       await fetch('api/submissions.php', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
         },
         body: JSON.stringify({
           session_id: sessionId,
@@ -1837,7 +1852,10 @@ function App() {
     try {
       const res = await fetch('api/payment_accounts.php', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
+        },
         body: JSON.stringify({
           action: 'save',
           user_id: authUser.id,
@@ -2477,8 +2495,7 @@ function App() {
     }, /*#__PURE__*/React.createElement("img", {
       src: src,
       alt: file.name,
-      className: "w-16 h-16 object-cover rounded-md border border-white/10",
-      onLoad: e => URL.revokeObjectURL(src)
+      className: "w-16 h-16 object-cover rounded-md border border-white/10"
     }), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: () => setWizardFiles(wizardFiles.filter((_, i) => i !== idx)),
@@ -2532,8 +2549,7 @@ function App() {
     }, /*#__PURE__*/React.createElement("img", {
       src: src,
       alt: file.name,
-      className: "w-16 h-16 object-cover rounded-md border border-white/10",
-      onLoad: e => URL.revokeObjectURL(src)
+      className: "w-16 h-16 object-cover rounded-md border border-white/10"
     }), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: () => setWizardFiles(wizardFiles.filter((_, i) => i !== idx)),
@@ -3243,8 +3259,7 @@ function App() {
     }, /*#__PURE__*/React.createElement("img", {
       src: src,
       alt: file.name,
-      className: "w-16 h-16 object-cover rounded-md border border-white/10",
-      onLoad: e => URL.revokeObjectURL(src)
+      className: "w-16 h-16 object-cover rounded-md border border-white/10"
     }), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: () => setWizardFiles(wizardFiles.filter((_, i) => i !== idx)),
@@ -3298,8 +3313,7 @@ function App() {
     }, /*#__PURE__*/React.createElement("img", {
       src: src,
       alt: file.name,
-      className: "w-16 h-16 object-cover rounded-md border border-white/10",
-      onLoad: e => URL.revokeObjectURL(src)
+      className: "w-16 h-16 object-cover rounded-md border border-white/10"
     }), /*#__PURE__*/React.createElement("button", {
       type: "button",
       onClick: () => setWizardFiles(wizardFiles.filter((_, i) => i !== idx)),
@@ -4165,6 +4179,9 @@ function App() {
         formData.append('file', file);
         const uploadRes = await fetch('api/upload_profile.php', {
           method: 'POST',
+          headers: {
+            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
+          },
           body: formData
         });
         const uploadData = await uploadRes.json();
@@ -4176,7 +4193,8 @@ function App() {
         const updateRes = await fetch('api/auth.php', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
           },
           body: JSON.stringify({
             action: 'update_profile',
@@ -4228,7 +4246,8 @@ function App() {
         const res = await fetch('api/auth.php', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
           },
           body: JSON.stringify({
             action: 'update_profile',
@@ -4324,7 +4343,8 @@ function App() {
         const res = await fetch('api/auth.php', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
           },
           body: JSON.stringify({
             action: 'change_password',
@@ -4443,7 +4463,8 @@ function App() {
         await fetch('api/auth.php', {
           method: 'POST',
           headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
           },
           body: JSON.stringify({
             action: 'logout'

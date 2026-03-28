@@ -53,4 +53,3 @@ try {
 } catch (Exception $e) {
     echo "<p style='color: red;'>Database Error: " . htmlspecialchars($e->getMessage()) . "</p>";
 }
-?>

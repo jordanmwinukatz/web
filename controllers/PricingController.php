@@ -269,4 +269,3 @@ class PricingController extends Controller {
         return $this->success(['message' => 'Override saved', 'file' => basename($file)]);
     }
 }
-?>
