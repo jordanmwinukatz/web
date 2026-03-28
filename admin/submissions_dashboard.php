@@ -817,6 +817,24 @@ function timeAgoSub($datetime) {
                     `;
                     document.body.appendChild(toast);
                     document.title = `(${data.new_count}) New Orders! - Admin Panel`;
+
+                    // Seamless Live Data Swap
+                    fetch(window.location.href)
+                        .then(freshRes => freshRes.text())
+                        .then(freshHtml => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(freshHtml, 'text/html');
+                            
+                            const filterTabs = document.querySelector('.filter-tabs');
+                            if (filterTabs && doc.querySelector('.filter-tabs')) {
+                                filterTabs.innerHTML = doc.querySelector('.filter-tabs').innerHTML;
+                            }
+                            
+                            const submissionsList = document.querySelector('.submissions-list');
+                            if (submissionsList && doc.querySelector('.submissions-list')) {
+                                submissionsList.innerHTML = doc.querySelector('.submissions-list').innerHTML;
+                            }
+                        }).catch(e => console.error('Silent update failed:', e));
                 }
             }).catch(console.error);
     }, 15000);

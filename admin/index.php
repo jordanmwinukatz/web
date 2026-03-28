@@ -1338,23 +1338,59 @@ function timeAgo($datetime) {
                 const j = await res.json();
                 const badge = document.getElementById('notifBadge');
                 if (j.success && typeof j.pending === 'number') {
-                    if (previousPendingCount !== null && j.pending > previousPendingCount && notifSound) {
-                        try {
-                            notifSound.currentTime = 0;
-                            const playPromise = notifSound.play();
-                            if (playPromise && typeof playPromise.then === 'function') {
-                                playPromise.then(() => {
+                    if (previousPendingCount !== null && j.pending > previousPendingCount) {
+                        // Play sound
+                        if (notifSound) {
+                            try {
+                                notifSound.currentTime = 0;
+                                const playPromise = notifSound.play();
+                                if (playPromise && typeof playPromise.then === 'function') {
+                                    playPromise.then(() => {
+                                        notifSoundPrimed = true;
+                                        hideSoundPrompt();
+                                    }).catch(() => {
+                                        showSoundPrompt();
+                                    });
+                                } else {
                                     notifSoundPrimed = true;
-                                    hideSoundPrompt();
-                                }).catch(() => {
-                                    showSoundPrompt();
-                                });
-                            } else {
-                                notifSoundPrimed = true;
+                                }
+                            } catch (err) {
+                                showSoundPrompt();
                             }
-                        } catch (err) {
-                            showSoundPrompt();
                         }
+
+                        // NEW: Seamless Live Data Swap
+                        try {
+                            // If dropdown is open, refresh it live
+                            const dd = document.getElementById('notifDropdown');
+                            if (dd && dd.classList.contains('open')) {
+                                loadNotifications();
+                            }
+
+                            // Fetch fresh HTML in background and swap stats/activity
+                            const freshRes = await fetch(window.location.href);
+                            const freshHtml = await freshRes.text();
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(freshHtml, 'text/html');
+
+                            const statsGrid = document.querySelector('.stats-grid');
+                            if (statsGrid && doc.querySelector('.stats-grid')) {
+                                statsGrid.innerHTML = doc.querySelector('.stats-grid').innerHTML;
+                            }
+                            
+                            const dashGrid = document.querySelector('.dashboard-grid');
+                            if (dashGrid && doc.querySelector('.dashboard-grid')) {
+                                dashGrid.innerHTML = doc.querySelector('.dashboard-grid').innerHTML;
+                            }
+
+                            const activityList = document.querySelector('.activity-list');
+                            if (activityList && doc.querySelector('.activity-list')) {
+                                activityList.innerHTML = doc.querySelector('.activity-list').innerHTML;
+                            }
+
+                            // Visual flash to indicate update
+                            refreshData();
+                        } catch (e) { console.error('Silent update failed:', e); }
                     }
                     if (j.pending > 0) {
                         badge.textContent = j.pending > 99 ? '99+' : String(j.pending);
