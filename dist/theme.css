@@ -1134,14 +1134,15 @@ section {
 
 @media (max-width: 767px) {
     .hero-eyebrow {
-        font-size: 9.5px;
-        padding: 4px 8px;
-        gap: 5px;
-        letter-spacing: 0.02em;
+        font-size: 8.5px;
+        padding: 4px 10px;
+        gap: 4px;
+        letter-spacing: 0.01em;
         white-space: nowrap;
         max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
+        margin-bottom: 14px;
     }
     .hero-grid {
         grid-template-columns: 1fr !important;
@@ -1328,13 +1329,14 @@ a.hero-btn-whatsapp {
 
 @media (max-width: 767px) {
     .pm-card {
-        padding: 8px 12px;
-        min-width: 80px;
-        min-height: 44px;
+        padding: 6px 8px;
+        min-width: 64px;
+        min-height: 36px;
+        border-radius: 10px;
     }
     .pm-card-logo {
-        height: 28px;
-        max-width: 100px;
+        height: 22px;
+        max-width: 80px;
     }
 }
 
@@ -1788,4 +1790,30 @@ a.hero-btn-whatsapp {
 [data-theme="light"] .stat-card {
     background: rgba(248, 250, 252, 0.6) !important;
     border-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+/* ============================================================
+   MOBILE HEADER BRAND NAME
+   Constrain the brand text so it doesn't awkwardly truncate
+   ============================================================ */
+@media (max-width: 767px) {
+    /* Limit the brand link width so the name truncates gracefully */
+    header a[href="#top"] {
+        max-width: 200px;
+    }
+    header a[href="#top"] .truncate {
+        max-width: 160px;
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+@media (max-width: 374px) {
+    header a[href="#top"] {
+        max-width: 150px;
+    }
+    header a[href="#top"] .truncate {
+        max-width: 110px;
+    }
 }
