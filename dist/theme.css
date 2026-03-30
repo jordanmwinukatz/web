@@ -1144,6 +1144,7 @@ section {
         text-overflow: ellipsis;
         margin-bottom: 14px;
     }
+
     .hero-grid {
         grid-template-columns: 1fr !important;
         gap: 24px !important;
@@ -1334,6 +1335,7 @@ a.hero-btn-whatsapp {
         min-height: 36px;
         border-radius: 10px;
     }
+
     .pm-card-logo {
         height: 22px;
         max-width: 80px;
@@ -1797,10 +1799,12 @@ a.hero-btn-whatsapp {
    Constrain the brand text so it doesn't awkwardly truncate
    ============================================================ */
 @media (max-width: 767px) {
+
     /* Limit the brand link width so the name truncates gracefully */
     header a[href="#top"] {
         max-width: 200px;
     }
+
     header a[href="#top"] .truncate {
         max-width: 160px;
         display: block;
@@ -1809,10 +1813,12 @@ a.hero-btn-whatsapp {
         text-overflow: ellipsis;
     }
 }
+
 @media (max-width: 374px) {
     header a[href="#top"] {
         max-width: 150px;
     }
+
     header a[href="#top"] .truncate {
         max-width: 110px;
     }
@@ -1823,11 +1829,13 @@ a.hero-btn-whatsapp {
    Side-by-side buttons + single-row trust badges
    ============================================================ */
 @media (max-width: 767px) {
+
     /* Force buttons side-by-side instead of stacked */
     .hero-section .flex.flex-col.sm\:flex-row.gap-3 {
         flex-direction: row !important;
         gap: 8px !important;
     }
+
     /* Compact button styling */
     .hero-section .hero-btn-primary,
     .hero-section .hero-btn-whatsapp {
@@ -1844,14 +1852,109 @@ a.hero-btn-whatsapp {
         flex-wrap: nowrap !important;
         gap: 6px !important;
     }
-    .hero-section div[style*="flexWrap"] > div {
+
+    .hero-section div[style*="flexWrap"]>div {
         padding: 5px 8px !important;
         gap: 5px !important;
     }
-    .hero-section div[style*="flexWrap"] > div strong {
+
+    .hero-section div[style*="flexWrap"]>div strong {
         font-size: 12px !important;
     }
-    .hero-section div[style*="flexWrap"] > div span {
+
+    .hero-section div[style*="flexWrap"]>div span {
         font-size: 10px !important;
+    }
+}
+
+/* ============================================================
+   MOBILE PRICE PREVIEW SECTION
+   Compact layout: side-by-side prices, smaller cards
+   ============================================================ */
+@media (max-width: 767px) {
+    /* Section top padding */
+    #prices {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* "CURRENTLY OFFER" heading */
+    #prices .text-3xl.sm\:text-4xl {
+        font-size: 1.4rem !important;
+    }
+
+    /* "Price Preview" sub */
+    #prices .text-lg.sm\:text-xl.text-yellow-400 {
+        font-size: 0.9rem !important;
+        margin-top: 4px !important;
+    }
+
+    /* USDT main card — compact padding */
+    #prices .shadow-\[0_0_20px_rgba\(34\,197\,94\,0\.35\)\] {
+        padding: 16px !important;
+        margin-top: 16px !important;
+    }
+
+    /* USDT title row smaller */
+    #prices .shadow-\[0_0_20px_rgba\(34\,197\,94\,0\.35\)\] .text-2xl.sm\:text-3xl {
+        font-size: 1.2rem !important;
+        gap: 6px !important;
+    }
+    #prices .shadow-\[0_0_20px_rgba\(34\,197\,94\,0\.35\)\] .w-9.h-9 {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+
+    /* Buy/Sell prices — force 2 columns side-by-side */
+    #prices .grid.grid-cols-1.sm\:grid-cols-2 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-top: 12px !important;
+    }
+
+    /* Price values smaller */
+    #prices .text-2xl.font-bold {
+        font-size: 1.15rem !important;
+    }
+
+    /* BTC/ETH card — compact padding */
+    #prices .shadow-\[0_0_20px_rgba\(59\,130\,246\,0\.25\)\] {
+        padding: 16px !important;
+        margin-top: 12px !important;
+    }
+
+    /* BTC/ETH grid — force side-by-side */
+    #prices .shadow-\[0_0_20px_rgba\(59\,130\,246\,0\.25\)\] .grid.grid-cols-1.sm\:grid-cols-2 {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+    }
+
+    /* BTC/ETH headings */
+    #prices .shadow-\[0_0_20px_rgba\(59\,130\,246\,0\.25\)\] .text-xl {
+        font-size: 0.85rem !important;
+        gap: 4px !important;
+        margin-bottom: 6px !important;
+    }
+    #prices .shadow-\[0_0_20px_rgba\(59\,130\,246\,0\.25\)\] .w-9.h-9 {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 12px !important;
+    }
+
+    /* BTC/ETH price text */
+    #prices .shadow-\[0_0_20px_rgba\(59\,130\,246\,0\.25\)\] .text-emerald-300,
+    #prices .shadow-\[0_0_20px_rgba\(59\,130\,246\,0\.25\)\] .text-orange-300 {
+        font-size: 0.8rem !important;
+    }
+
+    /* BUY / SELL toggle buttons — compact */
+    #prices .flex.justify-center.gap-3 {
+        margin-top: 1.25rem !important;
+        gap: 8px !important;
+    }
+    #prices .flex.justify-center.gap-3 button {
+        padding: 8px 20px !important;
+        font-size: 13px !important;
     }
 }
