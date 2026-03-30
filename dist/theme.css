@@ -1958,3 +1958,49 @@ a.hero-btn-whatsapp {
         font-size: 13px !important;
     }
 }
+
+/* ============================================================
+   MOBILE ORDER WIZARD SECTION
+   Compact heading + card text sizes
+   ============================================================ */
+@media (max-width: 767px) {
+    /* "Start Your Order" section heading */
+    #contact .text-3xl.md\:text-4xl {
+        font-size: 1.5rem !important;
+    }
+
+    /* "Complete order wizard..." subtitle */
+    #contact .text-white\/70.mt-2 {
+        font-size: 0.85rem !important;
+        margin-top: 4px !important;
+    }
+
+    /* Reduce margin below the heading block */
+    #contact .mb-10 {
+        margin-bottom: 1.25rem !important;
+    }
+
+    /* Wizard card — less padding on mobile */
+    #contact div[style*="linear-gradient(180deg,#0f1115"] {
+        padding: 20px 16px !important;
+        border-radius: 18px !important;
+    }
+
+    /* "jordanmwinukatz" brand inside card */
+    #contact .text-center.text-3xl.font-black {
+        font-size: 1.35rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    /* Yellow "Start Your Order" inside card */
+    #contact .text-2xl.font-bold.text-center {
+        font-size: 1.1rem !important;
+        margin-bottom: 4px !important;
+    }
+
+    /* "Step X of Y" label */
+    #contact .text-sm.opacity-85 {
+        font-size: 0.75rem !important;
+        margin-bottom: 12px !important;
+    }
+}
