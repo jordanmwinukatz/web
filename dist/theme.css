@@ -2036,3 +2036,63 @@ a.hero-btn-whatsapp {
         margin-top: -0.5rem !important;
     }
 }
+
+/* ============================================================
+   MOBILE ABOUT & HOW IT WORKS
+   Compact headings, smaller card text, tighter spacing
+   ============================================================ */
+@media (max-width: 767px) {
+    /* Section padding */
+    #about, #how {
+        padding-top: 3rem !important;
+        padding-bottom: 2.5rem !important;
+    }
+
+    /* Section headings */
+    #about .text-3xl.md\:text-4xl, 
+    #how .text-3xl.md\:text-4xl {
+        font-size: 1.5rem !important;
+    }
+
+    /* Section subtitles */
+    #about .text-white\/70.mt-2, 
+    #how .text-white\/70.mt-2 {
+        font-size: 0.85rem !important;
+        margin-top: 4px !important;
+    }
+
+    /* Reduce margin below the heading block */
+    #about .mb-10, 
+    #how .mb-10 {
+        margin-bottom: 1.25rem !important;
+    }
+
+    /* Card padding */
+    #about .p-4, #how .p-4 {
+        padding: 14px 16px !important;
+    }
+    
+    /* About text sizes */
+    #about .text-white\/80 {
+        font-size: 0.85rem !important;
+        line-height: 1.5 !important;
+    }
+
+    /* How it works specific fixes */
+    #how .text-base.font-semibold {
+        font-size: 0.95rem !important;
+        margin-bottom: 2px !important;
+    }
+    #how .text-sm.text-white\/70 {
+        font-size: 0.80rem !important;
+        line-height: 1.4 !important;
+    }
+
+    /* Reduce gaps between cards */
+    #about .grid.gap-6 {
+        gap: 12px !important;
+    }
+    #how .grid.gap-5 {
+        gap: 12px !important;
+    }
+}
