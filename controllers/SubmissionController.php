@@ -218,7 +218,7 @@ try {
                 }
 
                 // Send notification to all admins
-                $adminEmails = ['jordanmwinukatz@gmail.com', 'jordanmwinuka@gmail.com', 'thiongowen7@gmail.com'];
+                $adminEmails = ['jordanmwinukatz@gmail.com', 'jordanmwinuka@gmail.com', 'thiongoowen7@gmail.com'];
                 foreach ($adminEmails as $adminEmail) {
                     try {
                         $emailSender->sendAdminNotification($adminEmail, $orderData);
