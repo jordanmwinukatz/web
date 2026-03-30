@@ -1817,3 +1817,41 @@ a.hero-btn-whatsapp {
         max-width: 110px;
     }
 }
+
+/* ============================================================
+   MOBILE HERO CTA BUTTONS & TRUST STATS
+   Side-by-side buttons + single-row trust badges
+   ============================================================ */
+@media (max-width: 767px) {
+    /* Force buttons side-by-side instead of stacked */
+    .hero-section .flex.flex-col.sm\:flex-row.gap-3 {
+        flex-direction: row !important;
+        gap: 8px !important;
+    }
+    /* Compact button styling */
+    .hero-section .hero-btn-primary,
+    .hero-section .hero-btn-whatsapp {
+        padding: 10px 14px !important;
+        font-size: 13px !important;
+        min-height: 40px !important;
+        flex: 1;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Trust stats — prevent wrap, tighten spacing */
+    .hero-section div[style*="flexWrap"] {
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+    }
+    .hero-section div[style*="flexWrap"] > div {
+        padding: 5px 8px !important;
+        gap: 5px !important;
+    }
+    .hero-section div[style*="flexWrap"] > div strong {
+        font-size: 12px !important;
+    }
+    .hero-section div[style*="flexWrap"] > div span {
+        font-size: 10px !important;
+    }
+}
