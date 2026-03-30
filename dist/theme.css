@@ -2004,3 +2004,35 @@ a.hero-btn-whatsapp {
         margin-bottom: 12px !important;
     }
 }
+
+/* ============================================================
+   MOBILE FOOTER POLISH
+   Center elements, stack logo and copy, adjust spacing
+   ============================================================ */
+@media (max-width: 767px) {
+    /* Footer padding */
+    footer.py-10 {
+        padding-top: 2rem !important;
+        padding-bottom: 2rem !important;
+    }
+
+    /* Stack the logo and copyright */
+    footer .grid > div:nth-child(1) {
+        flex-direction: column !important;
+        justify-content: center !important;
+        text-align: center !important;
+        gap: 12px !important;
+    }
+
+    /* Support / Email buttons */
+    footer .grid > div:nth-child(3) {
+        justify-content: center !important;
+        gap: 16px !important;
+    }
+
+    /* Reduce top padding of social icons section */
+    footer .pt-6.border-t {
+        padding-top: 1rem !important;
+        margin-top: -0.5rem !important;
+    }
+}
