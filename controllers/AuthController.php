@@ -236,17 +236,25 @@ try {
         csrf_init();
         
         // Set admin session if user has is_admin flag in DB
-        $adminCheck = $pdo->prepare('SELECT is_admin FROM users WHERE id = ?');
-        $adminCheck->execute([$user['id']]);
-        $adminRow = $adminCheck->fetch(PDO::FETCH_ASSOC);
-        if ($adminRow && (int)$adminRow['is_admin'] === 1) {
-            $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_user'] = [
-                'id' => $user['id'],
-                'name' => $user['name'],
-                'email' => $user['email'],
-                'profile_picture' => $user['profile_picture'] ?? null
-            ];
+        // Guard against servers where the is_admin column hasn't been migrated yet
+        try {
+            $colCheckAdmin = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'is_admin'");
+            if ($colCheckAdmin && $colCheckAdmin->fetch()) {
+                $adminCheck = $pdo->prepare('SELECT is_admin FROM users WHERE id = ?');
+                $adminCheck->execute([$user['id']]);
+                $adminRow = $adminCheck->fetch(PDO::FETCH_ASSOC);
+                if ($adminRow && (int)$adminRow['is_admin'] === 1) {
+                    $_SESSION['admin_logged_in'] = true;
+                    $_SESSION['admin_user'] = [
+                        'id' => $user['id'],
+                        'name' => $user['name'],
+                        'email' => $user['email'],
+                        'profile_picture' => $user['profile_picture'] ?? null
+                    ];
+                }
+            }
+        } catch (Exception $e) {
+            error_log('is_admin column check failed: ' . $e->getMessage());
         }
         
         // Get user with profile picture and email verification status - check if columns exist first
