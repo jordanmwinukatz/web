@@ -118,6 +118,78 @@
       'error.verify_email':  'Please verify your email address to continue.',
       'error.network':       'Network error. Please try again.',
       'error.generic':       'Something went wrong. Please try again.',
+      // Ticker
+      'ticker.1':            '24/7 desk – instant confirmations',
+      'ticker.2':            'Best spreads • Transparent rates',
+      'ticker.3':            'Secure P2P • CRDB supported',
+      // Hero
+      'hero.eyebrow':        'LIVE P2P USDT DESK — 24/7 INSTANT CONFIRMATIONS',
+      'hero.heading1':       'Fast, Secure, and Reliable',
+      'hero.heading2':       'Crypto Trading in Tanzania.',
+      'hero.subtitle':       'Public rates. Private speed. A premium P2P desk built for trust, clarity, and instant settlement.',
+      'hero.volume':         'Volume',
+      'hero.traders':        'Traders',
+      'hero.desk':           'Desk',
+      'hero.view_prices':    'View Live Prices',
+      'hero.whatsapp':       'WhatsApp Chat',
+      // Converter extra
+      'lrc.buy':             'BUY',
+      'lrc.sell':            'SELL',
+      // Price section
+      'price.currently':     'Currently Offer',
+      'price.preview':       'Price Preview',
+      'price.buy':           'Buy',
+      'price.sell':          'Sell',
+      'price.buy_details':   'Buy Details',
+      'price.asset':         'Asset',
+      'price.price_tzs':     'Price (TZS)',
+      'price.limits':        'Limits',
+      'price.action':        'Action',
+      'price.buy_methods':   'Buy Payment Methods',
+      'price.more_methods':  'Want more payment methods or higher limits? Click below to switch into',
+      'price.adv_mode':      'Advancement Advertisements Mode',
+      'price.place_order':   'Place an Order',
+      // About section
+      'about.title':         'About',
+      'about.subtitle':      'Personal, transparent, and built around your speed of business.',
+      'about.p1_prefix':     'At',
+      'about.p1':            ', we make crypto simple, safe, and fast. Founded by Jordan Mwinuka, we focus on honest pricing, instant delivery, and clear communication—so you trade with confidence.',
+      'about.p2':            'We operate a hybrid pricing model powered by public APIs and precision manual control, ensuring competitive spreads while protecting execution quality across market conditions.',
+      // How It Works
+      'how.title':           'How It Works',
+      'how.subtitle':        'From quote to confirmation in four clean steps.',
+      'how.step1':           '1) Check Price',
+      'how.step1_desc':      'See the latest buy/sell rates for your platform.',
+      'how.step2':           '2) Submit Order',
+      'how.step2_desc':      'Fill a short form with your details and amount.',
+      'how.step3':           '3) Pay & Upload',
+      'how.step3_desc':      'Follow payment access, upload your receipt, add exchange email.',
+      'how.step4':           '4) Confirm',
+      'how.step4_desc':      'We verify and release crypto/fiat instantly.',
+      // App mockup
+      'app.instant':         'Instant Settlement',
+      'app.methods':         'M-Pesa · Tigo Pesa · CRDB',
+      'app.zero_fees':       'Zero App Fees',
+      'app.on_pairs':        'On selected pairs',
+      'app.greeting':        'Good morning 👋',
+      'app.portfolio':       'Total Portfolio Value',
+      'app.buy_crypto':      'Buy Crypto',
+      'app.sell_crypto':     'Sell Crypto',
+      'app.market':          'Market',
+      'app.see_all':         'See all →',
+      // Order wizard
+      'wizard.title':        'Start Your Order',
+      'wizard.subtitle':     'Complete order wizard with P2P integration and step-by-step guidance',
+      'wizard.step':         'Step',
+      'wizard.of':           'of',
+      // Footer
+      'footer.rights':       '. All rights reserved.',
+      'footer.privacy':      'Privacy',
+      'footer.terms':        'Terms',
+      'footer.back_top':     'Back to top',
+      'footer.support':      'Support',
+      'footer.email':        'Email',
+      'footer.logout':       'Logout',
     },
 
     sw: {
@@ -191,6 +263,69 @@
       'error.verify_email':  'Tafadhali thibitisha anwani yako ya barua pepe ili uendelee.',
       'error.network':       'Hitilafu ya mtandao. Tafadhali jaribu tena.',
       'error.generic':       'Kuna tatizo fulani. Tafadhali jaribu tena.',
+      'ticker.1':            'Dawati la 24/7 – uthibitisho wa haraka',
+      'ticker.2':            'Spread bora • Bei za uwazi',
+      'ticker.3':            'P2P Salama • CRDB inasaidiwa',
+      'hero.eyebrow':        'DAWATI LA P2P USDT — UTHIBITISHO WA HARAKA 24/7',
+      'hero.heading1':       'Haraka, Salama, na ya Kuaminika',
+      'hero.heading2':       'Biashara ya Crypto Tanzania.',
+      'hero.subtitle':       'Bei za wazi. Kasi ya kibinafsi. Dawati la P2P la hali ya juu lililojengwa kwa uaminifu, uwazi, na malipo ya papo hapo.',
+      'hero.volume':         'Kiasi',
+      'hero.traders':        'Wafanyabiashara',
+      'hero.desk':           'Dawati',
+      'hero.view_prices':    'Angalia Bei za Sasa',
+      'hero.whatsapp':       'WhatsApp Chat',
+      'lrc.buy':             'NUNUA',
+      'lrc.sell':            'UZA',
+      'price.currently':     'Tunatoa Sasa',
+      'price.preview':       'Muhtasari wa Bei',
+      'price.buy':           'Nunua',
+      'price.sell':          'Uza',
+      'price.buy_details':   'Maelezo ya Kununua',
+      'price.asset':         'Mali',
+      'price.price_tzs':     'Bei (TZS)',
+      'price.limits':        'Vikomo',
+      'price.action':        'Kitendo',
+      'price.buy_methods':   'Njia za Malipo ya Kununua',
+      'price.more_methods':  'Unataka njia zaidi za malipo au vikomo vikubwa? Bonyeza hapa chini kubadilisha kwenda',
+      'price.adv_mode':      'Hali ya Matangazo ya Juu',
+      'price.place_order':   'Weka Agizo',
+      'about.title':         'Kuhusu Sisi',
+      'about.subtitle':      'Ya kibinafsi, ya uwazi, na iliyojengwa kuzunguka kasi ya biashara yako.',
+      'about.p1_prefix':     'Katika',
+      'about.p1':            ', tunafanya crypto kuwa rahisi, salama, na haraka. Ilianzishwa na Jordan Mwinuka, tunalenga bei za uaminifu, utoaji wa papo hapo, na mawasiliano wazi—ili ufanye biashara kwa ujasiri.',
+      'about.p2':            'Tunaendesha mfumo wa bei wa mseto unaotumia API za umma na udhibiti sahihi wa mikono, kuhakikisha spread za ushindani huku tukilinda ubora wa utekelezaji katika hali zote za soko.',
+      'how.title':           'Jinsi Inavyofanya Kazi',
+      'how.subtitle':        'Kutoka bei hadi uthibitisho kwa hatua nne rahisi.',
+      'how.step1':           '1) Angalia Bei',
+      'how.step1_desc':      'Angalia bei za hivi karibuni za kununua/kuuza kwa jukwaa lako.',
+      'how.step2':           '2) Wasilisha Agizo',
+      'how.step2_desc':      'Jaza fomu fupi yenye maelezo yako na kiasi.',
+      'how.step3':           '3) Lipa na Pakia',
+      'how.step3_desc':      'Fuata upatikanaji wa malipo, pakia risiti yako, ongeza barua pepe ya kubadilishana.',
+      'how.step4':           '4) Thibitisha',
+      'how.step4_desc':      'Tunathibitisha na kutoa crypto/fedha mara moja.',
+      'app.instant':         'Malipo ya Papo Hapo',
+      'app.methods':         'M-Pesa · Tigo Pesa · CRDB',
+      'app.zero_fees':       'Bila Ada za App',
+      'app.on_pairs':        'Kwa jozi zilizochaguliwa',
+      'app.greeting':        'Habari za asubuhi 👋',
+      'app.portfolio':       'Thamani ya Jumla ya Mkoba',
+      'app.buy_crypto':      'Nunua Crypto',
+      'app.sell_crypto':     'Uza Crypto',
+      'app.market':          'Soko',
+      'app.see_all':         'Ona zote →',
+      'wizard.title':        'Anza Agizo Lako',
+      'wizard.subtitle':     'Mchawi kamili wa agizo na muunganisho wa P2P na mwongozo wa hatua kwa hatua',
+      'wizard.step':         'Hatua',
+      'wizard.of':           'ya',
+      'footer.rights':       '. Haki zote zimehifadhiwa.',
+      'footer.privacy':      'Faragha',
+      'footer.terms':        'Masharti',
+      'footer.back_top':     'Rudi juu',
+      'footer.support':      'Msaada',
+      'footer.email':        'Barua pepe',
+      'footer.logout':       'Toka',
     },
 
     fr: {
@@ -456,6 +591,116 @@
   // RTL languages
   const RTL_LANGS = ['ar', 'he', 'fa', 'ur'];
 
+  // ─── Auto-tagging map: match React-rendered elements by href or text ───────
+  // Maps { href → i18n key } for nav links
+  const HREF_I18N_MAP = {
+    '#prices':  'nav.prices',
+    '#about':   'nav.about',
+    '#how':     'nav.how',
+    '#contact': 'nav.contact',
+  };
+
+  // Maps { English text → i18n key } for labels/buttons with no reliable href
+  const TEXT_I18N_MAP = {
+    'View Prices':            'nav.prices',
+    'View Live Prices':       'nav.prices',
+    'Start Trade':            'lrc.start_trade',
+    'Start a Trade':          'nav.start_trade',
+    'Live Rate Converter':    'lrc.title',
+    'DESK ONLINE':            'lrc.desk_online',
+    'Desk Online':            'lrc.desk_online',
+    'AMOUNT':                 'lrc.amount',
+    'Amount':                 'lrc.amount',
+    'FROM':                   'lrc.from',
+    'TO':                     'lrc.to',
+    'YOU GET':                'lrc.you_get',
+    'You get':                'lrc.you_get',
+    'View all rates →':       'lrc.view_rates',
+    'View all rates →':       'lrc.view_rates',
+    'BUY RATE':               'lrc.buy_rate',
+    'SELL RATE':              'lrc.sell_rate',
+    'BUY rate':               'lrc.buy_rate',
+    'SELL rate':              'lrc.sell_rate',
+    'WhatsApp Chat':          'hero.whatsapp',
+    // Ticker
+    '24/7 desk – instant confirmations':  'ticker.1',
+    'Best spreads • Transparent rates':   'ticker.2',
+    'Secure P2P • CRDB supported':        'ticker.3',
+    // Hero
+    'LIVE P2P USDT DESK — 24/7 INSTANT CONFIRMATIONS': 'hero.eyebrow',
+    'Fast, Secure, and Reliable':         'hero.heading1',
+    'Crypto Trading in Tanzania.':        'hero.heading2',
+    'Public rates. Private speed. A premium P2P desk built for trust, clarity, and instant settlement.': 'hero.subtitle',
+    'Volume':                 'hero.volume',
+    'Traders':                'hero.traders',
+    'Desk':                   'hero.desk',
+    'View Live Prices':       'hero.view_prices',
+    // Converter
+    'buy':                    'lrc.buy',
+    'sell':                   'lrc.sell',
+    'From':                   'lrc.from',
+    'To':                     'lrc.to',
+    // Price section
+    'Currently Offer':        'price.currently',
+    'Price Preview':          'price.preview',
+    'Buy':                    'price.buy',
+    'Sell':                   'price.sell',
+    'Buy Details':            'price.buy_details',
+    'Asset':                  'price.asset',
+    'Price (TZS)':            'price.price_tzs',
+    'Limits':                 'price.limits',
+    'Action':                 'price.action',
+    'Buy Payment Methods':    'price.buy_methods',
+    'Want more payment methods or higher limits? Click below to switch into': 'price.more_methods',
+    'Advancement Advertisements Mode': 'price.adv_mode',
+    'Place an Order':         'price.place_order',
+    // About
+    'Personal, transparent, and built around your speed of business.': 'about.subtitle',
+    'At':                     'about.p1_prefix',
+    ', we make crypto simple, safe, and fast. Founded by Jordan Mwinuka, we focus on honest pricing, instant delivery, and clear communication—so you trade with confidence.': 'about.p1',
+    'We operate a hybrid pricing model powered by public APIs and precision manual control, ensuring competitive spreads while protecting execution quality across market conditions.': 'about.p2',
+    // How It Works
+    'From quote to confirmation in four clean steps.': 'how.subtitle',
+    '1) Check Price':         'how.step1',
+    'See the latest buy/sell rates for your platform.': 'how.step1_desc',
+    '2) Submit Order':        'how.step2',
+    'Fill a short form with your details and amount.': 'how.step2_desc',
+    '3) Pay & Upload':        'how.step3',
+    'Follow payment access, upload your receipt, add exchange email.': 'how.step3_desc',
+    '4) Confirm':             'how.step4',
+    'We verify and release crypto/fiat instantly.': 'how.step4_desc',
+    // App section
+    'Official Mobile App':    'app.eyebrow',
+    'The JM P2P mobile app is almost here — a native trading experience for Tanzania with instant M-Pesa, Tigo Pesa, CRDB & NMB support, right in your pocket.': 'app.desc',
+    '⚡ Lightning Fast':      'app.pill1',
+    '🔒 Bank-grade Security': 'app.pill2',
+    '📱 iOS & Android':       'app.pill3',
+    'Notify Me':              'app.notify_btn',
+    'Instant Settlement':     'app.instant',
+    'M-Pesa · Tigo Pesa · CRDB': 'app.methods',
+    'Zero App Fees':          'app.zero_fees',
+    'On selected pairs':      'app.on_pairs',
+    'Good morning 👋':        'app.greeting',
+    'Total Portfolio Value':  'app.portfolio',
+    'Buy Crypto':             'app.buy_crypto',
+    'Sell Crypto':            'app.sell_crypto',
+    'Market':                 'app.market',
+    'See all →':              'app.see_all',
+    // Order wizard
+    'Start Your Order':       'wizard.title',
+    'Complete order wizard with P2P integration and step-by-step guidance': 'wizard.subtitle',
+    'Step':                   'wizard.step',
+    'of':                     'wizard.of',
+    // Footer
+    '. All rights reserved.': 'footer.rights',
+    'Privacy':                'footer.privacy',
+    'Terms':                  'footer.terms',
+    'Back to top':            'footer.back_top',
+    'Support':                'footer.support',
+    'Email':                  'footer.email',
+    'Logout':                 'footer.logout',
+  };
+
   // ─── Core Engine ────────────────────────────────────────────────────────────
   const I18N = {
     currentLang: 'en',
@@ -466,17 +711,121 @@
       return dict[key] || DICT['en'][key] || key;
     },
 
+    /**
+     * Auto-discover React-rendered elements and stamp data-i18n on them.
+     * Runs before applyTranslations so the main loop picks them up.
+     */
+    autoTag: function () {
+      // 1. Tag nav links by href
+      var header = document.querySelector('header');
+      if (header) {
+        header.querySelectorAll('a[href]').forEach(function (a) {
+          if (a.hasAttribute('data-i18n')) return; // already tagged
+          var href = a.getAttribute('href');
+          var key = HREF_I18N_MAP[href];
+          if (key) {
+            // Only tag simple text links (not the logo link)
+            var text = a.textContent.trim();
+            if (text.length < 40 && !a.querySelector('img')) {
+              a.setAttribute('data-i18n', key);
+            }
+          }
+        });
+      }
+
+      // 2. Tag elements by matching text content
+      // Use both direct-text-only matching and full textContent for leaf nodes
+      var allEls = document.querySelectorAll('span, div, a, button, label, p, h1, h2, h3, h4, th, td, em, strong');
+      allEls.forEach(function (el) {
+        if (el.hasAttribute('data-i18n')) return;
+        // Skip elements with many child elements (containers)
+        // but allow elements with 1-2 child elements (e.g. h1 with a span inside)
+        var childElements = el.querySelectorAll(':scope > *');
+
+        // For leaf elements (no child elements), use textContent directly
+        var text;
+        if (childElements.length === 0) {
+          text = el.textContent.trim();
+        } else {
+          // For elements with children, try to match using only direct text nodes
+          var directText = '';
+          for (var i = 0; i < el.childNodes.length; i++) {
+            if (el.childNodes[i].nodeType === 3) { // Text node
+              directText += el.childNodes[i].textContent;
+            }
+          }
+          text = directText.trim();
+          // If no direct text, skip — don't match on concatenated child text
+          if (!text) return;
+        }
+
+        var key = TEXT_I18N_MAP[text];
+        if (key) {
+          el.setAttribute('data-i18n', key);
+        }
+      });
+
+      // 3. Tag elements by CSS class patterns (for elements with specific class names)
+      var CLASS_I18N_MAP = {
+        'hero-eyebrow': 'hero.eyebrow',
+        'app-teaser-eyebrow': 'app.eyebrow',
+        'app-teaser-desc': 'app.desc',
+        'app-teaser-notify-btn': 'app.notify_btn',
+        'atsec-greeting': 'app.greeting',
+        'atsec-bal-label': 'app.portfolio',
+        'atsec-mkt-title': 'app.market',
+        'atsec-mkt-see': 'app.see_all',
+      };
+      Object.keys(CLASS_I18N_MAP).forEach(function (cls) {
+        var el = document.querySelector('.' + cls);
+        if (el && !el.hasAttribute('data-i18n')) {
+          el.setAttribute('data-i18n', CLASS_I18N_MAP[cls]);
+        }
+      });
+
+      // 4. Tag app teaser pills by content
+      document.querySelectorAll('.app-teaser-pill').forEach(function (el) {
+        if (el.hasAttribute('data-i18n')) return;
+        var text = el.textContent.trim();
+        var key = TEXT_I18N_MAP[text];
+        if (key) el.setAttribute('data-i18n', key);
+      });
+
+      // 5. Tag app mockup badge elements by class
+      document.querySelectorAll('.atsec-bn').forEach(function (el) {
+        if (el.hasAttribute('data-i18n')) return;
+        var text = el.textContent.trim();
+        var key = TEXT_I18N_MAP[text];
+        if (key) el.setAttribute('data-i18n', key);
+      });
+      document.querySelectorAll('.atsec-bs').forEach(function (el) {
+        if (el.hasAttribute('data-i18n')) return;
+        var text = el.textContent.trim();
+        var key = TEXT_I18N_MAP[text];
+        if (key) el.setAttribute('data-i18n', key);
+      });
+      document.querySelectorAll('.atsec-bal-btn').forEach(function (el) {
+        if (el.hasAttribute('data-i18n')) return;
+        var text = el.textContent.trim();
+        var key = TEXT_I18N_MAP[text];
+        if (key) el.setAttribute('data-i18n', key);
+      });
+    },
+
     /** Apply translations to all [data-i18n] elements in the DOM */
     applyTranslations: function () {
-      const lang = this.currentLang;
+      var lang = this.currentLang;
       // Set HTML lang attribute
       document.documentElement.lang = lang;
       // Set RTL direction for Arabic etc.
       document.documentElement.dir = RTL_LANGS.includes(lang) ? 'rtl' : 'ltr';
 
+      // Auto-discover and tag React-rendered elements first
+      this.autoTag();
+
       document.querySelectorAll('[data-i18n]').forEach(function (el) {
-        const key = el.getAttribute('data-i18n');
-        const translation = I18N.t(key);
+        var key = el.getAttribute('data-i18n');
+        var translation = I18N.t(key);
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
           el.placeholder = translation;
         } else {
@@ -484,47 +833,52 @@
         }
       });
 
-      // Also handle data-i18n-html (for elements needing innerHtml)
+      // Also handle data-i18n-html (for elements needing innerHTML)
       document.querySelectorAll('[data-i18n-html]').forEach(function (el) {
-        const key = el.getAttribute('data-i18n-html');
+        var key = el.getAttribute('data-i18n-html');
         el.innerHTML = I18N.t(key);
       });
     },
 
-    /** Persist and apply a language */
+    /** Persist and apply a language (only when user explicitly chooses) */
     changeLanguage: function (lang) {
       if (!DICT[lang]) lang = 'en';
       this.currentLang = lang;
+      try { localStorage.setItem('jmp2p_lang_explicit', 'true'); } catch (e) {}
       try { localStorage.setItem('jmp2p_lang', lang); } catch (e) {}
       this.applyTranslations();
       // Update switcher UI if present
-      const switcher = document.getElementById('i18n-lang-switcher');
+      var switcher = document.getElementById('i18n-lang-switcher');
       if (switcher) switcher.value = lang;
     },
 
-    /** Main init — detects language from cache, then IP */
+    /** Main init — always detects via IP unless user explicitly chose a language */
     init: function () {
-      // 1. Check localStorage first
-      let saved = null;
+      // 1. Only honour localStorage if the user *explicitly* chose a language
+      var saved = null;
+      var explicit = false;
       try { saved = localStorage.getItem('jmp2p_lang'); } catch (e) {}
+      try { explicit = localStorage.getItem('jmp2p_lang_explicit') === 'true'; } catch (e) {}
 
-      if (saved && DICT[saved]) {
-        this.changeLanguage(saved);
+      if (explicit && saved && DICT[saved]) {
+        this.currentLang = saved;
+        this.applyTranslations();
         return;
       }
 
-      // 2. Detect via IP (ipapi.co is free, no API key needed)
-      // Apply English immediately to avoid blank page while fetching
-      this.changeLanguage('en');
+      // 2. Show English immediately while we detect the real language
+      this.currentLang = 'en';
+      this.applyTranslations();
 
+      // 3. Detect via IP geolocation
       var self = this;
-      fetch('https://ipapi.co/json/', { cache: 'force-cache' })
+      fetch('https://get.geojs.io/v1/ip/country.json', { cache: 'force-cache' })
         .then(function (r) { return r.json(); })
         .then(function (data) {
-          var countryCode = (data && data.country_code) ? data.country_code.toUpperCase() : null;
+          var countryCode = (data && data.country) ? data.country.toUpperCase() : null;
           var lang = (countryCode && COUNTRY_LANG[countryCode]) ? COUNTRY_LANG[countryCode] : 'en';
-          // Save detected lang (without persisting, so next visit re-detects if user moved country)
           self.currentLang = lang;
+          try { localStorage.setItem('jmp2p_lang', lang); } catch (e) {}
           self.applyTranslations();
         })
         .catch(function () {
@@ -544,18 +898,23 @@
   }
 
   // Re-apply on dynamic content (React mounts etc.)
-  // Observe DOM mutations and re-translate new [data-i18n] nodes
+  // Observe ALL DOM mutations so autoTag() can discover and stamp React-rendered elements
   if (typeof MutationObserver !== 'undefined') {
+    var _i18nTimer = null;
     var observer = new MutationObserver(function (mutations) {
-      var hasNew = false;
+      var hasNewElements = false;
       mutations.forEach(function (m) {
         m.addedNodes.forEach(function (n) {
-          if (n.nodeType === 1 && (n.hasAttribute('data-i18n') || n.querySelector && n.querySelector('[data-i18n]'))) {
-            hasNew = true;
-          }
+          if (n.nodeType === 1) hasNewElements = true;
         });
       });
-      if (hasNew) I18N.applyTranslations();
+      if (hasNewElements) {
+        // Debounce — React can add many nodes in a single render cycle
+        clearTimeout(_i18nTimer);
+        _i18nTimer = setTimeout(function () {
+          I18N.applyTranslations();
+        }, 100);
+      }
     });
     observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
   }
