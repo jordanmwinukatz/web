@@ -274,58 +274,59 @@
     }
   </style>
     <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
+    <script src="/js/i18n.js?v=2026.04.01.1"></script>
 </head>
 <body>
   <div class="card" id="step1">
-    <a href="admin/completed_orders.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+    <a href="admin/completed_orders.php" class="back-link"><i class="fas fa-arrow-left"></i> <span data-i18n="order.back">Back to Orders</span></a>
     <div class="card-header">
       <div class="card-header-icon"><i class="fas fa-hand-holding-usd"></i></div>
-      <h1 class="step-title">Confirm Seller Transfer</h1>
+      <h1 class="step-title" data-i18n="sell.title">Confirm Seller Transfer</h1>
     </div>
-    <p class="step-desc">Verify that the seller's crypto was received successfully before proceeding with payment.</p>
+    <p class="step-desc" data-i18n="sell.desc">Verify that the seller's crypto was received successfully before proceeding with payment.</p>
     <div id="status" class="status-banner"><i class="fas fa-spinner fa-spin"></i> Loading order details…</div>
 
     <div class="detail-section">
-      <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i>Seller Info</div>
-      <div class="info-row"><span class="label">Order #</span><span id="order-number" class="value">—</span></div>
-      <div class="info-row"><span class="label">Seller</span><span id="seller-name" class="value">—</span></div>
-      <div class="info-row"><span class="label">Platform</span><span id="platform-name" class="value">—</span></div>
-      <div class="info-row"><span class="label">Recipient Email</span><span id="recipient-email" class="value">—</span></div>
-      <div class="info-row"><span class="label">Recipient UID</span><span id="recipient-uid" class="value">—</span></div>
-      <div class="info-row"><span class="label">Amount Sent</span><span id="crypto-amount" class="value-amount">—</span></div>
+      <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i><span data-i18n="sell.seller_info">Seller Info</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.order_num">Order #</span><span id="order-number" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="sell.seller">Seller</span><span id="seller-name" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="sell.platform">Platform</span><span id="platform-name" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="sell.recipient_email">Recipient Email</span><span id="recipient-email" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="sell.recipient_uid">Recipient UID</span><span id="recipient-uid" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="sell.amount_sent">Amount Sent</span><span id="crypto-amount" class="value-amount">—</span></div>
     </div>
 
     <div id="proof-section" class="proof-section hidden">
-      <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i>Proof Attachments (<span id="proof-count">0</span>)</div>
+      <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i><span data-i18n="sell.proof_attach">Proof Attachments</span> (<span id="proof-count">0</span>)</div>
       <div id="proof-grid" class="proof-grid"></div>
     </div>
 
     <button class="btn btn-warning" id="next-btn" onclick="goToStep2()" style="margin-top:20px;">
-      <i class="fas fa-check-circle" style="margin-right:6px;"></i> Confirm & Continue
+      <i class="fas fa-check-circle" style="margin-right:6px;"></i> <span data-i18n="sell.confirm_cont">Confirm &amp; Continue</span>
     </button>
   </div>
 
   <div class="card" id="step2">
     <div class="card-header">
       <div class="card-header-icon"><i class="fas fa-money-bill-wave"></i></div>
-      <h1 class="step-title">Pay the Seller</h1>
+      <h1 class="step-title" data-i18n="sell.pay_seller">Pay the Seller</h1>
     </div>
-    <p class="step-desc">Send the payment to the seller's account and mark the order as complete after transfer.</p>
+    <p class="step-desc" data-i18n="sell.pay_desc">Send the payment to the seller's account and mark the order as complete after transfer.</p>
 
     <div class="detail-section">
-      <div class="detail-label"><i class="fas fa-wallet" style="margin-right:6px;"></i>Payout Details</div>
-      <div class="info-row"><span class="label">Payout Channel</span><span id="payout-channel" class="value">—</span></div>
+      <div class="detail-label"><i class="fas fa-wallet" style="margin-right:6px;"></i><span data-i18n="sell.payout_details">Payout Details</span></div>
+      <div class="info-row"><span class="label" data-i18n="sell.payout_channel">Payout Channel</span><span id="payout-channel" class="value">—</span></div>
       <div class="info-row">
-        <span class="label">Payout Name</span>
-        <span><span id="pay-name" class="value">—</span><button class="copy-btn" data-copy="pay-name">Copy</button></span>
+        <span class="label" data-i18n="sell.payout_name">Payout Name</span>
+        <span><span id="pay-name" class="value">—</span><button class="copy-btn" data-copy="pay-name" data-i18n="order.copy">Copy</button></span>
       </div>
       <div class="info-row">
-        <span class="label">Account Number</span>
-        <span><span id="pay-number" class="value">—</span><button class="copy-btn" data-copy="pay-number">Copy</button></span>
+        <span class="label" data-i18n="sell.account_number">Account Number</span>
+        <span><span id="pay-number" class="value">—</span><button class="copy-btn" data-copy="pay-number" data-i18n="order.copy">Copy</button></span>
       </div>
       <div class="info-row">
-        <span class="label">Amount to Pay</span>
-        <span><span id="pay-amount" class="value-amount">—</span><button class="copy-btn" data-copy="pay-amount">Copy</button></span>
+        <span class="label" data-i18n="sell.amount_to_pay">Amount to Pay</span>
+        <span><span id="pay-amount" class="value-amount">—</span><button class="copy-btn" data-copy="pay-amount" data-i18n="order.copy">Copy</button></span>
       </div>
     </div>
 
@@ -333,13 +334,13 @@
 
     <div class="actions" id="actions-row" style="flex-direction:column;gap:12px;">
       <button class="btn btn-warning" id="api-pay-btn" onclick="triggerApiPayment(this)">
-        <i class="fas fa-bolt" style="margin-right:6px;"></i> Pay via API
+        <i class="fas fa-bolt" style="margin-right:6px;"></i> <span data-i18n="sell.pay_api">Pay via API</span>
       </button>
       <button class="btn btn-primary" id="complete-btn" onclick="completeOrder(this)">
-        <i class="fas fa-check-circle" style="margin-right:6px;"></i> Mark Payout Done
+        <i class="fas fa-check-circle" style="margin-right:6px;"></i> <span data-i18n="sell.mark_done">Mark Payout Done</span>
       </button>
       <button class="btn btn-secondary" onclick="backToStep1()">
-        <i class="fas fa-arrow-left" style="margin-right:6px;"></i> Back
+        <i class="fas fa-arrow-left" style="margin-right:6px;"></i> <span data-i18n="sell.back">Back</span>
       </button>
     </div>
   </div>

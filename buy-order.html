@@ -196,37 +196,38 @@
     .back-link:hover { color: var(--text-primary); }
   </style>
     <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
+    <script src="/js/i18n.js?v=2026.04.01.1"></script>
 </head>
 <body>
 
   <!-- STEP 1 -->
   <div class="card" id="step1">
-    <a href="admin/completed_orders.php" class="back-link"><i class="fas fa-arrow-left"></i> Back to Orders</a>
+    <a href="admin/completed_orders.php" class="back-link"><i class="fas fa-arrow-left"></i> <span data-i18n="order.back">Back to Orders</span></a>
     <div class="card-header">
       <div class="card-header-icon buy"><i class="fas fa-shopping-cart"></i></div>
-      <h1 class="step-title">Confirm Buyer Payment</h1>
+      <h1 class="step-title" data-i18n="order.confirm_buyer">Confirm Buyer Payment</h1>
     </div>
-    <p class="step-desc">Verify that the buyer's payment has been received and details match before proceeding.</p>
+    <p class="step-desc" data-i18n="order.verify_desc">Verify that the buyer's payment has been received and details match before proceeding.</p>
 
     <div id="status" class="status-banner"><i class="fas fa-spinner fa-spin"></i> Loading order details…</div>
 
     <div class="detail-section">
-      <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i>Customer Info</div>
-      <div class="info-row"><span class="label">Order #</span><span id="order-number" class="value">—</span></div>
-      <div class="info-row"><span class="label">Buyer</span><span id="buyer-handle" class="value">—</span></div>
-      <div class="info-row"><span class="label">Verified Name</span><span id="buyer-name" class="value">—</span></div>
-      <div class="info-row"><span class="label">Email</span><span id="buyer-email" class="value">—</span></div>
-      <div class="info-row"><span class="label">Payment Method</span><span id="payment-method" class="value">—</span></div>
-      <div class="info-row"><span class="label">Fiat Amount</span><span id="fiat-amount" class="value-amount">—</span></div>
+      <div class="detail-label"><i class="fas fa-user" style="margin-right:6px;"></i><span data-i18n="order.customer_info">Customer Info</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.order_num">Order #</span><span id="order-number" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.buyer">Buyer</span><span id="buyer-handle" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.verified_name">Verified Name</span><span id="buyer-name" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.email">Email</span><span id="buyer-email" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.payment_method">Payment Method</span><span id="payment-method" class="value">—</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.fiat_amount">Fiat Amount</span><span id="fiat-amount" class="value-amount">—</span></div>
     </div>
 
     <div id="proof-section" class="proof-section hidden">
-      <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i>Payment Proofs (<span id="proof-count">0</span>)</div>
+      <div class="detail-label"><i class="fas fa-receipt" style="margin-right:6px;"></i><span data-i18n="order.payment_proofs">Payment Proofs</span> (<span id="proof-count">0</span>)</div>
       <div id="proof-grid" class="proof-grid"></div>
     </div>
 
     <button class="btn btn-primary" id="next-btn" onclick="goToStep2()" style="margin-top:20px;">
-      <i class="fas fa-check-circle" style="margin-right:6px;"></i> Payment Verified – Continue
+      <i class="fas fa-check-circle" style="margin-right:6px;"></i> <span data-i18n="order.payment_verified">Payment Verified – Continue</span>
     </button>
   </div>
 
@@ -234,32 +235,32 @@
   <div class="card" id="step2">
     <div class="card-header">
       <div class="card-header-icon buy"><i class="fas fa-paper-plane"></i></div>
-      <h1 class="step-title">Send Crypto to Buyer</h1>
+      <h1 class="step-title" data-i18n="order.send_crypto">Send Crypto to Buyer</h1>
     </div>
-    <p class="step-desc">Review the buyer's platform details and release the crypto securely.</p>
+    <p class="step-desc" data-i18n="order.send_desc">Review the buyer's platform details and release the crypto securely.</p>
 
     <div class="detail-section">
-      <div class="detail-label"><i class="fas fa-exchange-alt" style="margin-right:6px;"></i>Transfer Details</div>
-      <div class="info-row"><span class="label">Platform</span><span id="platform-name" class="value">—</span></div>
+      <div class="detail-label"><i class="fas fa-exchange-alt" style="margin-right:6px;"></i><span data-i18n="order.transfer_details">Transfer Details</span></div>
+      <div class="info-row"><span class="label" data-i18n="order.platform">Platform</span><span id="platform-name" class="value">—</span></div>
       <div class="info-row">
-        <span class="label">Platform UID</span>
-        <span><span id="platform-uid" class="value">—</span><button class="copy-btn" data-copy="platform-uid">Copy</button></span>
+        <span class="label" data-i18n="order.platform_uid">Platform UID</span>
+        <span><span id="platform-uid" class="value">—</span><button class="copy-btn" data-copy="platform-uid" data-i18n="order.copy">Copy</button></span>
       </div>
       <div class="info-row">
-        <span class="label">Platform Email</span>
-        <span><span id="platform-email" class="value">—</span><button class="copy-btn" data-copy="platform-email">Copy</button></span>
+        <span class="label" data-i18n="order.platform_email">Platform Email</span>
+        <span><span id="platform-email" class="value">—</span><button class="copy-btn" data-copy="platform-email" data-i18n="order.copy">Copy</button></span>
       </div>
       <div class="info-row">
-        <span class="label">Amount to Send</span>
-        <span><span id="crypto-amount" class="value-amount">—</span><button class="copy-btn" data-copy="crypto-amount">Copy</button></span>
+        <span class="label" data-i18n="order.amount_to_send">Amount to Send</span>
+        <span><span id="crypto-amount" class="value-amount">—</span><button class="copy-btn" data-copy="crypto-amount" data-i18n="order.copy">Copy</button></span>
       </div>
     </div>
 
     <div class="actions" id="actions-row">
       <button class="btn btn-primary" id="complete-btn" onclick="completeOrder(this)">
-        <i class="fas fa-check-circle" style="margin-right:6px;"></i> Send Crypto Completed
+        <i class="fas fa-check-circle" style="margin-right:6px;"></i> <span data-i18n="order.send_completed">Send Crypto Completed</span>
       </button>
-      <button class="btn btn-secondary" onclick="backToStep1()">Back</button>
+      <button class="btn btn-secondary" onclick="backToStep1()" data-i18n="sell.back">Back</button>
     </div>
   </div>
 
