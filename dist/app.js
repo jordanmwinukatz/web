@@ -3864,29 +3864,33 @@ authOpen && (() => {
   };
   const pwStrength = authMode === 'create' ? getPasswordStrength(authForm.password) : { level: 0 };
 
-  /* ── SVG Icon Helpers ── */
-  const IconUser = React.createElement("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
-    React.createElement("path", { d: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" }),
-    React.createElement("circle", { cx: 12, cy: 7, r: 4 }));
-  const IconMail = React.createElement("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
-    React.createElement("rect", { x: 2, y: 4, width: 20, height: 16, rx: 2 }),
-    React.createElement("path", { d: "M22 7l-10 6L2 7" }));
-  const IconLock = React.createElement("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
-    React.createElement("rect", { x: 3, y: 11, width: 18, height: 11, rx: 2 }),
-    React.createElement("path", { d: "M7 11V7a5 5 0 0110 0v4" }));
-  const IconEye = React.createElement("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
+  const IconEye = React.createElement("svg", { width: 18, height: 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" },
     React.createElement("path", { d: "M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" }),
     React.createElement("circle", { cx: 12, cy: 12, r: 3 }));
-  const IconEyeOff = React.createElement("svg", { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
+  const IconEyeOff = React.createElement("svg", { width: 18, height: 18, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round", strokeLinejoin: "round" },
     React.createElement("path", { d: "M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" }),
     React.createElement("line", { x1: 1, y1: 1, x2: 23, y2: 23 }));
-  const IconShield = React.createElement("svg", { width: 12, height: 12, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
-    React.createElement("path", { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" }));
-  const IconCheck = React.createElement("svg", { width: 12, height: 12, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
-    React.createElement("polyline", { points: "20 6 9 17 4 12" }));
   const IconArrowLeft = React.createElement("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
     React.createElement("line", { x1: 19, y1: 12, x2: 5, y2: 12 }),
     React.createElement("polyline", { points: "12 19 5 12 12 5" }));
+
+  /* Floating label input helper */
+  const FloatInput = (props) => React.createElement("div", { className: "auth-input-group" },
+    React.createElement("div", { className: "auth-float-wrap" },
+      React.createElement("input", {
+        className: "auth-float-input",
+        id: props.id, name: props.name, type: props.type || "text",
+        autoComplete: props.autoComplete || "off",
+        value: props.value, placeholder: " ",
+        style: props.style || {},
+        onChange: props.onChange
+      }),
+      React.createElement("label", { className: "auth-float-label", htmlFor: props.id }, props.label),
+      props.toggle && React.createElement("button", {
+        type: "button", className: "auth-pw-toggle", tabIndex: -1,
+        onClick: props.toggle
+      }, props.showPw ? IconEyeOff : IconEye)),
+    props.children);
 
   return React.createElement("div", {
     className: "fixed inset-0 z-[120] flex items-center justify-center auth-overlay",
@@ -3895,7 +3899,7 @@ authOpen && (() => {
   /* Backdrop */
   React.createElement("div", {
     className: "absolute inset-0",
-    style: { background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' },
+    style: { background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' },
     onClick: e => {
       if (!authUser) { e.preventDefault(); e.stopPropagation(); showAuthToast('Please log in or register to continue'); return false; }
       setAuthOpen(false);
@@ -3911,13 +3915,11 @@ authOpen && (() => {
 
   /* Close button */
   authUser ? React.createElement("button", {
-    className: "auth-close-btn",
-    onClick: () => setAuthOpen(false)
+    className: "auth-close-btn", onClick: () => setAuthOpen(false)
   }, React.createElement("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
     React.createElement("line", { x1: 18, y1: 6, x2: 6, y2: 18 }), React.createElement("line", { x1: 6, y1: 6, x2: 18, y2: 18 })))
   : React.createElement("button", {
-    className: "auth-close-btn",
-    style: { cursor: 'not-allowed', opacity: 0.4 },
+    className: "auth-close-btn", style: { cursor: 'not-allowed', opacity: 0.35 },
     onClick: () => showAuthToast('Please log in or register to continue'),
     title: "Cannot close without logging in"
   }, React.createElement("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
@@ -3928,33 +3930,22 @@ authOpen && (() => {
     React.createElement("div", { className: "auth-logo-ring" },
       React.createElement("img", { src: "logo.png", alt: "JM P2P" })),
     React.createElement("h1", { className: "auth-title" },
-      authMode === 'forgot' ? 'Reset Password' : authMode === 'login' ? 'Welcome Back' : 'Create Account'),
+      authMode === 'forgot' ? 'Reset password' : authMode === 'login' ? 'Welcome back' : 'Choose sign up method'),
     React.createElement("p", { className: "auth-subtitle" },
-      authMode === 'forgot' ? "We'll send you a link to reset your password" :
-      authMode === 'login' ? 'Sign in to your trading account' : 'Start trading in under 60 seconds')),
+      authMode === 'forgot' ? "Enter your email and we'll send you a reset link" :
+      authMode === 'login' ? 'Log in to your trading account' : "Choose how you'd like to create your account")),
 
-  /* Tabs (hide during forgot) */
-  authMode !== 'forgot' && React.createElement("div", { className: "auth-tabs" },
-    React.createElement("button", {
-      type: "button",
-      className: "auth-tab" + (authMode === 'login' ? ' auth-tab--active' : ''),
-      onClick: () => setAuthMode('login')
-    }, "Sign In"),
-    React.createElement("button", {
-      type: "button",
-      className: "auth-tab" + (authMode === 'create' ? ' auth-tab--active' : ''),
-      onClick: () => setAuthMode('create')
-    }, "Create Account")),
+  /* ===== CREATE ACCOUNT: Google first, then divider, then email form ===== */
+  authMode === 'create' && React.createElement(React.Fragment, null,
+    /* Google button */
+    React.createElement("div", { id: "google-signin-btn", className: "auth-google-wrap" }),
+    /* Divider */
+    React.createElement("div", { className: "auth-divider" },
+      React.createElement("div", { className: "auth-divider-line" }),
+      React.createElement("span", { className: "auth-divider-text" }, "or"),
+      React.createElement("div", { className: "auth-divider-line" }))),
 
-  /* Google Sign-in */
-  authMode !== 'forgot' && React.createElement("div", { id: "google-signin-btn", className: "auth-google-wrap" }),
-
-  /* Divider */
-  authMode !== 'forgot' && React.createElement("div", { className: "auth-divider" },
-    React.createElement("div", { className: "auth-divider-line" }),
-    React.createElement("span", { className: "auth-divider-text" }, "or continue with email"),
-    React.createElement("div", { className: "auth-divider-line" })),
-
+  /* ===== LOGIN: Email form first ===== */
   /* Form */
   React.createElement("form", {
     className: "auth-form",
@@ -3963,67 +3954,36 @@ authOpen && (() => {
       try {
         if (authMode === 'forgot' && !resetEmailSent) {
           if (!authForm.email.trim()) throw new Error('Email is required');
-          const res = await fetch('api/auth.php', {
-            method: 'POST', credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'forgot_password', email: authForm.email })
-          });
+          const res = await fetch('api/auth.php', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'forgot_password', email: authForm.email }) });
           const responseText = await res.text();
-          let j;
-          try { j = JSON.parse(responseText); } catch (parseError) {
-            console.error('JSON Parse Error:', parseError, 'Response:', responseText);
-            throw new Error('Invalid response from server. Please try again.');
-          }
+          let j; try { j = JSON.parse(responseText); } catch (parseError) { throw new Error('Invalid response from server.'); }
           if (!j.success) throw new Error(j.error || 'Failed to send reset email');
           setResetEmailSent(true);
           showAuthToast('Password reset email sent! Check your inbox.');
         } else if (authMode === 'login') {
-          const res = await fetch('api/auth.php', {
-            method: 'POST', credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'login', email: authForm.email, password: authForm.password })
-          });
+          const res = await fetch('api/auth.php', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'login', email: authForm.email, password: authForm.password }) });
           const responseText = await res.text();
-          let j;
-          try { j = JSON.parse(responseText); } catch (parseError) {
-            console.error('JSON Parse Error:', parseError, 'Response:', responseText);
-            throw new Error('Invalid response from server. Please try again.');
-          }
+          let j; try { j = JSON.parse(responseText); } catch (parseError) { throw new Error('Invalid response from server.'); }
           if (!j.success) throw new Error(j.error || 'Login failed');
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));
-          if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongoowen7@gmail.com')) {
-            setAuthOpen(false); return;
-          }
+          if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongoowen7@gmail.com')) { setAuthOpen(false); return; }
           setAuthOpen(false);
           if (j.user && j.user.id) { setTimeout(() => fetchUserSubmissions(), 500); }
         } else {
           if (!authForm.fullName.trim()) throw new Error('Full name is required');
-          if (authForm.password.length < 8) throw new Error('Password too weak (min 8)');
+          if (authForm.password.length < 8) throw new Error('Password must be at least 8 characters');
           if (authForm.password !== authForm.confirm) throw new Error('Passwords do not match');
-          if (!authForm.agree) throw new Error('You must agree to the Terms');
-          const res = await fetch('api/auth.php', {
-            method: 'POST', credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ action: 'register', name: authForm.fullName, email: authForm.email, password: authForm.password })
-          });
+          const res = await fetch('api/auth.php', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'register', name: authForm.fullName, email: authForm.email, password: authForm.password }) });
           const responseText = await res.text();
-          let j;
-          try { j = JSON.parse(responseText); } catch (parseError) {
-            console.error('JSON Parse Error:', parseError, 'Response:', responseText);
-            throw new Error('Server returned an invalid response. Please try again. If the problem persists, the email may already be registered.');
-          }
+          let j; try { j = JSON.parse(responseText); } catch (parseError) { throw new Error('Server error. The email may already be registered.'); }
           if (!j.success) throw new Error(j.error || 'Registration failed');
           setAuthUser(j.user);
           localStorage.setItem('authUser', JSON.stringify(j.user));
-          if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongoowen7@gmail.com')) {
-            setAuthOpen(false); return;
-          }
+          if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongoowen7@gmail.com')) { setAuthOpen(false); return; }
           if (j.requires_verification || !j.user.email_verified) {
-            showAuthToast('Registration successful! Please check your email to verify your account before placing orders. A verification link has been sent to ' + j.user.email);
-            setAuthOpen(false);
-            if (orderOpen) { setOrderOpen(false); }
-            return;
+            showAuthToast('Registration successful! Please check your email to verify your account.');
+            setAuthOpen(false); if (orderOpen) { setOrderOpen(false); } return;
           }
           setAuthOpen(false);
           if (j.user && j.user.id) { setTimeout(() => fetchUserSubmissions(), 500); }
@@ -4035,116 +3995,89 @@ authOpen && (() => {
   },
   React.createElement("div", { className: "auth-form-fields" },
 
-  /* Forgot password: back link */
+  /* Forgot: back link */
   authMode === 'forgot' && React.createElement("button", {
     type: "button", className: "auth-back-link",
     onClick: () => { setAuthMode('login'); setResetEmailSent(false); }
-  }, IconArrowLeft, " Back to Sign In"),
+  }, IconArrowLeft, " Back to Log in"),
 
-  /* Forgot password: success */
+  /* Forgot: success state */
   authMode === 'forgot' && resetEmailSent && React.createElement("div", { className: "auth-reset-success" },
     React.createElement("div", { className: "auth-reset-success-icon" },
       React.createElement("svg", { width: 28, height: 28, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round", strokeLinejoin: "round" },
         React.createElement("path", { d: "M22 11.08V12a10 10 0 11-5.93-9.14" }),
         React.createElement("polyline", { points: "22 4 12 14.01 9 11.01" }))),
-    React.createElement("p", { style: { color: '#10b981', fontWeight: 600, fontSize: '16px', marginBottom: '6px' } }, "Check Your Inbox"),
-    React.createElement("p", { style: { color: '#94a3b8', fontSize: '13.5px', lineHeight: 1.5 } }, "We've sent password reset instructions to your email. The link expires in 1 hour."),
-    React.createElement("button", {
-      type: "button", className: "auth-forgot-link", style: { marginTop: '16px' },
-      onClick: () => { setAuthMode('login'); setResetEmailSent(false); }
-    }, "Return to Sign In")),
+    React.createElement("p", { style: { color: '#10b981', fontWeight: 600, fontSize: '16px', marginBottom: '8px' } }, "Check your inbox"),
+    React.createElement("p", { style: { color: '#94a3b8', fontSize: '14px', lineHeight: 1.5 } }, "We've sent password reset instructions to your email. The link expires in 1 hour."),
+    React.createElement("button", { type: "button", className: "auth-forgot-link", style: { marginTop: '16px' }, onClick: () => { setAuthMode('login'); setResetEmailSent(false); } }, "Return to Log in")),
 
   /* Full Name (create only) */
-  authMode === 'create' && React.createElement("div", { className: "auth-input-group" },
-    React.createElement("label", { className: "auth-input-label" }, "Full Name"),
-    React.createElement("div", { className: "auth-input-wrap" },
-      React.createElement("span", { className: "auth-input-icon" }, IconUser),
-      React.createElement("input", {
-        className: "auth-input", name: "fullName", autoComplete: "name",
-        value: authForm.fullName, placeholder: "e.g. Jordan Mwinuka",
-        onChange: e => setAuthForm({ ...authForm, fullName: e.target.value })
-      }))),
+  authMode === 'create' && FloatInput({ id: 'auth-name', name: 'fullName', label: 'Full name', autoComplete: 'name', value: authForm.fullName, onChange: e => setAuthForm({ ...authForm, fullName: e.target.value }) }),
 
   /* Email */
-  (!resetEmailSent || authMode !== 'forgot') && React.createElement("div", { className: "auth-input-group" },
-    React.createElement("label", { className: "auth-input-label" }, "Email Address"),
-    React.createElement("div", { className: "auth-input-wrap" },
-      React.createElement("span", { className: "auth-input-icon" }, IconMail),
-      React.createElement("input", {
-        className: "auth-input", name: "email", type: "email", autoComplete: "email",
-        value: authForm.email, placeholder: "you@example.com",
-        onChange: e => setAuthForm({ ...authForm, email: e.target.value })
-      }))),
+  (!resetEmailSent || authMode !== 'forgot') && FloatInput({ id: 'auth-email', name: 'email', type: 'email', label: 'Email', autoComplete: 'email', value: authForm.email, onChange: e => setAuthForm({ ...authForm, email: e.target.value }) }),
 
-  /* Password (not forgot) */
-  authMode !== 'forgot' && React.createElement("div", { className: "auth-input-group" },
-    React.createElement("label", { className: "auth-input-label" }, "Password"),
-    React.createElement("div", { className: "auth-input-wrap" },
-      React.createElement("span", { className: "auth-input-icon" }, IconLock),
-      React.createElement("input", {
-        className: "auth-input", name: "password",
-        type: authShowPw ? "text" : "password", autoComplete: authMode === 'login' ? 'current-password' : 'new-password',
-        value: authForm.password,
-        placeholder: authMode === 'login' ? 'Enter your password' : 'Min 8 characters',
-        style: { paddingRight: '44px' },
-        onChange: e => setAuthForm({ ...authForm, password: e.target.value })
-      }),
-      React.createElement("button", {
-        type: "button", className: "auth-pw-toggle",
-        onClick: () => setAuthShowPw(!authShowPw), tabIndex: -1
-      }, authShowPw ? IconEyeOff : IconEye)),
-    /* Password strength (create only) */
+  /* Password */
+  authMode !== 'forgot' && FloatInput({
+    id: 'auth-password', name: 'password',
+    type: authShowPw ? 'text' : 'password', label: 'Password',
+    autoComplete: authMode === 'login' ? 'current-password' : 'new-password',
+    value: authForm.password, style: { paddingRight: '48px' },
+    onChange: e => setAuthForm({ ...authForm, password: e.target.value }),
+    toggle: () => setAuthShowPw(!authShowPw), showPw: authShowPw
+  },
+    /* Password strength (create) */
     authMode === 'create' && authForm.password.length > 0 && React.createElement(React.Fragment, null,
       React.createElement("div", { className: "auth-pw-strength" },
         React.createElement("div", { className: "auth-pw-strength-bar" + (pwStrength.level >= 1 ? ' ' + pwStrength.cls : '') }),
         React.createElement("div", { className: "auth-pw-strength-bar" + (pwStrength.level >= 2 ? ' ' + pwStrength.cls : '') }),
         React.createElement("div", { className: "auth-pw-strength-bar" + (pwStrength.level >= 3 ? ' ' + pwStrength.cls : '') })),
       React.createElement("span", { className: "auth-pw-strength-text " + pwStrength.cls }, pwStrength.label)),
-    /* Forgot password link (login only) */
+    /* Forgot password link (login) */
     authMode === 'login' && React.createElement("button", {
       type: "button", className: "auth-forgot-link",
-      onClick: () => { setAuthMode('forgot'); setResetEmailSent(false); setAuthForm({ ...authForm, password: '', email: authForm.email }); }
+      onClick: () => { setAuthMode('forgot'); setResetEmailSent(false); setAuthForm({ ...authForm, password: '' }); }
     }, "Forgot password?")),
 
-  /* Confirm Password (create only) */
-  authMode === 'create' && React.createElement("div", { className: "auth-input-group" },
-    React.createElement("label", { className: "auth-input-label" }, "Confirm Password"),
-    React.createElement("div", { className: "auth-input-wrap" },
-      React.createElement("span", { className: "auth-input-icon" }, IconLock),
-      React.createElement("input", {
-        className: "auth-input", name: "confirm",
-        type: authShowPw2 ? "text" : "password", autoComplete: "new-password",
-        value: authForm.confirm, placeholder: "Re-enter your password",
-        style: { paddingRight: '44px' },
-        onChange: e => setAuthForm({ ...authForm, confirm: e.target.value })
-      }),
-      React.createElement("button", {
-        type: "button", className: "auth-pw-toggle",
-        onClick: () => setAuthShowPw2(!authShowPw2), tabIndex: -1
-      }, authShowPw2 ? IconEyeOff : IconEye)),
+  /* Confirm Password (create) */
+  authMode === 'create' && FloatInput({
+    id: 'auth-confirm', name: 'confirm',
+    type: authShowPw2 ? 'text' : 'password', label: 'Confirm password',
+    autoComplete: 'new-password', value: authForm.confirm, style: { paddingRight: '48px' },
+    onChange: e => setAuthForm({ ...authForm, confirm: e.target.value }),
+    toggle: () => setAuthShowPw2(!authShowPw2), showPw: authShowPw2
+  },
     !!authForm.confirm && authForm.confirm !== authForm.password && React.createElement("p", { className: "auth-field-error" }, "Passwords do not match")),
-
-  /* Terms checkbox (create only) */
-  authMode === 'create' && React.createElement("div", { className: "auth-checkbox-wrap" },
-    React.createElement("input", {
-      type: "checkbox", className: "auth-checkbox",
-      checked: authForm.agree,
-      onChange: e => setAuthForm({ ...authForm, agree: e.target.checked })
-    }),
-    React.createElement("span", { className: "auth-checkbox-text" },
-      "I agree to the ", React.createElement("a", { href: "#" }, "Terms of Service"),
-      " and ", React.createElement("a", { href: "#" }, "Privacy Policy"))),
 
   /* Submit button */
   React.createElement("button", {
-    type: "submit", className: "auth-submit-btn", disabled: resetEmailSent && authMode === 'forgot'
-  }, authMode === 'forgot' ? (resetEmailSent ? 'Email Sent ✓' : 'Send Reset Link') : authMode === 'login' ? 'Sign In' : 'Create Account'))),
+    type: "submit", className: "auth-submit-btn",
+    disabled: resetEmailSent && authMode === 'forgot'
+  }, authMode === 'forgot' ? (resetEmailSent ? 'Email Sent ✓' : 'Send Reset Link') : authMode === 'login' ? 'Log in' : 'Create account'),
 
-  /* Trust footer */
-  React.createElement("div", { className: "auth-trust" },
-    React.createElement("span", { className: "auth-trust-item" }, IconShield, "SSL Encrypted"),
-    React.createElement("span", { className: "auth-trust-item" }, IconCheck, "No Spam"),
-    React.createElement("span", { className: "auth-trust-item" }, IconShield, "Secure Login"))
+  /* Terms text (create only, Deriv-style) */
+  authMode === 'create' && React.createElement("p", { className: "auth-terms-text" },
+    "By creating an account, you agree to our ",
+    React.createElement("a", { href: "#" }, "Terms and conditions"),
+    " and acknowledge our ",
+    React.createElement("a", { href: "#" }, "Privacy policy"), "."))),
+
+  /* ===== LOGIN: Google below divider ===== */
+  authMode === 'login' && React.createElement(React.Fragment, null,
+    React.createElement("div", { className: "auth-divider", style: { margin: '0 32px 24px' } },
+      React.createElement("div", { className: "auth-divider-line" }),
+      React.createElement("span", { className: "auth-divider-text" }, "Or continue with"),
+      React.createElement("div", { className: "auth-divider-line" })),
+    React.createElement("div", { id: "google-signin-btn", className: "auth-google-wrap", style: { margin: '0 32px 28px' } })),
+
+  /* Bottom toggle link (Deriv-style) */
+  authMode !== 'forgot' && React.createElement("div", { className: "auth-toggle-wrap" },
+    React.createElement("span", { className: "auth-toggle-text" },
+      authMode === 'login' ? "Don't have an account yet? " : "Already have an account? ",
+      React.createElement("button", {
+        type: "button", className: "auth-toggle-link",
+        onClick: () => setAuthMode(authMode === 'login' ? 'create' : 'login')
+      }, authMode === 'login' ? 'Sign up' : 'Log in')))
 
   )));
 })(), showUserDashboard && authUser && /*#__PURE__*/React.createElement("div", {
