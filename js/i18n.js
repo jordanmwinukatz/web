@@ -662,7 +662,7 @@
     'LIVE P2P USDT DESK — 24/7 INSTANT CONFIRMATIONS': 'hero.eyebrow',
     'Fast, Secure, and Reliable':         'hero.heading1',
     'Crypto Trading in Tanzania.':        'hero.heading2',
-    'Public rates. Private speed. A premium P2P desk built for trust, clarity, and instant settlement.': 'hero.subtitle',
+    'Buy and sell USDT instantly with Tanzania\'s most trusted exchange. Public rates, private speed, and 24/7 settlement.': 'hero.subtitle',
     'Volume':                 'hero.volume',
     'Traders':                'hero.traders',
     'Desk':                   'hero.desk',
@@ -670,6 +670,8 @@
     // Converter
     'buy':                    'lrc.buy',
     'sell':                   'lrc.sell',
+    'BUY':                    'lrc.buy',
+    'SELL':                   'lrc.sell',
     'From':                   'lrc.from',
     'To':                     'lrc.to',
     // Price section
@@ -847,9 +849,9 @@
         var key = el.getAttribute('data-i18n');
         var translation = I18N.t(key);
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-          el.placeholder = translation;
+          if (el.placeholder !== translation) el.placeholder = translation;
         } else {
-          el.textContent = translation;
+          if (el.textContent !== translation) el.textContent = translation;
         }
       });
 
@@ -918,24 +920,21 @@
   }
 
   // Re-apply on dynamic content (React mounts etc.)
-  // Observe ALL DOM mutations so autoTag() can discover and stamp React-rendered elements
+  // Observe DOM mutations to discover React updates
   if (typeof MutationObserver !== 'undefined') {
     var _i18nTimer = null;
-    var observer = new MutationObserver(function (mutations) {
-      var hasNewElements = false;
-      mutations.forEach(function (m) {
-        m.addedNodes.forEach(function (n) {
-          if (n.nodeType === 1) hasNewElements = true;
-        });
-      });
-      if (hasNewElements) {
-        // Debounce — React can add many nodes in a single render cycle
-        clearTimeout(_i18nTimer);
-        _i18nTimer = setTimeout(function () {
-          I18N.applyTranslations();
-        }, 100);
-      }
+    var isTranslating = false; // Prevent observer loop
+    
+    var observer = new MutationObserver(function () {
+      if (isTranslating) return; // Skip mutations caused by applyTranslations
+      clearTimeout(_i18nTimer);
+      _i18nTimer = setTimeout(function () {
+        isTranslating = true;
+        I18N.applyTranslations();
+        // Give browser time to apply DOM updates before listening again
+        setTimeout(function() { isTranslating = false; }, 10);
+      }, 50);
     });
-    observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
+    observer.observe(document.body || document.documentElement, { childList: true, subtree: true, characterData: true });
   }
 })();
