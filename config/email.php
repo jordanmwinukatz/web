@@ -740,6 +740,125 @@ HTML;
 HTML;
     }
     
+    public function sendWelcomeEmail($userEmail, $userName, $signUpMethod = 'email') {
+        $subject = 'Welcome to jordanmwinukatz P2P Trading!';
+        $htmlBody = $this->getWelcomeEmailTemplate($userName, $signUpMethod);
+        $textBody = "Welcome to jordanmwinukatz P2P Trading!\n\nHello {$userName},\n\nThank you for joining our platform. Your account is ready and you can start trading immediately.\n\nHere's what you can do:\n- Buy & Sell USDT at competitive rates\n- Choose from multiple payment methods\n- Track your orders in real-time\n\nVisit https://jordanmwinukatz.com to get started.\n\nIf you have any questions, contact us at support@jordanmwinukatz.com\n\n— The JM P2P Trading Team";
+        
+        return $this->sendEmail($userEmail, $userName, $subject, $htmlBody, $textBody);
+    }
+    
+    private function getWelcomeEmailTemplate($userName, $signUpMethod = 'email') {
+        $siteUrl = 'https://jordanmwinukatz.com';
+        $year = date('Y');
+        $methodNote = $signUpMethod === 'google' 
+            ? 'You signed up using your Google account — no separate password needed.' 
+            : 'You can log in anytime using your email and password.';
+        
+        return <<<HTML
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to jordanmwinukatz P2P Trading</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #0b0b0c;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #0b0b0c; padding: 40px 20px;">
+        <tr>
+            <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #111827; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);">
+                    <!-- Header -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #fbbf24 0%, #06b6d4 100%); padding: 40px 30px; text-align: center;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: 0.5px;">Welcome to JM P2P Trading!</h1>
+                            <p style="margin: 12px 0 0; color: rgba(255, 255, 255, 0.9); font-size: 16px;">Your account is ready to go</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                        <td style="padding: 40px;">
+                            <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 20px;">Hello <strong style="color: #fbbf24;">{$userName}</strong>,</p>
+                            
+                            <p style="color: #e5e7eb; font-size: 16px; line-height: 1.6; margin: 0 0 10px;">Thank you for creating an account with <strong style="color: #ffffff;">jordanmwinukatz P2P Trading</strong>. We're excited to have you on board!</p>
+                            
+                            <p style="color: #9ca3af; font-size: 14px; line-height: 1.6; margin: 0 0 30px;">{$methodNote}</p>
+                            
+                            <!-- What You Can Do Card -->
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: rgba(251, 191, 36, 0.06); border-radius: 12px; border: 1px solid rgba(251, 191, 36, 0.15); margin-bottom: 30px;">
+                                <tr>
+                                    <td style="padding: 25px;">
+                                        <h2 style="margin: 0 0 20px; color: #fbbf24; font-size: 18px; font-weight: 700;">What you can do now</h2>
+                                        
+                                        <table width="100%" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                                    <table cellpadding="0" cellspacing="0"><tr>
+                                                        <td style="color: #fbbf24; font-size: 20px; width: 36px; vertical-align: top;">💰</td>
+                                                        <td>
+                                                            <p style="margin: 0; color: #ffffff; font-size: 14px; font-weight: 600;">Buy &amp; Sell USDT</p>
+                                                            <p style="margin: 4px 0 0; color: #9ca3af; font-size: 13px;">Trade at competitive, real-time market rates</p>
+                                                        </td>
+                                                    </tr></table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                                                    <table cellpadding="0" cellspacing="0"><tr>
+                                                        <td style="color: #06b6d4; font-size: 20px; width: 36px; vertical-align: top;">🏦</td>
+                                                        <td>
+                                                            <p style="margin: 0; color: #ffffff; font-size: 14px; font-weight: 600;">Multiple Payment Methods</p>
+                                                            <p style="margin: 4px 0 0; color: #9ca3af; font-size: 13px;">M-Pesa, bank transfer, and more</p>
+                                                        </td>
+                                                    </tr></table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 10px 0;">
+                                                    <table cellpadding="0" cellspacing="0"><tr>
+                                                        <td style="color: #10b981; font-size: 20px; width: 36px; vertical-align: top;">📊</td>
+                                                        <td>
+                                                            <p style="margin: 0; color: #ffffff; font-size: 14px; font-weight: 600;">Track Orders in Real-Time</p>
+                                                            <p style="margin: 4px 0 0; color: #9ca3af; font-size: 13px;">Monitor every trade from submission to completion</p>
+                                                        </td>
+                                                    </tr></table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <!-- CTA Button -->
+                            <table width="100%" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td align="center" style="padding: 10px 0 30px;">
+                                        <a href="{$siteUrl}" style="display: inline-block; padding: 16px 44px; background: linear-gradient(135deg, #fbbf24 0%, #06b6d4 100%); color: #ffffff; text-decoration: none; border-radius: 10px; font-weight: 700; font-size: 16px; text-align: center; letter-spacing: 0.3px;">Start Trading Now</a>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            <p style="color: #9ca3af; font-size: 14px; line-height: 1.6; margin: 0;">Need help getting started? Simply reply to this email or contact us at <a href="mailto:support@jordanmwinukatz.com" style="color: #06b6d4; text-decoration: none;">support@jordanmwinukatz.com</a> — we're always happy to assist.</p>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                        <td style="background-color: rgba(255, 255, 255, 0.05); padding: 25px; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.1);">
+                            <p style="color: #9ca3af; font-size: 12px; margin: 0 0 10px;">&copy; {$year} jordanmwinukatz P2P Trading. All rights reserved.</p>
+                            <p style="color: #6b7280; font-size: 12px; margin: 0;">support@jordanmwinukatz.com</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+HTML;
+    }
+    
     private function getPasswordResetTemplate($userName, $resetUrl) {
         return <<<HTML
 <!DOCTYPE html>

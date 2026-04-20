@@ -41,7 +41,7 @@ class Database {
             // Log the real error, but never expose it to the client
             error_log('Database connection failed: ' . $e->getMessage());
             http_response_code(503);
-            echo json_encode(['success' => false, 'error' => 'Service temporarily unavailable: ' . $e->getMessage()]);
+            echo json_encode(['success' => false, 'error' => 'Service temporarily unavailable']);
             exit;
         }
 

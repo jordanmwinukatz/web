@@ -111,6 +111,15 @@ try {
                         error_log('Exception sending admin notification: ' . $e->getMessage());
                         // Don't fail registration if admin email fails
                     }
+                    
+                    // Send welcome email to the new user
+                    try {
+                        $welcomeResult = $emailSender->sendWelcomeEmail($email, $name, 'email');
+                        error_log('Welcome email result: ' . json_encode($welcomeResult));
+                    } catch (Exception $e) {
+                        error_log('Exception sending welcome email: ' . $e->getMessage());
+                        // Don't fail registration if welcome email fails
+                    }
                 } else {
                     error_log('EmailSender class not found');
                 }
@@ -213,6 +222,27 @@ try {
             $stmt->execute([$name, $email, $passwordHash, $picture]);
             
             $userId = $pdo->lastInsertId();
+            
+            // Send welcome email to the new Google user
+            try {
+                $emailPath = __DIR__ . '/../config/email.php';
+                if (file_exists($emailPath)) {
+                    require_once $emailPath;
+                    if (class_exists('EmailSender')) {
+                        $emailSender = new EmailSender();
+                        $welcomeResult = $emailSender->sendWelcomeEmail($email, $name, 'google');
+                        error_log('Google signup welcome email result: ' . json_encode($welcomeResult));
+                        
+                        // Also notify admin
+                        $adminEmail = 'jordanmwinukatz@gmail.com';
+                        $userData = ['id' => $userId, 'name' => $name, 'email' => $email, 'email_verified' => true];
+                        $emailSender->sendNewUserNotification($adminEmail, $userData);
+                    }
+                }
+            } catch (Exception $e) {
+                error_log('Exception sending Google signup emails: ' . $e->getMessage());
+                // Don't fail registration if email fails
+            }
         } else {
             $userId = $user['id'];
         }
