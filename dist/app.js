@@ -3900,10 +3900,7 @@ authOpen && (() => {
   React.createElement("div", {
     className: "absolute inset-0",
     style: { background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' },
-    onClick: e => {
-      if (!authUser) { e.preventDefault(); e.stopPropagation(); showAuthToast('Please log in or register to continue'); return false; }
-      setAuthOpen(false);
-    }
+    onClick: () => setAuthOpen(false)
   }),
   /* Card */
   React.createElement("div", {
@@ -3914,14 +3911,8 @@ authOpen && (() => {
   React.createElement("div", { className: "auth-modal" },
 
   /* Close button */
-  authUser ? React.createElement("button", {
+  React.createElement("button", {
     className: "auth-close-btn", onClick: () => setAuthOpen(false)
-  }, React.createElement("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
-    React.createElement("line", { x1: 18, y1: 6, x2: 6, y2: 18 }), React.createElement("line", { x1: 6, y1: 6, x2: 18, y2: 18 })))
-  : React.createElement("button", {
-    className: "auth-close-btn", style: { cursor: 'not-allowed', opacity: 0.35 },
-    onClick: () => showAuthToast('Please log in or register to continue'),
-    title: "Cannot close without logging in"
   }, React.createElement("svg", { width: 14, height: 14, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
     React.createElement("line", { x1: 18, y1: 6, x2: 6, y2: 18 }), React.createElement("line", { x1: 6, y1: 6, x2: 18, y2: 18 }))),
 
