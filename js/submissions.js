@@ -33,6 +33,7 @@ window.submissions = {
 
             const response = await fetch('api/submissions.php', {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
@@ -61,6 +62,7 @@ window.submissions = {
                 if (submissionType === 'order_form' && result.submission_id) {
                     fetch('api/index.php?route=submissions', {
                         method: 'POST',
+                        credentials: 'include',
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''

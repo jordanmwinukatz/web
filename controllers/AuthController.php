@@ -153,6 +153,130 @@ try {
         ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit;
         
+    } elseif ($action === 'google_login') {
+        $credential = $input['credential'] ?? '';
+        
+        if (empty($credential)) {
+            throw new Exception('Missing Google credential token');
+        }
+        
+        // Verify Google JWT using Google's cert endpoint
+        $verifyUrl = 'https://oauth2.googleapis.com/tokeninfo?id_token=' . $credential;
+        $ch = curl_init($verifyUrl);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // Do not verify peer if developing locally with XAMPP without root certificates config
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($httpCode !== 200 || !$response) {
+            throw new Exception('Failed to verify Google token with Google servers.');
+        }
+        
+        $payload = json_decode($response, true);
+        if (!$payload || !isset($payload['email'])) {
+            throw new Exception('Invalid Google token payload');
+        }
+        
+        $email = $payload['email'];
+        $name = $payload['name'] ?? explode('@', $email)[0];
+        $picture = $payload['picture'] ?? null;
+        
+        // Find if user already exists
+        $stmt = $pdo->prepare('SELECT id FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        $userId = null;
+        
+        if (!$user) {
+            // Create user securely mapping logic
+            
+            // Ensure email verification columns exist
+            try {
+                $colCheck = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'email_verified'");
+                if ($colCheck && !$colCheck->fetch()) {
+                    $pdo->exec("ALTER TABLE users ADD COLUMN email_verified TINYINT(1) NOT NULL DEFAULT 0");
+                }
+            } catch (Exception $e) {}
+            
+            try {
+                $colCheck = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'profile_picture'");
+                if ($colCheck && !$colCheck->fetch()) {
+                    $pdo->exec("ALTER TABLE users ADD COLUMN profile_picture VARCHAR(255) NULL");
+                }
+            } catch (Exception $e) {}
+            
+            $passwordHash = password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT);
+            $stmt = $pdo->prepare('INSERT INTO users (name, email, password_hash, email_verified, profile_picture) VALUES (?, ?, ?, 1, ?)');
+            $stmt->execute([$name, $email, $passwordHash, $picture]);
+            
+            $userId = $pdo->lastInsertId();
+        } else {
+            $userId = $user['id'];
+        }
+        
+        // Init session matching manual login
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        session_regenerate_id(true);
+        $_SESSION['user_id'] = $userId;
+        require_once __DIR__ . '/../core/csrf.php';
+        csrf_init();
+        
+        try {
+            $colCheckAdmin = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'is_admin'");
+            if ($colCheckAdmin && $colCheckAdmin->fetch()) {
+                $adminCheck = $pdo->prepare('SELECT is_admin, name, email, profile_picture FROM users WHERE id = ?');
+                $adminCheck->execute([$userId]);
+                $adminRow = $adminCheck->fetch(PDO::FETCH_ASSOC);
+                if ($adminRow && (int)$adminRow['is_admin'] === 1) {
+                    $_SESSION['admin_logged_in'] = true;
+                    $_SESSION['admin_user'] = [
+                        'id' => $userId,
+                        'name' => $adminRow['name'],
+                        'email' => $adminRow['email'],
+                        'profile_picture' => $adminRow['profile_picture'] ?? null
+                    ];
+                }
+            }
+        } catch (Exception $e) {}
+        
+        // Return full user object
+        try {
+            $colCheck = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'profile_picture'");
+            $hasProfilePic = $colCheck && $colCheck->fetch();
+            $colCheckVerified = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'email_verified'");
+            $hasEmailVerified = $colCheckVerified && $colCheckVerified->fetch();
+            $colCheckAdmin = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'is_admin'");
+            $hasIsAdmin = $colCheckAdmin && $colCheckAdmin->fetch();
+            
+            $selectFields = ['id', 'name', 'email'];
+            if ($hasProfilePic) $selectFields[] = 'profile_picture';
+            if ($hasEmailVerified) $selectFields[] = 'email_verified';
+            if ($hasIsAdmin) $selectFields[] = 'is_admin';
+            
+            $stmt = $pdo->prepare('SELECT ' . implode(', ', $selectFields) . ' FROM users WHERE id = ?');
+        } catch (Exception $e) {
+            $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+        }
+        
+        $stmt->execute([$userId]);
+        $userWithPicture = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (isset($userWithPicture['email_verified'])) $userWithPicture['email_verified'] = (bool)$userWithPicture['email_verified'];
+        if (isset($userWithPicture['is_admin'])) $userWithPicture['is_admin'] = (bool)$userWithPicture['is_admin'];
+        
+        echo json_encode([
+            'success' => true,
+            'user' => $userWithPicture,
+            'message' => 'Login successful',
+            'requires_verification' => false
+        ]);
+        exit;
+        
     } elseif ($action === 'login') {
         // Rate limiting: max 5 failed attempts per 15 minutes per IP
         $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';

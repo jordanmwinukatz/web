@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <!-- Primary Meta Tags -->
-    <title>jordanmwinukatz P2P Trading - Buy & Sell USDT, BTC, ETH in Tanzania</title>
-    <meta name="title" content="jordanmwinukatz P2P Trading - Buy & Sell USDT, BTC, ETH in Tanzania">
-    <meta name="description" content="Secure P2P cryptocurrency trading platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates. Fast transactions, multiple payment methods including M-Pesa, Tigo Pesa, CRDB Bank, and NMB Bank. Trusted crypto exchange service.">
-    <meta name="keywords" content="P2P trading, cryptocurrency, USDT, Bitcoin, Ethereum, Tanzania, M-Pesa, Tigo Pesa, CRDB Bank, NMB Bank, crypto exchange, buy crypto, sell crypto, digital currency Tanzania">
+    <link rel="icon" type="image/png" href="logo.png?v=2">
+    <link rel="shortcut icon" type="image/png" href="logo.png?v=2">
+    <title>jordanmwinukatz - Buy & Sell USDT, BTC, ETH in Tanzania</title>
+    <meta name="title" content="jordanmwinukatz - Buy & Sell USDT, BTC, ETH in Tanzania">
+    <meta name="description" content="Secure cryptocurrency platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates. Fast transactions, multiple payment methods including M-Pesa, Tigo Pesa, CRDB Bank, and NMB Bank. Trusted crypto exchange service.">
+    <meta name="keywords" content="cryptocurrency, USDT, Bitcoin, Ethereum, Tanzania, M-Pesa, Tigo Pesa, CRDB Bank, NMB Bank, crypto exchange, buy crypto, sell crypto, digital currency Tanzania">
     <meta name="author" content="jordanmwinukatz">
     <meta name="robots" content="index, follow">
     <meta name="language" content="English">
@@ -40,17 +42,17 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://jordanmwinukatz.com/">
-    <meta property="og:title" content="jordanmwinukatz P2P Trading - Buy & Sell USDT, BTC, ETH in Tanzania">
-    <meta property="og:description" content="Secure P2P cryptocurrency trading platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates. Fast transactions, multiple payment methods.">
+    <meta property="og:title" content="jordanmwinukatz - Buy & Sell USDT, BTC, ETH in Tanzania">
+    <meta property="og:description" content="Secure cryptocurrency platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates. Fast transactions, multiple payment methods.">
     <meta property="og:image" content="https://jordanmwinukatz.com/og-image.jpg">
-    <meta property="og:site_name" content="jordanmwinukatz P2P Trading">
+    <meta property="og:site_name" content="jordanmwinukatz">
     <meta property="og:locale" content="en_US">
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://jordanmwinukatz.com/">
-    <meta property="twitter:title" content="jordanmwinukatz P2P Trading - Buy & Sell USDT, BTC, ETH in Tanzania">
-    <meta property="twitter:description" content="Secure P2P cryptocurrency trading platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates. Fast transactions, multiple payment methods.">
+    <meta property="twitter:title" content="jordanmwinukatz - Buy & Sell USDT, BTC, ETH in Tanzania">
+    <meta property="twitter:description" content="Secure cryptocurrency platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates. Fast transactions, multiple payment methods.">
     <meta property="twitter:image" content="https://jordanmwinukatz.com/og-image.jpg">
     
     <!-- Structured Data (JSON-LD) -->
@@ -58,8 +60,8 @@
     {
       "@context": "https://schema.org",
       "@type": "FinancialService",
-      "name": "jordanmwinukatz P2P Trading",
-      "description": "Secure P2P cryptocurrency trading platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates.",
+      "name": "jordanmwinukatz",
+      "description": "Secure cryptocurrency platform in Tanzania. Buy and sell USDT, Bitcoin, and Ethereum with competitive rates.",
       "url": "https://jordanmwinukatz.com",
       "logo": "https://jordanmwinukatz.com/logo.png",
       "serviceType": "Cryptocurrency Exchange",
@@ -89,7 +91,7 @@
     <!-- Preload critical resources -->
     <link rel="preload" href="dist/lib/react.production.min.js" as="script">
     <link rel="preload" href="dist/lib/react-dom.production.min.js" as="script">
-    <link rel="preload" href="dist/app.js?v=30" as="script">
+    <link rel="preload" href="dist/app.js?v=36" as="script">
     <link rel="preload" href="dist/styles.css?v=6" as="style">
     <link rel="preload" href="dist/theme.css?v=16" as="style">
     
@@ -107,7 +109,7 @@
     <script src="dist/lib/react.production.min.js" defer></script>
     <script src="dist/lib/react-dom.production.min.js" defer></script>
     <!-- App bundle - defer, runs after React; download starts in parallel -->
-    <script src="dist/app.js?v=30" defer></script>
+    <script src="dist/app.js?v=36" defer></script>
     
     <!-- Analytics tracking - load async to not block rendering -->
     <script>
@@ -127,21 +129,23 @@
     
     <script src="/js/csrf_interceptor.js?v=2026.03.25.1"></script>
     <!-- i18n: Auto language detection (IP-based, zero user effort) -->
-    <script src="js/i18n.js?v=2026.04.01.1" defer></script>
+    <script src="js/i18n.js?v=2026.04.19.1" defer></script>
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <div id="root">
         <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-primary, #0f172a);">
             <!-- Premium Geometric Logo -->
             <div style="position: relative; width: 60px; height: 60px; margin-bottom: 28px; animation: pulse-glow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;">
-                <img src="logo.png" alt="JM P2P Loading" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5)); border-radius: 50%;">
+                <img src="logo.png" alt="Loading" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.5)); border-radius: 50%;">
                 <!-- Subtle spinning aura ring -->
                 <div style="position: absolute; top: -12px; left: -12px; right: -12px; bottom: -12px; border: 2px solid transparent; border-top-color: rgba(16, 185, 129, 0.4); border-left-color: rgba(16, 185, 129, 0.1); border-radius: 50%; animation: spin 1.5s linear infinite;"></div>
             </div>
             
             <!-- Branding & Bouncing Dots -->
             <div style="display: flex; align-items: center; gap: 8px;">
-                <h2 style="color: var(--text-primary, #f8fafc); font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.05em; margin: 0;">JM P2P</h2>
+                <h2 style="color: var(--text-primary, #f8fafc); font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 700; letter-spacing: 0.05em; margin: 0;">jordanmwinukatz</h2>
                 <span style="display: flex; gap: 4px; margin-top: 6px;">
                     <span style="width: 4px; height: 4px; border-radius: 50%; background-color: #10b981; animation: loading-dot 1.4s infinite ease-in-out both;"></span>
                     <span style="width: 4px; height: 4px; border-radius: 50%; background-color: #10b981; animation: loading-dot 1.4s infinite ease-in-out both; animation-delay: 0.2s;"></span>
@@ -199,6 +203,52 @@
     }
     </script>
     <!--End of Tawk.to Script-->
+
+    <!-- ============================================================
+         FLOATING NAVBAR — Scroll-triggered glass pill effect
+         Deriv-inspired: transparent at top, floating pill on scroll.
+    ============================================================ -->
+    <script>
+    (function() {
+      var SCROLL_THRESHOLD = 80; // px before floating kicks in
+      var header = null;
+      var ticking = false;
+
+      function onScroll() {
+        if (!header) return;
+        if (!ticking) {
+          requestAnimationFrame(function() {
+            if (window.scrollY > SCROLL_THRESHOLD) {
+              header.classList.add('deriv-header--scrolled');
+            } else {
+              header.classList.remove('deriv-header--scrolled');
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }
+
+      function init() {
+        header = document.querySelector('.deriv-header');
+        if (!header) return false;
+        window.addEventListener('scroll', onScroll, { passive: true });
+        // Run immediately to catch page-load at a scroll offset
+        onScroll();
+        return true;
+      }
+
+      // React may not have rendered the header yet — observe
+      if (!init()) {
+        var obs = new MutationObserver(function() {
+          if (init()) obs.disconnect();
+        });
+        obs.observe(document.getElementById('root') || document.body, {
+          childList: true, subtree: true
+        });
+      }
+    })();
+    </script>
 
     <!-- ============================================================
          MOBILE HAMBURGER NAVIGATION
@@ -424,10 +474,7 @@
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
           <span data-i18n="nav.prices">Live Prices</span>
         </a>
-        <a href="#about" class="mob-nav-link" data-mob-link>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          <span data-i18n="nav.about">About</span>
-        </a>
+
         <a href="#how" class="mob-nav-link" data-mob-link>
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
           <span data-i18n="nav.how">How It Works</span>
@@ -516,7 +563,7 @@
         var header = document.querySelector('header');
         if (!header) return false;
 
-        var btnContainer = header.querySelector('.flex.items-center.gap-2');
+        var btnContainer = header.querySelector('.deriv-actions');
         if (!btnContainer) return false;
 
         // Don't double-inject
@@ -548,5 +595,676 @@
       }
     })();
     </script>
+
+    <!-- ============================================================
+         LANGUAGE SWITCHER (EN / SW)
+         Injected independently of the React bundle.
+         Uses the same pattern as the hamburger menu injection.
+    ============================================================ -->
+    <style>
+      /* Language Switcher */
+      .lang-switch-wrap {
+        position: relative;
+        z-index: 56;
+      }
+      .lang-switch-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        border: 1px solid rgba(255,255,255,0.12);
+        background: rgba(255,255,255,0.05);
+        color: rgba(255,255,255,0.85);
+        font-size: 13px;
+        font-weight: 600;
+        font-family: 'Inter', system-ui, sans-serif;
+        cursor: pointer;
+        transition: background 0.15s, border-color 0.15s;
+        white-space: nowrap;
+        letter-spacing: 0.02em;
+      }
+      .lang-switch-btn:hover {
+        background: rgba(255,255,255,0.12);
+        border-color: rgba(255,255,255,0.2);
+      }
+      .lang-switch-btn svg {
+        width: 16px;
+        height: 16px;
+        opacity: 0.7;
+        flex-shrink: 0;
+      }
+      .lang-switch-btn:hover svg { opacity: 1; }
+
+      /* Dropdown */
+      .lang-switch-dropdown {
+        display: none;
+        position: absolute;
+        top: calc(100% + 6px);
+        right: 0;
+        min-width: 150px;
+        background: #0f172a;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        overflow: hidden;
+        animation: langDropIn 0.15s ease;
+      }
+      .lang-switch-dropdown.open { display: block; }
+      @keyframes langDropIn {
+        from { opacity: 0; transform: translateY(-6px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+      .lang-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        font-family: 'Inter', system-ui, sans-serif;
+        color: rgba(255,255,255,0.75);
+        cursor: pointer;
+        transition: background 0.12s, color 0.12s;
+        border: none;
+        background: none;
+        width: 100%;
+        text-align: left;
+      }
+      .lang-option:hover {
+        background: rgba(255,255,255,0.08);
+        color: #fff;
+      }
+      .lang-option.active {
+        color: #10b981;
+        background: rgba(16,185,129,0.08);
+      }
+      .lang-option .lang-flag {
+        font-size: 18px;
+        line-height: 1;
+      }
+      .lang-option .lang-check {
+        margin-left: auto;
+        opacity: 0;
+        color: #10b981;
+        font-size: 14px;
+      }
+      .lang-option.active .lang-check { opacity: 1; }
+      .lang-option + .lang-option {
+        border-top: 1px solid rgba(255,255,255,0.06);
+      }
+
+      /* Light theme overrides */
+      [data-theme="light"] .lang-switch-btn {
+        border-color: rgba(15,23,42,0.15);
+        background: rgba(15,23,42,0.06);
+        color: #1e293b;
+      }
+      [data-theme="light"] .lang-switch-btn:hover {
+        background: rgba(15,23,42,0.1);
+      }
+      [data-theme="light"] .lang-switch-dropdown {
+        background: #f8fafc;
+        border-color: rgba(15,23,42,0.12);
+        box-shadow: 0 8px 32px rgba(15,23,42,0.18);
+      }
+      [data-theme="light"] .lang-option {
+        color: #475569;
+      }
+      [data-theme="light"] .lang-option:hover {
+        background: rgba(15,23,42,0.05);
+        color: #0f172a;
+      }
+      [data-theme="light"] .lang-option.active {
+        color: #059669;
+        background: rgba(16,185,129,0.08);
+      }
+      [data-theme="light"] .lang-option + .lang-option {
+        border-top-color: rgba(15,23,42,0.08);
+      }
+    </style>
+
+    <script>
+    (function() {
+      var LANGS = [
+        { code: 'en', label: 'English',  flag: '🇬🇧', short: 'EN' },
+        { code: 'sw', label: 'Kiswahili', flag: '🇹🇿', short: 'SW' }
+      ];
+
+      var currentLang = 'en';
+      var dropdownOpen = false;
+
+      // Sync with i18n system on load
+      try {
+        var saved = localStorage.getItem('jmp2p_lang');
+        if (saved === 'sw') currentLang = 'sw';
+      } catch(e) {}
+
+      function getLangObj(code) {
+        return LANGS.find(function(l) { return l.code === code; }) || LANGS[0];
+      }
+
+      function buildSwitcher() {
+        var wrap = document.createElement('div');
+        wrap.className = 'lang-switch-wrap';
+        wrap.id = 'lang-switch-wrap';
+
+        var langObj = getLangObj(currentLang);
+
+        // Main button
+        var btn = document.createElement('button');
+        btn.className = 'lang-switch-btn';
+        btn.id = 'lang-switch-btn';
+        btn.setAttribute('aria-label', 'Change language');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10A15.3 15.3 0 0112 2z"/></svg><span id="lang-switch-label">' + langObj.short + '</span>';
+
+        // Dropdown
+        var dropdown = document.createElement('div');
+        dropdown.className = 'lang-switch-dropdown';
+        dropdown.id = 'lang-switch-dropdown';
+
+        LANGS.forEach(function(lang) {
+          var opt = document.createElement('button');
+          opt.className = 'lang-option' + (lang.code === currentLang ? ' active' : '');
+          opt.setAttribute('data-lang', lang.code);
+          opt.innerHTML = '<span class="lang-flag">' + lang.flag + '</span><span>' + lang.label + '</span><span class="lang-check">✓</span>';
+          opt.addEventListener('click', function() {
+            currentLang = lang.code;
+            // Update UI
+            document.getElementById('lang-switch-label').textContent = lang.short;
+            dropdown.querySelectorAll('.lang-option').forEach(function(o) {
+              o.classList.toggle('active', o.getAttribute('data-lang') === lang.code);
+            });
+            // Close dropdown
+            dropdown.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            dropdownOpen = false;
+            // Apply language via i18n system
+            if (window.i18n && window.i18n.changeLanguage) {
+              window.i18n.changeLanguage(lang.code);
+            }
+            // Also translate the header Create Account button
+            updateHeaderTranslations(lang.code);
+          });
+          dropdown.appendChild(opt);
+        });
+
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          dropdownOpen = !dropdownOpen;
+          dropdown.classList.toggle('open', dropdownOpen);
+          btn.setAttribute('aria-expanded', String(dropdownOpen));
+        });
+
+        wrap.appendChild(btn);
+        wrap.appendChild(dropdown);
+
+        // Close on outside click
+        document.addEventListener('click', function() {
+          if (dropdownOpen) {
+            dropdown.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+            dropdownOpen = false;
+          }
+        });
+
+        return wrap;
+      }
+
+      function updateHeaderTranslations(lang) {
+        // Translate header buttons that were injected by React
+        var createBtn = document.getElementById('header-create-account-btn');
+        if (createBtn) {
+          createBtn.textContent = lang === 'sw' ? 'Fungua Akaunti' : 'Create Account';
+        }
+        // Log In button: find by text match inside the flex container
+        var header = document.querySelector('header');
+        if (header) {
+          header.querySelectorAll('button').forEach(function(b) {
+            var t = b.textContent.trim();
+            if (t === 'Log In' || t === 'Ingia') {
+              b.textContent = lang === 'sw' ? 'Ingia' : 'Log In';
+            }
+            if (t === 'Login' || t === 'Ingia') {
+              b.textContent = lang === 'sw' ? 'Ingia' : 'Log In';
+            }
+          });
+        }
+      }
+
+      function injectLangSwitcher() {
+        var header = document.querySelector('header');
+        if (!header) return false;
+
+        var btnContainer = header.querySelector('.deriv-actions');
+        if (!btnContainer) return false;
+
+        // Don't double-inject
+        if (document.getElementById('lang-switch-wrap')) return true;
+
+        var switcher = buildSwitcher();
+        // Insert before the theme toggle (first child of the flex container)
+        var themeToggle = btnContainer.querySelector('.theme-toggle');
+        if (themeToggle) {
+          btnContainer.insertBefore(switcher, themeToggle);
+        } else {
+          btnContainer.insertBefore(switcher, btnContainer.firstChild);
+        }
+
+        // Sync with current i18n language
+        if (window.i18n && window.i18n.currentLang) {
+          var lang = window.i18n.currentLang;
+          if (lang === 'sw' || lang === 'en') {
+            currentLang = lang;
+            var label = document.getElementById('lang-switch-label');
+            if (label) label.textContent = getLangObj(lang).short;
+            var dd = document.getElementById('lang-switch-dropdown');
+            if (dd) {
+              dd.querySelectorAll('.lang-option').forEach(function(o) {
+                o.classList.toggle('active', o.getAttribute('data-lang') === lang);
+              });
+            }
+          }
+          updateHeaderTranslations(lang);
+        }
+
+        return true;
+      }
+
+      // Try immediately, then observe for React mount
+      if (!injectLangSwitcher()) {
+        var observer = new MutationObserver(function() {
+          if (injectLangSwitcher()) observer.disconnect();
+        });
+        observer.observe(document.getElementById('root') || document.body, {
+          childList: true, subtree: true
+        });
+      }
+    })();
+    </script>
+
+    <!-- ============================================================
+         PREMIUM UI OVERRIDES
+         Hide About section. Replace How It Works with premium design.
+    ============================================================ -->
+    <style>
+      /* Hide legacy About section and all nav links to it */
+      [id="about"] { display: none !important; }
+      a[href="#about"] { display: none !important; }
+
+      /* Hide Order Wizard section */
+      [id="contact"] { display: none !important; }
+      a[href="#contact"] { display: none !important; }
+
+      /* Hide "Advancement Advertisements Mode" upsell + "Place an Order" bouncing finger */
+      .text-yellow-300.font-semibold { display: none !important; }
+      button:has(> .animate-pulse) { display: none !important; }
+      .animate-bounce { display: none !important; }
+      .animate-bounce + button { display: none !important; }
+
+      /* Phone mockup section polish */
+      .app-teaser-phone-wrap {
+        padding: 30px 40px !important;
+      }
+      .atsec-badge-left {
+        left: -20px !important;
+        top: 15% !important;
+      }
+      .atsec-badge-right {
+        right: -20px !important;
+        bottom: 22% !important;
+      }
+
+    </style>
+
+    <style>
+      /* ══════════════════════════════════════════════
+         Premium How It Works — Step-Flow Arrow Design
+         ══════════════════════════════════════════════ */
+      #hiw-premium-container {
+        display: none;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+      }
+      #hiw-premium-container.active {
+        display: block;
+      }
+
+      .hiw-flow { position: relative; }
+      .hiw-flow-inner {
+        max-width: 1140px; margin: 0 auto; padding: 0 24px;
+        position: relative; z-index: 1;
+      }
+      .hiw-flow-heading {
+        text-align: center;
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 800;
+        color: #f1f5f9;
+        margin: 0 0 10px;
+        letter-spacing: -0.03em;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      .hiw-flow-sub {
+        text-align: center;
+        color: rgba(148,163,184,0.8);
+        font-size: 15px;
+        margin: 0 0 56px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+
+      /* Steps container — horizontal on desktop */
+      .hiw-steps-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0;
+      }
+
+      /* Individual step */
+      .hiw-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        flex: 1;
+        max-width: 200px;
+        position: relative;
+        /* Scroll animation */
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      .hiw-visible .hiw-step {
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+      .hiw-visible .hiw-step:nth-child(2) { transition-delay: 0.08s; }
+      .hiw-visible .hiw-step:nth-child(3) { transition-delay: 0.16s; }
+      .hiw-visible .hiw-step:nth-child(4) { transition-delay: 0.24s; }
+      .hiw-visible .hiw-step:nth-child(5) { transition-delay: 0.32s; }
+      /* Arrows have matching delays */
+      .hiw-visible .hiw-arrow:nth-of-type(2) { transition-delay: 0.04s; }
+      .hiw-visible .hiw-arrow:nth-of-type(4) { transition-delay: 0.12s; }
+      .hiw-visible .hiw-arrow:nth-of-type(6) { transition-delay: 0.20s; }
+      .hiw-visible .hiw-arrow:nth-of-type(8) { transition-delay: 0.28s; }
+
+      /* Step circle with icon */
+      .hiw-circle {
+        width: 72px; height: 72px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        margin-bottom: 18px;
+        position: relative;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: default;
+      }
+      .hiw-circle:hover { transform: scale(1.1); }
+
+      /* Step number badge */
+      .hiw-num {
+        position: absolute;
+        top: -4px; right: -4px;
+        width: 22px; height: 22px;
+        border-radius: 50%;
+        background: #0f172a;
+        border: 2px solid;
+        font-size: 11px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+
+      /* Color variants */
+      .hiw-circle--emerald {
+        background: rgba(16,185,129,0.1);
+        border: 2px solid rgba(16,185,129,0.3);
+        color: #34d399;
+        box-shadow: 0 0 30px rgba(16,185,129,0.1);
+      }
+      .hiw-circle--emerald:hover { box-shadow: 0 0 40px rgba(16,185,129,0.25); }
+      .hiw-circle--emerald .hiw-num { border-color: #10b981; color: #34d399; }
+
+      .hiw-circle--blue {
+        background: rgba(59,130,246,0.1);
+        border: 2px solid rgba(59,130,246,0.3);
+        color: #60a5fa;
+        box-shadow: 0 0 30px rgba(59,130,246,0.1);
+      }
+      .hiw-circle--blue:hover { box-shadow: 0 0 40px rgba(59,130,246,0.25); }
+      .hiw-circle--blue .hiw-num { border-color: #3b82f6; color: #60a5fa; }
+
+      .hiw-circle--amber {
+        background: rgba(245,158,11,0.1);
+        border: 2px solid rgba(245,158,11,0.3);
+        color: #fbbf24;
+        box-shadow: 0 0 30px rgba(245,158,11,0.1);
+      }
+      .hiw-circle--amber:hover { box-shadow: 0 0 40px rgba(245,158,11,0.25); }
+      .hiw-circle--amber .hiw-num { border-color: #f59e0b; color: #fbbf24; }
+
+      .hiw-circle--purple {
+        background: rgba(168,85,247,0.1);
+        border: 2px solid rgba(168,85,247,0.3);
+        color: #c084fc;
+        box-shadow: 0 0 30px rgba(168,85,247,0.1);
+      }
+      .hiw-circle--purple:hover { box-shadow: 0 0 40px rgba(168,85,247,0.25); }
+      .hiw-circle--purple .hiw-num { border-color: #a855f7; color: #c084fc; }
+
+      .hiw-circle--cyan {
+        background: rgba(6,182,212,0.1);
+        border: 2px solid rgba(6,182,212,0.3);
+        color: #22d3ee;
+        box-shadow: 0 0 30px rgba(6,182,212,0.1);
+      }
+      .hiw-circle--cyan:hover { box-shadow: 0 0 40px rgba(6,182,212,0.25); }
+      .hiw-circle--cyan .hiw-num { border-color: #06b6d4; color: #22d3ee; }
+
+      /* Step text */
+      .hiw-step-title {
+        font-size: 15px; font-weight: 700; color: #f1f5f9;
+        margin: 0 0 8px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      .hiw-step-desc {
+        font-size: 12.5px;
+        color: rgba(148,163,184,0.7);
+        line-height: 1.6;
+        margin: 0;
+        max-width: 180px;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+
+      /* Arrow connector between steps */
+      .hiw-arrow {
+        display: flex;
+        align-items: center;
+        padding-top: 22px; /* Vertically align with circle center */
+        color: rgba(148,163,184,0.25);
+        font-size: 20px;
+        flex-shrink: 0;
+        margin: 0 8px;
+        /* Scroll animation */
+        opacity: 0;
+        transform: translateX(-8px);
+      }
+      .hiw-visible .hiw-arrow {
+        opacity: 1;
+        transform: translateX(0);
+        transition: opacity 0.4s ease, transform 0.4s ease;
+      }
+
+      /* Mobile: vertical layout */
+      @media (max-width: 768px) {
+        .hiw-steps-row {
+          flex-direction: column;
+          align-items: center;
+          gap: 0;
+        }
+        .hiw-step { max-width: 300px; }
+        .hiw-arrow {
+          padding-top: 0;
+          margin: 12px 0;
+          transform: rotate(90deg);
+        }
+        .hiw-visible .hiw-arrow { transform: rotate(90deg); }
+      }
+
+      /* Light theme */
+      [data-theme="light"] .hiw-flow-heading { color: #0f172a; }
+      [data-theme="light"] .hiw-flow-sub { color: rgba(71,85,105,0.8); }
+      [data-theme="light"] .hiw-step-title { color: #0f172a; }
+      [data-theme="light"] .hiw-step-desc { color: rgba(71,85,105,0.75); }
+      [data-theme="light"] .hiw-arrow { color: rgba(71,85,105,0.2); }
+      [data-theme="light"] .hiw-num { background: #ffffff; }
+
+      /* ── Light mode: Mobile App Teaser Section ── */
+      [data-theme="light"] .app-teaser-h2 {
+        color: #0f172a !important;
+      }
+      [data-theme="light"] .app-teaser-desc {
+        color: #475569 !important;
+      }
+      [data-theme="light"] .app-teaser-pill {
+        background: rgba(15,23,42,0.05) !important;
+        border-color: rgba(15,23,42,0.12) !important;
+        color: #334155 !important;
+      }
+      [data-theme="light"] .app-teaser-notify-form input {
+        background: #f1f5f9 !important;
+        border-color: rgba(15,23,42,0.12) !important;
+        color: #0f172a !important;
+      }
+      [data-theme="light"] .app-teaser-notify-form input::placeholder {
+        color: #94a3b8 !important;
+      }
+      [data-theme="light"] .app-teaser-success {
+        color: #b45309 !important;
+      }
+      [data-theme="light"] .atsec-badge {
+        background: rgba(255,255,255,0.92) !important;
+        border-color: rgba(15,23,42,0.1) !important;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important;
+      }
+      [data-theme="light"] .atsec-bn {
+        color: #0f172a !important;
+      }
+      [data-theme="light"] .atsec-bs {
+        color: #64748b !important;
+      }
+    </style>
+
+    <!-- NATIVE HTML IN DOM FOR EASY TRANSLATION -->
+    <div id="hiw-premium-container">
+      <div class="hiw-flow">
+        <div class="hiw-flow-inner">
+          <h2 class="hiw-flow-heading" data-i18n="hiw.heading">How It Works</h2>
+          <p class="hiw-flow-sub" data-i18n="hiw.sub">Your trade from start to finish in five clear steps.</p>
+          <div class="hiw-steps-row">
+            
+            <div class="hiw-step">
+              <div class="hiw-circle hiw-circle--emerald">
+                <i class="fa-solid fa-user-plus"></i><span class="hiw-num">1</span>
+              </div>
+              <h3 class="hiw-step-title" data-i18n="hiw.s1_title">Create Account</h3>
+              <p class="hiw-step-desc" data-i18n="hiw.s1_desc">Sign up with your name and email. Your account secures your order history and saved payment details.</p>
+            </div>
+            
+            <div class="hiw-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            
+            <div class="hiw-step">
+              <div class="hiw-circle hiw-circle--blue">
+                <i class="fa-solid fa-chart-line"></i><span class="hiw-num">2</span>
+              </div>
+              <h3 class="hiw-step-title" data-i18n="hiw.s2_title">Check Live Rates</h3>
+              <p class="hiw-step-desc" data-i18n="hiw.s2_desc">View real-time buy/sell rates on our live price board. Use the calculator to see exactly what you get.</p>
+            </div>
+            
+            <div class="hiw-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            
+            <div class="hiw-step">
+              <div class="hiw-circle hiw-circle--amber">
+                <i class="fa-solid fa-clipboard-list"></i><span class="hiw-num">3</span>
+              </div>
+              <h3 class="hiw-step-title" data-i18n="hiw.s3_title">Place Your Order</h3>
+              <p class="hiw-step-desc" data-i18n="hiw.s3_desc">Choose buy or sell, enter amount, pick payment method, and provide your exchange platform details.</p>
+            </div>
+
+            <div class="hiw-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            
+            <div class="hiw-step">
+              <div class="hiw-circle hiw-circle--purple">
+                <i class="fa-solid fa-cloud-arrow-up"></i><span class="hiw-num">4</span>
+              </div>
+              <h3 class="hiw-step-title" data-i18n="hiw.s4_title">Pay & Upload Proof</h3>
+              <p class="hiw-step-desc" data-i18n="hiw.s4_desc">Complete payment via M-Pesa, bank, or crypto. Upload a screenshot of your receipt as proof.</p>
+            </div>
+
+            <div class="hiw-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            
+            <div class="hiw-step">
+              <div class="hiw-circle hiw-circle--cyan">
+                <i class="fa-solid fa-handshake"></i><span class="hiw-num">5</span>
+              </div>
+              <h3 class="hiw-step-title" data-i18n="hiw.s5_title">We Verify & Deliver</h3>
+              <p class="hiw-step-desc" data-i18n="hiw.s5_desc">Our team reviews your proof, confirms the transaction, and delivers your crypto or TZS.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+    (function(){
+      function upgradeUI(){
+        var a=document.getElementById('about');
+        if(a) a.style.display='none';
+        
+        var h=document.getElementById('how');
+        var prem = document.getElementById('hiw-premium-container');
+        if(!h || !prem) return false;
+        
+        // Hide React's original section
+        h.style.display='none';
+        
+        // Move the premium native node into the correct DOM position and display it
+        if(!prem.classList.contains('active')){
+          h.parentNode.insertBefore(prem, h.nextSibling);
+          prem.classList.add('active');
+        }
+
+        if('IntersectionObserver' in window){
+          var io=new IntersectionObserver(function(entries){
+            entries.forEach(function(entry){
+              if(entry.isIntersecting){
+                entry.target.classList.add('hiw-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },{threshold:0.1});
+          // Observe the premium container directly
+          io.observe(prem);
+        } else {
+          prem.classList.add('hiw-visible');
+        }
+        return true;
+      }
+
+      if(!upgradeUI()){
+        var obs=new MutationObserver(function(){if(upgradeUI())obs.disconnect();});
+        obs.observe(document.getElementById('root')||document.body,{childList:true,subtree:true});
+        setTimeout(function(){obs.disconnect();},15000);
+      }
+    })();
+    </script>
+
 </body>
 </html>

@@ -103,6 +103,51 @@ try {
             ]);
             break;
 
+        case 'bulk_trash':
+            $ids = $input['ids'] ?? [];
+            if (!is_array($ids) || empty($ids)) {
+                echo json_encode(['success' => false, 'error' => 'No items selected']);
+                exit;
+            }
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $stmt = $pdo->prepare("UPDATE user_submissions SET deleted_at = NOW() WHERE id IN ($placeholders)");
+            if ($stmt->execute($ids)) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Failed to move to trash']);
+            }
+            break;
+
+        case 'bulk_restore':
+            $ids = $input['ids'] ?? [];
+            if (!is_array($ids) || empty($ids)) {
+                echo json_encode(['success' => false, 'error' => 'No items selected']);
+                exit;
+            }
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $stmt = $pdo->prepare("UPDATE user_submissions SET deleted_at = NULL WHERE id IN ($placeholders)");
+            if ($stmt->execute($ids)) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Failed to restore items']);
+            }
+            break;
+
+        case 'permanent_delete':
+            $ids = $input['ids'] ?? [];
+            if (!is_array($ids) || empty($ids)) {
+                echo json_encode(['success' => false, 'error' => 'No items selected']);
+                exit;
+            }
+            $placeholders = implode(',', array_fill(0, count($ids), '?'));
+            $stmt = $pdo->prepare("DELETE FROM user_submissions WHERE id IN ($placeholders)");
+            if ($stmt->execute($ids)) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Failed to permanent delete']);
+            }
+            break;
+
         case 'get_suggestions':
             $q = trim($input['query'] ?? '');
             if (strlen($q) < 2) {

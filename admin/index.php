@@ -27,6 +27,7 @@ $submissionsStmt = $pdo->query("
         SUM(CASE WHEN submission_status = 'reviewed' THEN 1 ELSE 0 END) AS reviewed,
         SUM(CASE WHEN submission_status = 'completed' THEN 1 ELSE 0 END) AS completed
     FROM user_submissions
+    WHERE deleted_at IS NULL
 ");
 $submissions = $submissionsStmt->fetch(PDO::FETCH_ASSOC);
 $totalSubmissions = (int)($submissions['total'] ?? 0);
@@ -41,17 +42,18 @@ $activeOrders = $pendingCount + $reviewedCount;
 $successRate = $totalSubmissions > 0 ? round(($completedCount / $totalSubmissions) * 100, 1) : 0;
 
 // Revenue (sum of numeric 'amount' field in form_data JSON for completed submissions)
-$revenueStmt = $pdo->query("SELECT SUM(CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.amount')), '') AS DECIMAL(18,2))) AS total_amount FROM user_submissions WHERE submission_status='completed'");
+$revenueStmt = $pdo->query("SELECT SUM(CAST(NULLIF(JSON_UNQUOTE(JSON_EXTRACT(form_data, '$.amount')), '') AS DECIMAL(18,2))) AS total_amount FROM user_submissions WHERE submission_status='completed' AND deleted_at IS NULL");
 $revenueTotal = (float)($revenueStmt->fetch(PDO::FETCH_ASSOC)['total_amount'] ?? 0);
 
 // Completed today
-$completedTodayStmt = $pdo->query("SELECT COUNT(*) AS c FROM user_submissions WHERE submission_status='completed' AND DATE(updated_at) = CURDATE()");
+$completedTodayStmt = $pdo->query("SELECT COUNT(*) AS c FROM user_submissions WHERE submission_status='completed' AND DATE(updated_at) = CURDATE() AND deleted_at IS NULL");
 $completedToday = (int)($completedTodayStmt->fetch(PDO::FETCH_ASSOC)['c'] ?? 0);
 
 // Average response time (hours) from created to first 'completed' status entry
 $avgRespStmt = $pdo->query("SELECT AVG(TIMESTAMPDIFF(SECOND, us.created_at, ssh.created_at))/3600 AS hrs
     FROM user_submissions us
     JOIN submission_status_history ssh ON ssh.submission_id = us.id AND ssh.new_status = 'completed'
+    WHERE us.deleted_at IS NULL
 ");
 $avgRespHours = (float)($avgRespStmt->fetch(PDO::FETCH_ASSOC)['hrs'] ?? 0);
 $avgRespDisplay = $avgRespHours > 0 ? round($avgRespHours, 1) . 'h' : '0h';
@@ -66,7 +68,7 @@ $prevVisitors = (int)($prevVisitorsStmt->fetch(PDO::FETCH_ASSOC)['c'] ?? 0);
 $visitorsChange = $prevVisitors > 0 ? round((($totalVisitors - $prevVisitors) / $prevVisitors) * 100, 1) : ($totalVisitors > 0 ? 100 : 0);
 
 // New submissions today
-$newTodayStmt = $pdo->query("SELECT COUNT(*) AS c FROM user_submissions WHERE DATE(created_at) = CURDATE()");
+$newTodayStmt = $pdo->query("SELECT COUNT(*) AS c FROM user_submissions WHERE DATE(created_at) = CURDATE() AND deleted_at IS NULL");
 $newToday = (int)($newTodayStmt->fetch(PDO::FETCH_ASSOC)['c'] ?? 0);
 
 // Revenue formatted
@@ -79,7 +81,7 @@ $prevSuccessStmt = $pdo->query("
         COUNT(*) AS total, 
         SUM(CASE WHEN submission_status = 'completed' THEN 1 ELSE 0 END) AS completed
     FROM user_submissions 
-    WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY)
+    WHERE created_at < DATE_SUB(NOW(), INTERVAL 30 DAY) AND deleted_at IS NULL
 ");
 $prevSuccess = $prevSuccessStmt->fetch(PDO::FETCH_ASSOC);
 $prevSuccessRate = ((int)$prevSuccess['total'] > 0) ? round(((int)$prevSuccess['completed'] / (int)$prevSuccess['total']) * 100, 1) : 0;
@@ -93,6 +95,7 @@ $recentActivityStmt = $pdo->query("
            JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.email')) AS user_email,
            us.created_at, us.updated_at
     FROM user_submissions us
+    WHERE us.deleted_at IS NULL
     ORDER BY us.updated_at DESC
     LIMIT 8
 ");

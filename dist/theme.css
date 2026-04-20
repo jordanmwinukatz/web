@@ -322,31 +322,464 @@ select:focus {
     color: rgba(255, 255, 255, 0.8) !important;
 }
 
-/* ===== Navigation Bar ===== */
-header.sticky {
-    background: var(--nav-bg) !important;
-    border-bottom-color: var(--border-default) !important;
-    backdrop-filter: blur(20px) saturate(1.4) !important;
-    -webkit-backdrop-filter: blur(20px) saturate(1.4) !important;
+/* ============================================================
+   DERIV-INSPIRED PREMIUM FLOATING NAVIGATION BAR
+   Initial: semi-transparent dark bar, full-width.
+   Scrolled: floating rounded pill with stronger glass background.
+   Nav links grouped inside a visible tinted pill container.
+   ============================================================ */
+.deriv-header {
+    background: rgba(0, 0, 0, 0.45) !important;
+    border-bottom: none !important;
+    backdrop-filter: blur(16px) saturate(1.3) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.3) !important;
+    color: #ffffff !important;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    left: 0;
+    right: 0;
+    padding: 0;
+}
+
+/* ── SCROLLED STATE: Floating glass pill ── */
+.deriv-header.deriv-header--scrolled {
+    background: rgba(0, 0, 0, 0.72) !important;
+    backdrop-filter: blur(32px) saturate(1.8) !important;
+    -webkit-backdrop-filter: blur(32px) saturate(1.8) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.25),
+        0 1px 4px rgba(0, 0, 0, 0.1);
+    margin: 12px 16px 0 !important;
+    border-radius: 60px;
+    left: 0;
+    right: 0;
+    width: auto;
+    position: fixed !important;
+    top: 0 !important;
+    z-index: 100 !important;
+}
+
+/* ============================================================
+   TOP TICKER BAR (Live Prices)
+   ============================================================ */
+.deriv-ticker {
+    background: #131722;
+    border-bottom: 1px solid #1e222d;
+    position: sticky;
+    top: 0;
+    z-index: 60;
+}
+
+/* Light mode overrides for the ticker */
+[data-theme="light"] .deriv-ticker {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .deriv-ticker span[style*="d1d4dc"] {
+    color: #334155 !important;
+}
+
+[data-theme="light"] .deriv-ticker span[style*="787b86"] {
+    color: #64748b !important;
+}
+
+/* Light mode: transparent navbar with dark text over white hero */
+[data-theme="light"] .deriv-header {
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .deriv-header.deriv-header--scrolled {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) saturate(1.5) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(1.5) !important;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.08) !important;
+    box-shadow:
+        0 4px 24px rgba(15, 23, 42, 0.1),
+        0 1px 4px rgba(15, 23, 42, 0.05);
+    color: #0f172a !important;
+}
+
+/* Light mode: nav links dark text */
+[data-theme="light"] .deriv-header .deriv-nav-link {
+    color: #334155 !important;
+}
+[data-theme="light"] .deriv-header .deriv-nav-link:hover {
+    color: #0f172a !important;
+    background: rgba(15, 23, 42, 0.05);
+}
+
+/* Light mode: nav pill container */
+[data-theme="light"] .deriv-header .deriv-nav {
+    background: rgba(15, 23, 42, 0.04);
+    border-color: rgba(15, 23, 42, 0.06);
+}
+
+/* Light mode: logo text */
+[data-theme="light"] .deriv-header .deriv-logo-text {
+    color: #0f172a !important;
+}
+
+/* Light mode: login button */
+[data-theme="light"] .deriv-header .deriv-btn-login {
+    border-color: #0f172a !important;
+    color: #0f172a !important;
+}
+[data-theme="light"] .deriv-header .deriv-btn-login:hover {
+    background: rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Light mode: theme toggle */
+[data-theme="light"] .deriv-header .theme-toggle {
+    border-color: rgba(15, 23, 42, 0.12) !important;
+    background: rgba(15, 23, 42, 0.04) !important;
+    color: #475569 !important;
+}
+[data-theme="light"] .deriv-header .theme-toggle:hover {
+    background: rgba(15, 23, 42, 0.08) !important;
+    color: #0f172a !important;
+}
+
+/* Dark mode scrolled */
+[data-theme="dark"] .deriv-header.deriv-header--scrolled {
+    background: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* Large screens */
+@media (min-width: 1024px) {
+    .deriv-header.deriv-header--scrolled {
+        margin: 10px 32px 0;
+    }
+}
+
+@media (max-width: 767px) {
+    .deriv-header.deriv-header--scrolled {
+        margin: 6px 8px 0;
+        border-radius: 20px;
+    }
+    
+    .logo-desktop { display: none !important; }
+    .logo-mobile { display: inline !important; }
+}
+
+/* ── Inner container: max-width + 3-column layout ── */
+.deriv-header-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 28px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.deriv-header--scrolled .deriv-header-inner {
+    height: 56px;
+    padding: 0 20px;
+}
+
+@media (max-width: 767px) {
+    .deriv-header-inner {
+        height: 56px;
+        padding: 0 16px;
+        gap: 10px;
+    }
+    .deriv-header--scrolled .deriv-header-inner {
+        height: 50px;
+        padding: 0 14px;
+    }
+    .deriv-nav {
+        display: none !important;
+    }
+    .deriv-btn-login,
+    .deriv-btn-create {
+        display: none !important;
+    }
+}
+
+/* ── Logo ── */
+.deriv-logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none !important;
+    flex-shrink: 0;
+    transition: opacity 0.15s ease;
+}
+
+.deriv-logo-link:hover {
+    opacity: 0.85;
+}
+
+.deriv-logo-link img {
+    border-radius: 10px;
+}
+
+.deriv-logo-text {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    color: var(--brand-emerald) !important;
+    font-family: var(--font-sans);
+    line-height: 1;
+}
+
+.logo-desktop { display: inline; }
+.logo-mobile { display: none; }
+
+/* In the header, logo text is always emerald by default */
+.deriv-header .deriv-logo-text {
+    color: var(--brand-emerald) !important;
+}
+
+/* ── Center Navigation — Grouped in a visible pill ── */
+.deriv-nav {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    /* The pill container behind nav links */
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: var(--radius-full);
+    padding: 4px 6px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+
+
+.deriv-nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.78) !important;
+    text-decoration: none !important;
+    font-family: var(--font-sans);
+    letter-spacing: -0.005em;
+    transition: color 0.18s ease, background 0.18s ease;
+    position: relative;
+    white-space: nowrap;
+}
+
+.deriv-nav-link:hover {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+
+
+/* Remove the old ::after underline for deriv nav links */
+.deriv-nav-link::after {
+    display: none !important;
+}
+
+/* Chevron icon */
+.deriv-chevron {
+    opacity: 0.5;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    flex-shrink: 0;
+}
+
+.deriv-nav-link:hover .deriv-chevron {
+    opacity: 0.8;
+    transform: translateY(1px);
+}
+
+/* External arrow icon */
+.deriv-external {
+    opacity: 0.4;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    flex-shrink: 0;
+    margin-left: -2px;
+}
+
+.deriv-nav-link:hover .deriv-external {
+    opacity: 0.7;
+    transform: translate(1px, -1px);
+}
+
+/* ── Right Actions ── */
+.deriv-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* ── Log In Button (Outlined pill — white on dark header) ── */
+.deriv-btn-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: var(--radius-full);
+    border: 1.5px solid rgba(255, 255, 255, 0.55);
+    background: transparent;
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
+    min-height: 40px;
+}
+
+.deriv-btn-login:hover {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: none !important;
+}
+
+
+
+/* ── Open Account Button (Solid emerald pill) ── */
+.deriv-btn-create {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border-radius: var(--radius-full);
+    border: none;
+    background: linear-gradient(135deg, #10b981, #059669) !important;
+    color: #ffffff !important;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    min-height: 40px;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+.deriv-btn-create:hover {
+    background: linear-gradient(135deg, #059669, #047857) !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+    transform: translateY(-1px) !important;
+}
+
+.deriv-btn-create:active {
+    transform: translateY(0) scale(0.98) !important;
+}
+
+/* ── Authenticated User Button ── */
+.deriv-btn-user {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    border: 1px solid var(--border-default);
+    background: var(--color-bg-05);
     color: var(--text-primary) !important;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
 }
 
-[data-theme="light"] header.sticky {
-    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+.deriv-btn-user:hover {
+    background: var(--bg-surface-hover);
+    border-color: var(--border-medium);
 }
 
-[data-theme="light"] header.sticky a,
-[data-theme="light"] header.sticky span,
-[data-theme="light"] header.sticky button {
-    color: var(--text-primary) !important;
+/* ── Logout Button ── */
+.deriv-btn-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    background: rgba(239, 68, 68, 0.08);
+    color: #f87171 !important;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    white-space: nowrap;
 }
 
-[data-theme="light"] header.sticky nav a {
-    color: var(--text-secondary) !important;
+.deriv-btn-logout:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.35);
 }
 
-[data-theme="light"] header.sticky nav a:hover {
-    color: var(--text-primary) !important;
+[data-theme="light"] .deriv-btn-logout {
+    color: #dc2626 !important;
+}
+
+/* ── Mobile Buttons ── */
+.deriv-btn-mobile-login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-default);
+    background: var(--color-bg-05);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.deriv-btn-mobile-login:hover {
+    background: var(--bg-surface-hover);
+    color: var(--text-primary);
+}
+
+.deriv-btn-mobile-profile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    background: rgba(16, 185, 129, 0.08);
+    color: #10b981;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.deriv-btn-mobile-profile:hover {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* ── Header text defaults ── */
+.deriv-header a,
+.deriv-header span,
+.deriv-header button {
+    color: inherit;
+}
+
+/* ── Theme toggle base (dark mode default) ── */
+.deriv-header .theme-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-full);
+    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.deriv-header .theme-toggle:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
 }
 
 /* ===== Text Color Overrides for Light Mode ===== */
@@ -1036,74 +1469,186 @@ section {
 .hero-eyebrow {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    font-size: 13px;
-    letter-spacing: 0.08em;
+    gap: 8px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    padding: 8px 14px;
+    padding: 7px 14px;
     border-radius: 999px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    margin-bottom: 24px;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
     backdrop-filter: blur(6px);
 }
 
 .pulse-dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background: #34D399;
-    box-shadow: 0 0 10px rgba(52, 211, 153, 0.8);
-    animation: pulse 1.8s infinite;
+    box-shadow: 0 0 8px rgba(52, 211, 153, 0.7);
+    animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.5);
-        opacity: 0.6;
-    }
-
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.5; }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-/* ===== Hero Background Glow ===== */
+/* ===== Hero Gradient Text (the accent word) ===== */
+.hero-gradient-text {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 30%, #06b6d4 60%, #10b981 100%);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: hero-gradient-shift 4s ease-in-out infinite;
+}
+
+@keyframes hero-gradient-shift {
+    0% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+    100% { background-position: 0% center; }
+}
+
+/* ===== Hero Background ===== */
 .hero-section {
     position: relative;
     overflow: hidden;
+    min-height: 85vh;
+    display: flex;
+    align-items: center;
+}
+
+/* Light mode: hero gets a proper light background */
+[data-theme="light"] .hero-section {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* Light mode: root wrapper background override */
+[data-theme="light"] .app-root {
+    background: #f8fafc !important;
+    color: #0f172a !important;
 }
 
 .hero-section::before {
     content: "";
     position: absolute;
-    inset: -160px;
+    inset: -200px;
     background:
-        radial-gradient(550px 400px at 14% 50%, rgba(245, 197, 66, 0.06), transparent 60%),
-        radial-gradient(600px 420px at 86% 50%, rgba(52, 211, 153, 0.05), transparent 60%);
+        radial-gradient(600px 500px at 10% 40%, rgba(16, 185, 129, 0.08), transparent 65%),
+        radial-gradient(500px 400px at 80% 30%, rgba(6, 182, 212, 0.05), transparent 60%),
+        radial-gradient(800px 600px at 50% 80%, rgba(99, 102, 241, 0.03), transparent 60%);
     pointer-events: none;
     z-index: 0;
 }
 
-/* ===== Hero Right — converter size and position ===== */
+[data-theme="light"] .hero-section::before {
+    background:
+        radial-gradient(600px 500px at 10% 40%, rgba(16, 185, 129, 0.06), transparent 65%),
+        radial-gradient(500px 400px at 80% 30%, rgba(6, 182, 212, 0.04), transparent 60%),
+        radial-gradient(800px 600px at 50% 80%, rgba(99, 102, 241, 0.03), transparent 60%);
+}
+
+/* ===== Hero Right — converter ===== */
 .hero__right {
-    transform: translateX(-24px);
+    transform: translateX(-12px);
     width: 100%;
     min-width: 0;
 }
 
-/* Converter panel: substantial width and presence (match reference) */
 .hero__right .lrc-panel {
-    min-width: 460px;
-    max-width: 560px;
+    min-width: 440px;
+    max-width: 520px;
     width: 100%;
-    padding: 24px !important;
+    padding: 28px !important;
+    border-radius: 24px !important;
+}
+
+/* Light mode: converter panel gets light glass */
+[data-theme="light"] .hero__right .lrc-panel {
+    background: #ffffff !important;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+}
+
+/* Light mode: converter text */
+[data-theme="light"] .lrc-panel h2 {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .lrc-panel label {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .lrc-panel input,
+[data-theme="light"] .lrc-panel select {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .lrc-panel select option {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* Light mode: converter result box */
+[data-theme="light"] .lrc-panel div[style*="rgba(16,185,129,0.08)"] {
+    background: rgba(16, 185, 129, 0.06) !important;
+    border-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Light mode: converter status text */
+[data-theme="light"] .lrc-panel span[style*="11px"][style*="10b981"] {
+    color: #059669 !important;
+}
+
+/* Light mode: converter microcopy */
+[data-theme="light"] .lrc-panel div[style*="rgba(255,255,255,0.38)"] {
+    color: #64748b !important;
+}
+
+/* Light mode: converter secondary link */
+[data-theme="light"] .lrc-panel a[style*="rgba(255,255,255,0.4)"] {
+    color: #64748b !important;
+}
+
+/* Light mode: swap button */
+[data-theme="light"] .lrc-panel button[title="Swap currencies"] {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    color: #059669 !important;
+}
+
+/* Light mode: buy/sell toggle inactive */
+[data-theme="light"] .lrc-panel div[style*="var(--color-bg-05)"] {
+    background: #f1f5f9 !important;
+}
+
+[data-theme="light"] .lrc-panel button[style*="transparent"][style*="rgba(255,255,255,0.55)"] {
+    color: #64748b !important;
+}
+
+/* Light mode: result value */
+[data-theme="light"] .lrc-panel div[style*="36px"][style*="10b981"] {
+    color: #059669 !important;
+}
+
+/* Light mode: result currency label */
+[data-theme="light"] .lrc-panel div[style*="rgba(255,255,255,0.5)"] {
+    color: #64748b !important;
+}
+
+/* Light mode: "You get" label */
+[data-theme="light"] .lrc-panel div[style*="rgba(255,255,255,0.4)"][style*="uppercase"] {
+    color: #94a3b8 !important;
 }
 
 @media (max-width: 1200px) {
@@ -1117,7 +1662,6 @@ section {
     .hero__right {
         transform: none;
     }
-
     .hero__right .lrc-panel {
         min-width: 0;
         max-width: 100%;
@@ -1128,21 +1672,21 @@ section {
 @media (max-width: 1024px) {
     .hero-grid {
         grid-template-columns: 1fr 1fr !important;
-        gap: 24px !important;
+        gap: 32px !important;
     }
 }
 
 @media (max-width: 767px) {
+    .hero-section {
+        min-height: auto;
+    }
+
     .hero-eyebrow {
-        font-size: 8.5px;
-        padding: 4px 10px;
-        gap: 4px;
-        letter-spacing: 0.01em;
-        white-space: nowrap;
-        max-width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-bottom: 14px;
+        font-size: 8px;
+        padding: 5px 10px;
+        gap: 5px;
+        letter-spacing: 0.08em;
+        margin-bottom: 16px;
     }
 
     .hero-grid {
@@ -1150,58 +1694,89 @@ section {
         gap: 24px !important;
         padding: 0 16px !important;
     }
+
+    .hero-headline {
+        font-size: clamp(32px, 8vw, 48px) !important;
+    }
+
+    .hero-stats-row {
+        gap: 16px !important;
+    }
+
+    .hero-stat-divider {
+        display: none !important;
+    }
 }
 
-/* ===== Hero CTA Buttons — Pro styling + hover ===== */
+/* ===== Hero CTA Buttons ===== */
+a.hero-btn-primary,
+a.hero-btn-whatsapp {
+    transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none !important;
+}
+
 a.hero-btn-primary:hover {
-    background: linear-gradient(135deg, #047857 0%, #059669 100%) !important;
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45) !important;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+    box-shadow: 0 8px 28px rgba(16, 185, 129, 0.4) !important;
+    transform: translateY(-2px);
 }
 
 a.hero-btn-whatsapp:hover {
-    background: #20bd5a !important;
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5) !important;
-    transform: translateY(-1px);
-}
-
-a.hero-btn-primary,
-a.hero-btn-whatsapp {
-    transition: box-shadow var(--duration-normal) var(--ease-out),
-        transform var(--duration-normal) var(--ease-out),
-        background var(--duration-normal) var(--ease-out);
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    transform: translateY(-2px);
 }
 
 /* ============================================================
-   LIGHT MODE CONTRAST FIXES
-   Fixes for elements using inline rgba(255,255,255,...) colors
-   and Tailwind dark-first classes that become invisible on white.
+   LIGHT MODE HERO FIXES
    ============================================================ */
 
-/* 1. Hero subtitle — inline color: rgba(255,255,255,0.68) */
-[data-theme="light"] .hero-section p[style*="rgba(255,255,255"] {
-    color: var(--text-secondary) !important;
+/* Hero headline — dark text in light mode */
+[data-theme="light"] .hero-headline {
+    color: #0f172a !important;
 }
 
-/* 2. Trust stats chips — inline rgba white backgrounds & text */
-[data-theme="light"] .hero-section div[style*="rgba(255,255,255,0.04)"] {
-    background: rgba(15, 23, 42, 0.06) !important;
-    border-color: rgba(15, 23, 42, 0.12) !important;
+/* Hero gradient text — keep colorful */
+[data-theme="light"] .hero-gradient-text {
+    -webkit-text-fill-color: transparent !important;
 }
 
-[data-theme="light"] .hero-section div[style*="rgba(255,255,255,0.04)"] strong[style*="rgba(255,255,255"] {
-    color: var(--text-primary) !important;
+/* Hero subtitle */
+[data-theme="light"] .hero-section .hero-subtitle {
+    color: #475569 !important;
 }
 
-[data-theme="light"] .hero-section div[style*="rgba(255,255,255,0.04)"] span[style*="rgba(255,255,255"] {
-    color: var(--text-muted) !important;
-}
-
-/* 3. Hero eyebrow pill */
+/* Hero eyebrow */
 [data-theme="light"] .hero-eyebrow {
-    background: rgba(15, 23, 42, 0.06) !important;
-    border-color: rgba(15, 23, 42, 0.12) !important;
-    color: var(--text-secondary) !important;
+    background: rgba(15, 23, 42, 0.05) !important;
+    border-color: rgba(15, 23, 42, 0.1) !important;
+    color: #475569 !important;
+}
+
+/* Hero buttons in light mode */
+[data-theme="light"] a.hero-btn-primary {
+    color: #ffffff !important;
+}
+
+[data-theme="light"] a.hero-btn-whatsapp {
+    border-color: rgba(15, 23, 42, 0.2) !important;
+    color: #0f172a !important;
+}
+
+[data-theme="light"] a.hero-btn-whatsapp:hover {
+    background: rgba(15, 23, 42, 0.05) !important;
+    border-color: rgba(15, 23, 42, 0.3) !important;
+}
+
+/* Stats text — dark in light mode */
+[data-theme="light"] .hero-stats-row strong {
+    color: #0f172a !important;
+}
+[data-theme="light"] .hero-stats-row span {
+    color: #64748b !important;
+}
+[data-theme="light"] .hero-stat-divider {
+    background: rgba(15, 23, 42, 0.12) !important;
 }
 
 /* 4. BUY/SELL inactive tab — bg-slate-800 text-white/80 */
@@ -1284,6 +1859,208 @@ a.hero-btn-whatsapp {
 /* 12. Price card Updated timestamp */
 [data-theme="light"] .text-slate-400 {
     color: var(--text-muted) !important;
+}
+
+/* ============================================================
+   PRICES SECTION LIGHT MODE
+   ============================================================ */
+[data-theme="light"] .prices-section .prices-card {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .prices-section .prices-card span[style*="fontWeight: 700"] {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .prices-section .prices-toggle {
+    background: #f1f5f9 !important;
+    border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .prices-section .prices-toggle button {
+    color: #64748b !important;
+}
+
+[data-theme="light"] .prices-section .prices-toggle button[style*="10b981"] {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .prices-section .prices-toggle button[style*="f97316"] {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .prices-section div[style*="var(--color-bg-06"] {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+}
+
+[data-theme="light"] .prices-section table th {
+    color: #94a3b8 !important;
+}
+
+[data-theme="light"] .prices-section table td {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .prices-section table tr[style*="rgba(255,255,255"] {
+    border-color: #f1f5f9 !important;
+}
+
+/* ============================================================
+   PRICES TWO-COLUMN LAYOUT — Responsive
+   ============================================================ */
+@media (max-width: 768px) {
+    .prices-layout {
+        grid-template-columns: 1fr !important;
+        gap: 32px !important;
+    }
+    .prices-card {
+        position: static !important;
+    }
+}
+
+/* Trust points light mode */
+[data-theme="light"] .trust-point {
+    background: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
+}
+
+[data-theme="light"] .trust-point-desc {
+    color: #64748b !important;
+    opacity: 1 !important;
+}
+
+/* ============================================================
+   MICRO-ANIMATIONS — Subtle, psychological engagement
+   ============================================================ */
+
+/* ── 1. Scroll-reveal: fade up ── */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger children (trust points, cards, etc.) */
+.reveal-stagger > .reveal:nth-child(1) { transition-delay: 0s; }
+.reveal-stagger > .reveal:nth-child(2) { transition-delay: 0.08s; }
+.reveal-stagger > .reveal:nth-child(3) { transition-delay: 0.16s; }
+.reveal-stagger > .reveal:nth-child(4) { transition-delay: 0.24s; }
+.reveal-stagger > .reveal:nth-child(5) { transition-delay: 0.32s; }
+.reveal-stagger > .reveal:nth-child(6) { transition-delay: 0.4s; }
+
+/* ── 2. Trust point hover: lift + subtle border glow ── */
+.trust-point {
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s ease,
+                box-shadow 0.25s ease;
+    cursor: default;
+}
+
+.trust-point:hover {
+    transform: translateY(-4px);
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.06);
+}
+
+[data-theme="light"] .trust-point:hover {
+    border-color: rgba(16, 185, 129, 0.25) !important;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.08);
+}
+
+/* ── 3. Live price subtle pulse — "this data is alive" ── */
+@keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+.prices-card div[style*="fontWeight: 800"][style*="10b981"],
+.prices-card div[style*="fontWeight: 800"][style*="f97316"] {
+    animation: live-pulse 3s ease-in-out infinite;
+}
+
+/* ── 4. Trading card hover: gentle lift ── */
+.prices-card {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s ease;
+}
+
+.prices-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ── 5. Button press feedback ── */
+.prices-card button:active,
+a.hero-btn-primary:active,
+a.hero-btn-whatsapp:active,
+.deriv-btn-create:active,
+.deriv-btn-login:active {
+    transform: scale(0.97) !important;
+    transition: transform 0.1s ease !important;
+}
+
+/* ── 6. Payment card hover shimmer ── */
+.pm-card {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.2s ease,
+                box-shadow 0.2s ease !important;
+}
+
+.pm-card:hover {
+    transform: translateY(-2px) !important;
+}
+
+/* ── 7. Section title entrance (for "How It Works", "Contact", etc.) ── */
+.section-title-animate {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.section-title-animate.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ── 8. Subtle floating for hero eyebrow ── */
+@keyframes gentle-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+.hero-eyebrow {
+    animation: gentle-float 4s ease-in-out infinite;
+}
+
+/* ── Respect reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+    .reveal,
+    .section-title-animate {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+    .trust-point,
+    .prices-card,
+    .pm-card {
+        transition: none !important;
+    }
+    .hero-eyebrow {
+        animation: none !important;
+    }
+    .prices-card div[style*="fontWeight: 800"] {
+        animation: none !important;
+    }
 }
 
 /* ============================================================
@@ -1839,30 +2616,25 @@ a.hero-btn-whatsapp {
     /* Compact button styling */
     .hero-section .hero-btn-primary,
     .hero-section .hero-btn-whatsapp {
-        padding: 10px 14px !important;
+        padding: 10px 16px !important;
         font-size: 13px !important;
-        min-height: 40px !important;
+        min-height: 42px !important;
         flex: 1;
         text-align: center;
         justify-content: center;
+        border-radius: 60px !important;
     }
 
-    /* Trust stats — prevent wrap, tighten spacing */
-    .hero-section div[style*="flexWrap"] {
-        flex-wrap: nowrap !important;
-        gap: 6px !important;
+    /* Stats row — compact */
+    .hero-stats-row {
+        gap: 14px !important;
     }
 
-    .hero-section div[style*="flexWrap"]>div {
-        padding: 5px 8px !important;
-        gap: 5px !important;
+    .hero-stats-row strong {
+        font-size: 15px !important;
     }
 
-    .hero-section div[style*="flexWrap"]>div strong {
-        font-size: 12px !important;
-    }
-
-    .hero-section div[style*="flexWrap"]>div span {
+    .hero-stats-row span {
         font-size: 10px !important;
     }
 }

@@ -12,11 +12,12 @@ const {
 /* =========================
    Brand & Global Settings
    ========================= */
-const BUSINESS_NAME = "jordanmwinukatz P2P Trading";
+const BUSINESS_NAME = "jordanmwinukatz";
 const WHATSAPP_NUMBER = "+255714107557";
 const SUPPORT_EMAIL = "jordanmwinuka@gmail.com";
 const LOGO_URL = "./logo.png"; // optional — shows gradient placeholder if missing
 const FAVICON_URL = "/favicon.png"; // optional
+const GOOGLE_CLIENT_ID = "454644699932-2b21a06krt2tlf7h6a95dupgar5qfqde.apps.googleusercontent.com";
 
 /* Helpers */
 const wa = text => `https://wa.me/${WHATSAPP_NUMBER.replace(/[^\d]/g, "")}?text=${encodeURIComponent(text)}`;
@@ -248,9 +249,10 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
         fontSize: '14px', fontWeight: 600, cursor: 'pointer',
         transition: 'all 0.18s ease',
         background: side === s
-          ? (s === 'buy' ? '#10b981' : '#f59e0b')
+          ? (s === 'buy' ? 'linear-gradient(135deg, #10b981, #059669)' : 'linear-gradient(135deg, #f59e0b, #d97706)')
           : 'transparent',
-        color: side === s ? (s === 'buy' ? '#022c22' : '#1c1107') : 'rgba(255,255,255,0.55)',
+        color: side === s ? '#ffffff' : 'rgba(255,255,255,0.55)',
+        boxShadow: side === s && s === 'buy' ? '0 2px 10px rgba(16,185,129,0.3)' : (side === s && s === 'sell' ? '0 2px 10px rgba(245,158,11,0.3)' : 'none'),
         letterSpacing: '0.05em', textTransform: 'uppercase'
       }
     }, s)
@@ -378,10 +380,10 @@ function LiveRateConverter({ buyRate, sellRate, waLink, onStartTrade }) {
       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
       width: '100%', boxSizing: 'border-box',
       padding: '16px 20px', borderRadius: '14px',
-      background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-      color: '#022c22', fontWeight: 700, fontSize: '14px',
+      background: 'linear-gradient(135deg, #10b981, #059669)',
+      color: '#ffffff', fontWeight: 700, fontSize: '14px',
       textDecoration: 'none', letterSpacing: '0.02em',
-      boxShadow: '0 4px 16px rgba(16,185,129,0.28)',
+      boxShadow: '0 2px 10px rgba(16,185,129,0.3)',
       transition: 'opacity 0.18s',
       marginBottom: '12px'
     }
@@ -423,6 +425,7 @@ const PhoneMockupSection = () => {
 
       fetch('api/index.php?route=submissions', {
           method: 'POST',
+          credentials: 'include',
           headers: { 
               'Content-Type': 'application/json',
               'X-CSRF-TOKEN': csrfToken
@@ -728,15 +731,15 @@ const PhoneMockupSection = () => {
           <h2 class="app-teaser-h2">Trade crypto from<br><em>anywhere</em> in minutes.</h2>
           <p class="app-teaser-desc">The JM P2P mobile app is almost here — a native trading experience for Tanzania with instant M-Pesa, Tigo Pesa, CRDB &amp; NMB support, right in your pocket.</p>
           <div class="app-teaser-pills">
-            <div class="app-teaser-pill">⚡ Lightning Fast</div>
-            <div class="app-teaser-pill">🔒 Bank-grade Security</div>
-            <div class="app-teaser-pill">📱 iOS &amp; Android</div>
+            <div class="app-teaser-pill"><i class="fa-solid fa-bolt" style="color:#eab308;margin-right:6px;"></i> Lightning Fast</div>
+            <div class="app-teaser-pill"><i class="fa-solid fa-shield-halved" style="color:#10b981;margin-right:6px;"></i> Bank-grade Security</div>
+            <div class="app-teaser-pill"><i class="fa-solid fa-mobile-screen-button" style="color:#60a5fa;margin-right:6px;"></i> iOS &amp; Android</div>
           </div>
           <form class="app-teaser-notify-form" id="atsec-form" onsubmit="event.preventDefault();atsecOk();">
             <input type="email" placeholder="your@email.com" required>
             <button type="submit" class="app-teaser-notify-btn">Notify Me</button>
           </form>
-          <div class="app-teaser-success" id="atsec-ok">🎉 Awesome — you're on the list!</div>
+          <div class="app-teaser-success" id="atsec-ok"><i class="fa-solid fa-circle-check" style="color:#10b981;margin-right:6px;"></i> Awesome — you're on the list!</div>
         </div>
 
         <!-- Right: phone -->
@@ -750,56 +753,11 @@ const PhoneMockupSection = () => {
           </div>
 
           <div class="atsec-badge atsec-badge-right">
-            <div class="atsec-bic" style="background:#0ea5e9;color:#fff;">💸</div>
+            <div class="atsec-bic" style="background:#0ea5e9;color:#fff;"><i class="fa-solid fa-tag" style="font-size:13px;"></i></div>
             <div><div class="atsec-bn">Zero App Fees</div><div class="atsec-bs">On selected pairs</div></div>
           </div>
 
-          <div class="atsec-phone">
-            <div class="atsec-island"></div>
-            <div class="atsec-statusbar"><span>9:41</span><span>5G ▮▮▮</span></div>
-            <div class="atsec-header">
-              <div class="atsec-hdr-row">
-                <div><div class="atsec-greeting">Good morning 👋</div><div class="atsec-username">Jordan M.</div></div>
-                <div class="atsec-avatar"></div>
-              </div>
-            </div>
-            <div class="atsec-balance-card">
-              <div class="atsec-bal-label">Total Portfolio Value</div>
-              <div class="atsec-bal-amount">$3,240.50</div>
-              <div class="atsec-bal-change">↑ +$48.20 today (1.51%)</div>
-              <div class="atsec-bal-btns">
-                <div class="atsec-bal-btn">Buy Crypto</div>
-                <div class="atsec-bal-btn outline">Sell Crypto</div>
-              </div>
-            </div>
-            <div class="atsec-mkt-hdr">
-              <div class="atsec-mkt-title">Market</div>
-              <div class="atsec-mkt-see">See all →</div>
-            </div>
-            <div class="atsec-coins">
-              <div class="atsec-cr">
-                <div class="atsec-cl">
-                  <div class="atsec-ci" style="background:rgba(245,158,11,.15);color:#f59e0b;">₿</div>
-                  <div><div class="atsec-cn">Bitcoin</div><div class="atsec-cs">BTC</div></div>
-                </div>
-                <div class="atsec-cvr"><div class="atsec-cp">$64,230</div><div class="atsec-cc atsec-up">+2.45%</div></div>
-              </div>
-              <div class="atsec-cr">
-                <div class="atsec-cl">
-                  <div class="atsec-ci" style="background:rgba(14,165,233,.15);color:#0ea5e9;">₮</div>
-                  <div><div class="atsec-cn">Tether</div><div class="atsec-cs">USDT</div></div>
-                </div>
-                <div class="atsec-cvr"><div class="atsec-cp">$1.00</div><div class="atsec-cc atsec-up">+0.01%</div></div>
-              </div>
-              <div class="atsec-cr">
-                <div class="atsec-cl">
-                  <div class="atsec-ci" style="background:rgba(139,92,246,.15);color:#8b5cf6;">Ξ</div>
-                  <div><div class="atsec-cn">Ethereum</div><div class="atsec-cs">ETH</div></div>
-                </div>
-                <div class="atsec-cvr"><div class="atsec-cp">$3,450</div><div class="atsec-cc atsec-dn">-0.85%</div></div>
-              </div>
-            </div>
-          </div>
+          <img src="img/real_phone_mockup.png" alt="JM P2P Official Mobile App" style="width: 100%; max-width: 380px; height: auto; position: relative; z-index: 2; margin: 0 auto; display: block; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.5)) drop-shadow(0 0 80px rgba(16,185,129,0.08));" />
         </div>
 
       </div>
@@ -856,6 +814,64 @@ function App() {
   const [lightboxImage, setLightboxImage] = useState(null);
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   const wizardEmailRef = useRef(null);
+  const orderEndRef = useRef(null);
+  
+  // Google Auth Initialization
+  useEffect(() => {
+    window.handleGoogleResponse = async (response) => {
+      try {
+        const res = await fetch('api/auth.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'google_login', credential: response.credential })
+        });
+        const responseText = await res.text();
+        let j;
+        try {
+          j = JSON.parse(responseText);
+        } catch (parseError) {
+          throw new Error('Invalid response from server.');
+        }
+        if (!j.success) throw new Error(j.error || 'Google login failed');
+        setAuthUser(j.user);
+        localStorage.setItem('authUser', JSON.stringify(j.user));
+        
+        if (j.user && (j.user.is_admin || j.user.email === 'jordanmwinukatz@gmail.com' || j.user.email === 'thiongoowen7@gmail.com')) {
+          setAuthOpen(false);
+          return;
+        }
+
+        if (j.requires_verification || (j.user.hasOwnProperty('email_verified') && !j.user.email_verified)) {
+            showAuthToast('Login successful, but email needs verification.');
+        } else {
+            showAuthToast(j.message || 'Successfully logged in with Google');
+        }
+
+        setAuthOpen(false);
+        setTimeout(() => fetchUserSubmissions(), 500);
+      } catch(err) {
+        showAuthToast(err.message || 'An error occurred with Google login');
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (authOpen && window.google && authMode !== 'forgot') {
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: window.handleGoogleResponse
+      });
+      setTimeout(() => {
+        const btn = document.getElementById("google-signin-btn");
+        if (btn) {
+          window.google.accounts.id.renderButton(
+            btn,
+            { theme: "outline", size: "large", type: "standard", text: authMode === 'login' ? "signin_with" : "continue_with" }
+          );
+        }
+      }, 100);
+    }
+  }, [authOpen, authMode]);
   const wizardUidRef = useRef(null);
   const wizardTzsInputRef = useRef(null);
   const wizardUsdtInputRef = useRef(null);
@@ -1185,6 +1201,7 @@ function App() {
         fd.append('file', file);
         const uploadRes = await fetch('api/upload.php', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
           },
@@ -1361,6 +1378,7 @@ function App() {
       fd.append('file', receiptFile);
       const up = await fetch('api/upload.php', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
         },
@@ -1383,6 +1401,7 @@ function App() {
       // Create a submission record for the receipt
       await fetch('api/submissions.php', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
@@ -1489,38 +1508,27 @@ function App() {
         price: formatPriceTzs(liveBuyRate),
         limit: buyUsdtLimit,
         payments: liveBuyPayments.length ? liveBuyPayments : ["M-Pesa", "TigoPesa", "AirtelMoney"]
-      }, {
-        asset: "BTC",
-        price: "170,000,000.00 TZS",
-        limit: "6,900 - 2,763,017 TZS",
-        payments: ["CRDB Bank", "NMB Bank"]
-      }, {
-        asset: "ETH",
-        price: "10,000,000.00 TZS",
-        limit: "6,900 - 2,763,017 TZS",
-        payments: ["M-Pesa", "CRDB Bank", "NMB Bank"]
       }],
       sell: [{
         asset: "USDT",
         price: formatPriceTzs(liveSellRate),
         limit: sellUsdtLimit,
         payments: liveSellPayments.length ? liveSellPayments : ["CRDB Bank", "NMB Bank", "M-Pesa"]
-      }, {
-        asset: "BTC",
-        price: "168,000,000.00 TZS",
-        limit: sellUsdtLimit,
-        payments: ["CRDB Bank", "M-Pesa", "AirtelMoney"]
-      }, {
-        asset: "ETH",
-        price: "9,800,000.00 TZS",
-        limit: sellUsdtLimit,
-        payments: ["NMB Bank", "M-Pesa", "TigoPesa"]
       }]
     };
   }, [liveBuyRate, liveSellRate, liveMinTzs, liveMaxTzs, liveSellMinTzs, liveSellMaxTzs, liveBuyPayments, liveSellPayments]);
   const currentPaymentMethods = React.useMemo(() => {
     const usdtRow = offerDetails[priceMode]?.find(row => row.asset === "USDT");
-    return usdtRow?.payments ?? [];
+    const payments = usdtRow?.payments ?? [];
+    // Deduplicate by the logo they resolve to (catches "Vodafone M-Pesa" + "M-Pesa" etc.)
+    const getLogo = m => { const l = (m||"").toLowerCase(); if(l.includes('voda') || l.includes('mpesa') || l.includes('m-pesa')) return "mpesa"; if(l.includes('tigo')) return "tigo"; if(l.includes('airtel')) return "airtel"; if(l.includes('crdb')) return "crdb"; if(l.includes('nmb')) return "nmb"; if(l.includes('halo')) return "halo"; return l; };
+    const seen = new Set();
+    return payments.filter(m => {
+      const key = getLogo(m);
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
   }, [offerDetails, priceMode]);
   const handleAdvancementClick = () => {
     window.location.href = "/advertisements";
@@ -1818,7 +1826,7 @@ function App() {
     if (!authUser || !authUser.id) return;
     setLoadingSubmissions(true);
     try {
-      const res = await fetch(`api/submissions.php?action=user_submissions&user_id=${authUser.id}&limit=50`);
+      const res = await fetch(`api/submissions.php?action=user_submissions&user_id=${authUser.id}&limit=50`, { credentials: 'include' });
       const data = await res.json();
       if (data.success) {
         setUserSubmissions(data.submissions || []);
@@ -1834,7 +1842,7 @@ function App() {
   const fetchSavedAccounts = async () => {
     if (!authUser || !authUser.id) return;
     try {
-      const res = await fetch(`api/payment_accounts.php?action=get&user_id=${authUser.id}`);
+      const res = await fetch(`api/payment_accounts.php?action=get&user_id=${authUser.id}`, { credentials: 'include' });
       const data = await res.json();
       if (data.success && data.accounts) {
         setWizardUserSavedAccounts(data.accounts);
@@ -1852,6 +1860,7 @@ function App() {
     try {
       const res = await fetch('api/payment_accounts.php', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
@@ -1967,12 +1976,12 @@ function App() {
 
   /* ============ RENDER ============ */
   return /*#__PURE__*/React.createElement("div", {
-    className: "min-h-screen text-white",
+    className: "app-root min-h-screen text-white",
     style: {
       background: "linear-gradient(180deg,#0f172a 0%, #0b1225 100%)"
     }
   }, /*#__PURE__*/React.createElement("div", {
-    style: { background: '#131722', borderBottom: '1px solid #1e222d', position: 'sticky', top: 0, zIndex: 60 }
+    className: "deriv-ticker"
   }, /*#__PURE__*/React.createElement("div", {
     className: "w-full mx-auto px-2 sm:px-4 h-8 sm:h-9 flex items-center gap-2 sm:gap-6 overflow-hidden"
   }, /*#__PURE__*/React.createElement("div", {
@@ -1990,32 +1999,45 @@ function App() {
     key: i,
     style: { color: '#787b86', marginLeft: '40px' }
   }, a)))))), /*#__PURE__*/React.createElement("header", {
-    className: "sticky top-9 z-50 bg-black text-white border-b border-white/10"
+    className: "deriv-header sticky top-9 z-50"
   }, /*#__PURE__*/React.createElement("div", {
-    className: "w-full mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between"
-  }, /*#__PURE__*/React.createElement("a", {
+    className: "deriv-header-inner"
+  },
+  /* ── Logo ── */
+  /*#__PURE__*/React.createElement("a", {
     href: "#top",
-    className: "flex items-center gap-1.5 sm:gap-2 min-w-0"
-  }, /*#__PURE__*/React.createElement(Logo, null), /*#__PURE__*/React.createElement("span", {
-    className: "font-semibold text-sm sm:text-base truncate"
-  }, BUSINESS_NAME)), /*#__PURE__*/React.createElement("nav", {
-    className: "hidden md:flex items-center gap-6 text-sm text-white/80"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: "#prices",
-    className: "hover:text-white"
-  }, "Prices"), /*#__PURE__*/React.createElement("a", {
-    href: "#about",
-    className: "hover:text-white"
-  }, "About"), /*#__PURE__*/React.createElement("a", {
-    href: "#how",
-    className: "hover:text-white"
-  }, "How It Works"), /*#__PURE__*/React.createElement("a", {
+    className: "deriv-logo-link"
+  }, /*#__PURE__*/React.createElement(Logo, { className: "h-8 w-auto" }), /*#__PURE__*/React.createElement("span", {
+    className: "deriv-logo-text"
+  }, /*#__PURE__*/React.createElement("span", { className: "logo-desktop" }, "jordanmwinukatz"), /*#__PURE__*/React.createElement("span", { className: "logo-mobile" }, "JM P2P"))),
 
-    href: "#contact",
-    className: "hover:text-white"
-  }, "Contact")), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("button", {
+  /* ── Center Nav ── */
+  /*#__PURE__*/React.createElement("nav", {
+    className: "deriv-nav hidden md:flex"
+  },
+  /*#__PURE__*/React.createElement("a", { href: "#prices", className: "deriv-nav-link" },
+    /*#__PURE__*/React.createElement("span", null, "Prices"),
+    /*#__PURE__*/React.createElement("svg", { width: "10", height: "6", viewBox: "0 0 10 6", fill: "none", className: "deriv-chevron" },
+      /*#__PURE__*/React.createElement("path", { d: "M1 1l4 4 4-4", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }))),
+  /*#__PURE__*/React.createElement("a", { href: "#how", className: "deriv-nav-link" },
+    /*#__PURE__*/React.createElement("span", null, "How It Works"),
+    /*#__PURE__*/React.createElement("svg", { width: "10", height: "6", viewBox: "0 0 10 6", fill: "none", className: "deriv-chevron" },
+      /*#__PURE__*/React.createElement("path", { d: "M1 1l4 4 4-4", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }))),
+  /*#__PURE__*/React.createElement("a", { href: "#mobile-app", className: "deriv-nav-link" },
+    /*#__PURE__*/React.createElement("span", null, "Mobile App"),
+    /*#__PURE__*/React.createElement("svg", { width: "10", height: "6", viewBox: "0 0 10 6", fill: "none", className: "deriv-chevron" },
+      /*#__PURE__*/React.createElement("path", { d: "M1 1l4 4 4-4", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" }))),
+  /*#__PURE__*/React.createElement("a", { href: "#footer-section", className: "deriv-nav-link deriv-nav-link--external" },
+    /*#__PURE__*/React.createElement("span", null, "Contact"),
+    /*#__PURE__*/React.createElement("svg", { width: "12", height: "12", viewBox: "0 0 12 12", fill: "none", className: "deriv-external" },
+      /*#__PURE__*/React.createElement("path", { d: "M3.5 2h6.5v6.5M9.5 2.5L2 10", stroke: "currentColor", strokeWidth: "1.5", strokeLinecap: "round", strokeLinejoin: "round" })))),
+
+  /* ── Right Actions ── */
+  /*#__PURE__*/React.createElement("div", {
+    className: "deriv-actions"
+  },
+  /* Theme Toggle */
+  /*#__PURE__*/React.createElement("button", {
     className: "theme-toggle",
     title: "Toggle theme",
     onClick: function () {
@@ -2027,16 +2049,28 @@ function App() {
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.content = next === 'light' ? '#f8fafc' : '#10b981';
     }
-  }, /*#__PURE__*/React.createElement("svg", { className: "icon-sun", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: "2" }, /*#__PURE__*/React.createElement("circle", { cx: "12", cy: "12", r: "5" }), /*#__PURE__*/React.createElement("path", { d: "M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" })), /*#__PURE__*/React.createElement("svg", { className: "icon-moon", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: "2" }, /*#__PURE__*/React.createElement("path", { d: "M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" }))), /*#__PURE__*/React.createElement("div", {
-    className: "hidden md:block"
-  }, /*#__PURE__*/React.createElement(Button, {
-    as: "a",
-    href: "#prices"
-  }, "View Prices")), authUser ? /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("svg", { className: "icon-sun", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: "2" }, /*#__PURE__*/React.createElement("circle", { cx: "12", cy: "12", r: "5" }), /*#__PURE__*/React.createElement("path", { d: "M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" })), /*#__PURE__*/React.createElement("svg", { className: "icon-moon", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: "2" }, /*#__PURE__*/React.createElement("path", { d: "M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" }))),
+
+  /* Log In button (when not authenticated) */
+  authUser ? null : /*#__PURE__*/React.createElement("button", {
+    onClick: () => setAuthOpen(true),
+    className: "deriv-btn-login hidden md:inline-flex"
+  }, "Log in"),
+
+  /* Create Account button (when not authenticated) */
+  authUser ? null : /*#__PURE__*/React.createElement("button", {
+    onClick: () => { setAuthMode('create'); setAuthOpen(true); },
+    className: "deriv-btn-create hidden md:inline-flex",
+    id: "header-create-account-btn",
+    "data-i18n": "header.create"
+  }, "Open account"),
+
+  /* Authenticated: user profile + logout */
+  authUser ? /*#__PURE__*/React.createElement("div", {
     className: "hidden md:flex items-center gap-3"
   }, /*#__PURE__*/React.createElement("button", {
     onClick: (authUser.is_admin || authUser.email === 'jordanmwinukatz@gmail.com' || authUser.email === 'thiongoowen7@gmail.com') ? () => window.location.href = 'admin/index.php' : () => setShowUserDashboard(true),
-    className: "inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium border border-white/10 bg-white/5 hover:bg-white/10 transition",
+    className: "deriv-btn-user",
     title: (authUser.is_admin || authUser.email === 'jordanmwinukatz@gmail.com' || authUser.email === 'thiongoowen7@gmail.com') ? "Admin Dashboard" : "View my orders"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-4 h-4",
@@ -2053,6 +2087,7 @@ function App() {
       try {
         await fetch('api/auth.php', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json'
           },
@@ -2066,14 +2101,13 @@ function App() {
         setShowUserDashboard(false);
       } catch (e) {
         console.error('Logout error:', e);
-        // Still clear local state
         localStorage.removeItem('authUser');
         setAuthUser(null);
         setUserSubmissions([]);
         setShowUserDashboard(false);
       }
     },
-    className: "inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-300 transition",
+    className: "deriv-btn-logout",
     title: "Logout"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-4 h-4",
@@ -2085,12 +2119,12 @@ function App() {
     strokeLinejoin: "round",
     strokeWidth: 2,
     d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-  })), "Logout")) : /*#__PURE__*/React.createElement("button", {
+  })), "Logout")) : null,
+
+  /* Mobile: login icon (unauthenticated) */
+  !authUser ? /*#__PURE__*/React.createElement("button", {
     onClick: () => setAuthOpen(true),
-    className: "hidden md:inline-flex items-center rounded-lg px-3 py-1.5 text-sm font-medium border border-white/10 bg-white/5 hover:bg-white/10 transition"
-  }, "Login"), !authUser ? /*#__PURE__*/React.createElement("button", {
-    onClick: () => setAuthOpen(true),
-    className: "md:hidden p-2 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition",
+    className: "deriv-btn-mobile-login md:hidden",
     title: "Login"
   }, /*#__PURE__*/React.createElement("svg", {
     className: "w-5 h-5",
@@ -2102,7 +2136,21 @@ function App() {
     strokeLinejoin: "round",
     strokeWidth: 2,
     d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-  }))) : null))), quickOrderOpen && /*#__PURE__*/React.createElement("div", {
+  }))) : /*#__PURE__*/React.createElement("button", {
+    onClick: (authUser.is_admin || authUser.email === 'jordanmwinukatz@gmail.com' || authUser.email === 'thiongoowen7@gmail.com') ? () => window.location.href = 'admin/index.php' : () => setShowUserDashboard(true),
+    className: "deriv-btn-mobile-profile md:hidden",
+    title: "Profile / Orders"
+  }, /*#__PURE__*/React.createElement("svg", {
+    className: "w-5 h-5",
+    fill: "none",
+    stroke: "currentColor",
+    viewBox: "0 0 24 24"
+  }, /*#__PURE__*/React.createElement("path", {
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    strokeWidth: 2,
+    d: "M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+  })))))), quickOrderOpen && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-[120] flex items-center justify-center bg-black/20 backdrop-blur-md px-4 py-8 overflow-hidden",
     onTouchMove: e => {
       // Only prevent if touching the backdrop, not the modal content
@@ -2590,115 +2638,135 @@ function App() {
     }
   }, "Submit Order")))))), /*#__PURE__*/React.createElement(Section, {
     id: "top",
-    className: "hero-section pt-8 sm:pt-12 md:pt-24"
+    className: "hero-section pt-16 sm:pt-20 md:pt-28 pb-12 md:pb-20"
   }, /*#__PURE__*/React.createElement("div", {
+    className: "hero-grid",
     style: {
-      maxWidth: '1400px',
+      maxWidth: '1280px',
       margin: '0 auto',
-      padding: '0 32px',
+      padding: '0 28px',
       display: 'grid',
-      gridTemplateColumns: '1fr minmax(480px, 1.15fr)',
-      gap: '28px',
+      gridTemplateColumns: '1fr minmax(440px, 1fr)',
+      gap: '48px',
       alignItems: 'center',
       position: 'relative'
-    },
-    className: "hero-grid"
+    }
   },
 
   /* ── LEFT COLUMN ── */
   /*#__PURE__*/React.createElement("div", {
-    style: { maxWidth: '760px' }
+    style: { maxWidth: '620px' }
   },
-    /*#__PURE__*/React.createElement("div", { className: "hero-eyebrow" }, /*#__PURE__*/React.createElement("span", { className: "pulse-dot" }), " LIVE P2P USDT DESK — 24/7 INSTANT CONFIRMATIONS"),
-    /*#__PURE__*/React.createElement("h1", {
-    style: {
-      margin: '0 0 16px 0',
-      fontSize: 'clamp(48px, 4.8vw, 80px)',
-      fontWeight: 800,
-      lineHeight: 1.04,
-      letterSpacing: '-0.035em',
-      maxWidth: '760px'
-    }
-  },
-      /*#__PURE__*/React.createElement("span", {
-    className: "bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400"
-  }, "Fast, Secure, and Reliable"),
-      /*#__PURE__*/React.createElement("br", null),
-    "Crypto Trading in Tanzania."
-  ),
-    /*#__PURE__*/React.createElement("p", {
-    style: {
-      margin: '0 0 22px 0',
-      fontSize: '15px',
-      lineHeight: 1.6,
-      color: 'var(--color-text-68)',
-      maxWidth: '520px'
-    }
-  }, "Public rates. Private speed. A premium P2P desk built for trust, clarity, and instant settlement."),
-    /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col sm:flex-row gap-3",
-    style: { marginBottom: '20px' }
-  },
-      /*#__PURE__*/React.createElement(Button, {
-    as: "a",
-    href: "#prices",
-    className: "min-h-[44px] hero-btn-primary",
-    style: {
-      background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
-      border: 'none',
-      color: '#fff',
-      fontWeight: 600,
-      padding: '12px 24px',
-      borderRadius: '12px',
-      boxShadow: '0 4px 14px rgba(16, 185, 129, 0.35)'
-    }
-  }, "View Live Prices"),
-      /*#__PURE__*/React.createElement(Button, {
-    as: "a",
-    href: wa("Hi, I'd like to start trading."),
-    target: "_blank",
-    rel: "noopener noreferrer",
-    onClick: () => trackButtonClick('hero_whatsapp_chat', 'hero_section'),
-    className: "min-h-[44px] hero-btn-whatsapp",
-    style: {
-      background: '#25D366',
-      border: 'none',
-      color: '#fff',
-      fontWeight: 600,
-      padding: '12px 24px',
-      borderRadius: '12px',
-      boxShadow: '0 4px 14px rgba(37, 211, 102, 0.4)'
-    }
-  }, "WhatsApp Chat")
-  ),
+    /* Eyebrow badge */
+    /*#__PURE__*/React.createElement("div", { className: "hero-eyebrow" },
+      /*#__PURE__*/React.createElement("span", { className: "pulse-dot" }),
+      " LIVE P2P DESK — 24/7 INSTANT SETTLEMENT"
+    ),
 
-    /* ── Trust Stats Row ── */
-    /*#__PURE__*/React.createElement("div", {
-    style: { display: 'flex', gap: '12px', flexWrap: 'wrap' }
-  },
-    [
-      { val: '₮ 2B+', label: 'Volume' },
-      { val: '1,200+', label: 'Traders' },
-      { val: '24/7', label: 'Desk' }
-    ].map(item =>
-        /*#__PURE__*/React.createElement("div", {
-      key: item.label,
+    /* Main headline */
+    /*#__PURE__*/React.createElement("h1", {
+      className: "hero-headline",
       style: {
-        display: 'flex', gap: '8px', alignItems: 'baseline',
-        padding: '8px 10px', borderRadius: '999px',
-        background: 'var(--color-bg-04)',
-        border: '1px solid rgba(255,255,255,0.06)'
+        margin: '0 0 20px 0',
+        fontSize: 'clamp(38px, 4.2vw, 68px)',
+        fontWeight: 800,
+        lineHeight: 1.06,
+        letterSpacing: '-0.035em',
+        color: '#ffffff'
       }
     },
-          /*#__PURE__*/React.createElement("strong", {
-      style: { color: 'var(--color-text-92)', fontSize: '14px' }
-    }, item.val),
-          /*#__PURE__*/React.createElement("span", {
-      style: { color: 'var(--color-text-62)', fontSize: '12px' }
-    }, item.label)
+      /*#__PURE__*/React.createElement("span", {
+        className: "hero-gradient-text"
+      }, "Fast, Secure, and Reliable"),
+      /*#__PURE__*/React.createElement("br", null),
+      /*#__PURE__*/React.createElement("span", null, "Crypto Trading in Tanzania.")
+    ),
+
+    /* Subtitle */
+    /*#__PURE__*/React.createElement("p", {
+      className: "hero-subtitle",
+      style: {
+        margin: '0 0 32px 0',
+        fontSize: '17px',
+        lineHeight: 1.65,
+        color: 'rgba(255,255,255,0.55)',
+        maxWidth: '480px',
+        fontWeight: 400
+      }
+    }, "Buy and sell USDT instantly with Tanzania's most trusted exchange. Public rates, private speed, and 24/7 settlement."),
+
+    /* CTA Buttons */
+    /*#__PURE__*/React.createElement("div", {
+      className: "flex flex-col sm:flex-row gap-3",
+      style: { marginBottom: '36px' }
+    },
+      /*#__PURE__*/React.createElement(Button, {
+        as: "a",
+        href: "#prices",
+        className: "min-h-[48px] hero-btn-primary",
+        style: {
+          background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+          border: 'none',
+          color: '#fff',
+          fontWeight: 700,
+          padding: '14px 32px',
+          borderRadius: '60px',
+          fontSize: '15px',
+          boxShadow: '0 4px 20px rgba(16, 185, 129, 0.3)',
+          letterSpacing: '-0.01em'
+        }
+      }, "Start Trading"),
+      /*#__PURE__*/React.createElement(Button, {
+        as: "a",
+        href: wa("Hi, I'd like to start trading."),
+        target: "_blank",
+        rel: "noopener noreferrer",
+        onClick: () => trackButtonClick('hero_whatsapp_chat', 'hero_section'),
+        className: "min-h-[48px] hero-btn-whatsapp",
+        style: {
+          background: 'transparent',
+          border: '1.5px solid rgba(255,255,255,0.2)',
+          color: '#fff',
+          fontWeight: 600,
+          padding: '14px 32px',
+          borderRadius: '60px',
+          fontSize: '15px',
+          letterSpacing: '-0.01em'
+        }
+      }, "WhatsApp Chat")
+    ),
+
+    /* ── Stats Row ── */
+    /*#__PURE__*/React.createElement("div", {
+      className: "hero-stats-row",
+      style: { display: 'flex', gap: '24px', flexWrap: 'wrap', alignItems: 'center' }
+    },
+      [
+        { val: '₮ 2B+', label: 'Volume traded' },
+        { val: '1,200+', label: 'Active traders' },
+        { val: '24/7', label: 'Always open' }
+      ].map((item, i) =>
+        /*#__PURE__*/React.createElement(React.Fragment, { key: item.label },
+          i > 0 && /*#__PURE__*/React.createElement("div", {
+            className: "hero-stat-divider",
+            style: {
+              width: '1px', height: '28px',
+              background: 'rgba(255,255,255,0.1)'
+            }
+          }),
+          /*#__PURE__*/React.createElement("div", {
+            style: { display: 'flex', flexDirection: 'column', gap: '2px' }
+          },
+            /*#__PURE__*/React.createElement("strong", {
+              style: { color: '#ffffff', fontSize: '18px', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1 }
+            }, item.val),
+            /*#__PURE__*/React.createElement("span", {
+              style: { color: 'rgba(255,255,255,0.4)', fontSize: '12px', fontWeight: 500, letterSpacing: '0.02em' }
+            }, item.label)
+          )
+        )
+      )
     )
-    )
-  )
   ),
 
   /* ── RIGHT COLUMN: Converter ── */
@@ -2707,159 +2775,219 @@ function App() {
     style: { justifySelf: 'end' }
   },
     /*#__PURE__*/React.createElement(LiveRateConverter, {
-    buyRate: liveBuyRate,
-    sellRate: liveSellRate,
-    onStartTrade: openQuickOrder
-  })
+      buyRate: liveBuyRate,
+      sellRate: liveSellRate,
+      onStartTrade: openQuickOrder
+    })
   ))), /*#__PURE__*/React.createElement("section", {
     id: "prices",
-    className: "py-10 sm:py-16"
+    className: "prices-section",
+    style: { padding: '64px 0' }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "max-w-4xl mx-auto px-4"
-  }, /*#__PURE__*/React.createElement("h2", {
-    className: "text-3xl sm:text-4xl font-extrabold text-center text-blue-400 tracking-wide uppercase"
-  }, "Currently Offer"), /*#__PURE__*/React.createElement("p", {
-    className: "text-lg sm:text-xl font-semibold text-center text-yellow-400 mt-2"
-  }, "Price Preview"), /*#__PURE__*/React.createElement("div", {
-    className: "mt-6 bg-[var(--card,rgba(30,41,59,0.85))] border border-white/10 rounded-2xl shadow-[0_0_20px_rgba(34,197,94,0.35)] max-w-3xl mx-auto p-6 sm:p-8"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex flex-col items-center gap-2"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-2 text-2xl sm:text-3xl font-extrabold"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "w-9 h-9 rounded-full bg-emerald-500 text-slate-900 flex items-center justify-center font-black text-lg"
-  }, "\u20AE"), /*#__PURE__*/React.createElement("span", null, "USDT"), /*#__PURE__*/React.createElement("span", {
-    className: "text-slate-400 text-base sm:text-lg font-semibold"
-  }, "(Tether)")), /*#__PURE__*/React.createElement("div", {
-    className: "mt-5 grid grid-cols-1 sm:grid-cols-2 gap-6 w-full text-center text-lg sm:text-xl font-semibold"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "uppercase tracking-wide text-emerald-400"
-  }, "Buy"), /*#__PURE__*/React.createElement("p", {
-    className: "mt-1 text-emerald-300 text-2xl font-bold"
-  }, formatPriceTzs(liveBuyRate))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "uppercase tracking-wide text-orange-400"
-  }, "Sell"), /*#__PURE__*/React.createElement("p", {
-    className: "mt-1 text-orange-300 text-2xl font-bold"
-  }, formatPriceTzs(liveSellRate)))), /*#__PURE__*/React.createElement("div", {
-    className: "text-xs text-slate-400 mt-3"
-  }, lastUpdated ? `Updated ${new Date(lastUpdated).toLocaleTimeString()}` : 'Awaiting live quote'))), /*#__PURE__*/React.createElement("div", {
-    className: "mt-6 bg-[var(--card,rgba(30,41,59,0.85))] border border-white/10 rounded-2xl shadow-[0_0_20px_rgba(59,130,246,0.25)] max-w-3xl mx-auto p-6 sm:p-8"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "grid grid-cols-1 sm:grid-cols-2 gap-6 text-center text-lg font-semibold"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-center gap-2 text-xl font-extrabold mb-2"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "w-9 h-9 rounded-full bg-amber-500 text-slate-900 flex items-center justify-center font-black"
-  }, "\u20BF"), /*#__PURE__*/React.createElement("span", null, "BTC (Bitcoin)")), /*#__PURE__*/React.createElement("p", {
-    className: "text-emerald-300 font-bold"
-  }, "Buy: 170,000,000.00 TZS"), /*#__PURE__*/React.createElement("p", {
-    className: "text-orange-300 font-bold mt-1"
-  }, "Sell: 168,000,000.00 TZS")), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-center gap-2 text-xl font-extrabold mb-2"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "w-9 h-9 rounded-full bg-indigo-500 text-white flex items-center justify-center font-black"
-  }, "\u039E"), /*#__PURE__*/React.createElement("span", null, "ETH (Ethereum)")), /*#__PURE__*/React.createElement("p", {
-    className: "text-emerald-300 font-bold"
-  }, "Buy: 10,000,000.00 TZS"), /*#__PURE__*/React.createElement("p", {
-    className: "text-orange-300 font-bold mt-1"
-  }, "Sell: 9,800,000.00 TZS")))), /*#__PURE__*/React.createElement("div", {
-    className: "mt-8 flex justify-center gap-3"
-  }, /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    onClick: () => setPriceMode('buy'),
-    className: `px-6 py-3 rounded-lg font-semibold text-sm sm:text-base transition ${priceMode === 'buy' ? 'bg-emerald-500 text-slate-900 shadow-lg shadow-emerald-500/40' : 'bg-slate-800 text-white/80 hover:bg-slate-700'}`
-  }, "BUY"), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    onClick: () => setPriceMode('sell'),
-    className: `px-6 py-3 rounded-lg font-semibold text-sm sm:text-base transition ${priceMode === 'sell' ? 'bg-orange-500 text-slate-900 shadow-lg shadow-orange-500/40' : 'bg-slate-800 text-white/80 hover:bg-slate-700'}`
-  }, "SELL")), /*#__PURE__*/React.createElement("h3", {
-    className: "mt-6 text-center text-lg sm:text-xl font-extrabold text-slate-200 uppercase"
-  }, priceMode === 'buy' ? 'Buy Details' : 'Sell Details'), /*#__PURE__*/React.createElement("div", {
-    className: "mt-4 bg-slate-900/70 border border-white/10 rounded-2xl overflow-hidden"
-  }, /*#__PURE__*/React.createElement("table", {
-    className: "w-full text-xs sm:text-sm md:text-base"
-  }, /*#__PURE__*/React.createElement("thead", {
-    className: "bg-slate-900/80 text-slate-300 uppercase tracking-wide text-[10px] sm:text-xs md:text-sm"
-  }, /*#__PURE__*/React.createElement("tr", null, /*#__PURE__*/React.createElement("th", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 text-left"
-  }, "Asset"), /*#__PURE__*/React.createElement("th", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 text-left"
-  }, "Price (TZS)"), /*#__PURE__*/React.createElement("th", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 text-left"
-  }, "Limits"), /*#__PURE__*/React.createElement("th", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 text-center"
-  }, "Action"))), /*#__PURE__*/React.createElement("tbody", null, offerDetails[priceMode].map(row => /*#__PURE__*/React.createElement("tr", {
-    key: `${priceMode}-${row.asset}`,
-    className: "border-t border-white/5"
-  }, /*#__PURE__*/React.createElement("td", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 font-semibold text-white"
-  }, row.asset), /*#__PURE__*/React.createElement("td", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 font-semibold",
-    style: {
-      color: priceMode === 'buy' ? '#22c55e' : '#f97316'
-    }
-  }, row.price), /*#__PURE__*/React.createElement("td", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 text-white/80"
-  }, row.limit), /*#__PURE__*/React.createElement("td", {
-    className: "px-2 py-2 sm:px-4 sm:py-3 text-center"
-  }, /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    className: "row-btn px-2 py-1.5 sm:px-4 sm:py-2 rounded-md font-semibold text-[11px] sm:text-xs md:text-sm text-white transition",
-    style: {
-      background: priceMode === 'buy' ? '#22c55e' : '#f97316'
+    className: "prices-layout",
+    style: { maxWidth: '1140px', margin: '0 auto', padding: '0 24px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'start' }
+  },
+
+  /* ═══════════════════════════════════════════
+     LEFT COLUMN: Why Trade With Us + About
+     ═══════════════════════════════════════════ */
+  /*#__PURE__*/React.createElement("div", { style: { paddingTop: '8px' } },
+
+    /* Section label */
+    /*#__PURE__*/React.createElement("div", {
+      style: { display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.15)', borderRadius: '60px', padding: '6px 14px', marginBottom: '20px', fontSize: '11px', fontWeight: 600, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.06em' }
+    }, "\u25CF", " Live Desk"),
+
+    /* Heading */
+    /*#__PURE__*/React.createElement("h2", {
+      className: "prices-title",
+      style: { fontSize: '36px', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.2, marginBottom: '12px' }
+    }, "Why Trade", /*#__PURE__*/React.createElement("br", null), "With ", /*#__PURE__*/React.createElement("span", { className: "hero-gradient-text logo-desktop" }, "jordanmwinukatz"), /*#__PURE__*/React.createElement("span", { className: "hero-gradient-text logo-mobile" }, "JM P2P"), "?"),
+
+    /* Subtitle */
+    /*#__PURE__*/React.createElement("p", {
+      className: "prices-subtitle",
+      style: { fontSize: '15px', lineHeight: 1.7, opacity: 0.55, marginBottom: '32px', maxWidth: '420px' }
+    }, "We make crypto simple, safe, and fast. Honest pricing, instant delivery, and clear communication \u2014 so you trade with confidence."),
+
+    /* Trust points grid */
+    /*#__PURE__*/React.createElement("div", {
+      className: "reveal-stagger",
+      style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }
     },
-    onClick: () => openQuickOrder(priceMode === 'buy' ? 'Buy' : 'Sell')
-  }, priceMode === 'buy' ? 'Buy' : 'Sell'))))))), /*#__PURE__*/React.createElement("div", {
-    className: "mt-6 text-center"
-  }, /*#__PURE__*/React.createElement("h4", {
-    className: "text-blue-400 font-extrabold text-lg sm:text-xl"
-  }, priceMode === 'buy' ? 'Buy Payment Methods' : 'Sell Payment Methods'), /*#__PURE__*/React.createElement("div", {
-    className: "mt-4 flex flex-wrap justify-center gap-2 sm:gap-4"
-  }, currentPaymentMethods.length === 0 ? /*#__PURE__*/React.createElement("span", {
-    className: "text-sm text-slate-400"
-  }, "Loading payment methods...") : (() => { const getPaymentLogo = m => { const l = (m||"").toLowerCase(); if(l.includes('voda') || l.includes('mpesa')) return "/web/img/payments/mpesa_voda.png"; if(l.includes('tigo')) return "/web/img/payments/tigopesa.png"; if(l.includes('airtel')) return "/web/img/payments/airtel.png"; if(l.includes('crdb')) return "/web/img/payments/crdb_bank.png"; if(l.includes('nmb')) return "/web/img/payments/nmb_bank.png"; if(l.includes('halo')) return "/web/img/payments/halopesa.png"; return ""; }; return currentPaymentMethods.map(method => /*#__PURE__*/React.createElement("div", {
-    key: `${priceMode}-${method}`,
-    className: "pm-card",
-    title: method
-  }, /*#__PURE__*/React.createElement("img", {
-    src: getPaymentLogo(method),
-    alt: method,
-    className: "pm-card-logo",
-    onError: e => { e.target.style.display = "none"; if (e.target.nextSibling) e.target.nextSibling.style.display = "flex"; }
-  }), /*#__PURE__*/React.createElement("span", {
-    className: "pm-card-fallback"
-  }, method))); })())), /*#__PURE__*/React.createElement("div", {
-    className: "mt-8 text-center"
-  }, /*#__PURE__*/React.createElement("p", {
-    className: "text-yellow-300 font-semibold text-lg sm:text-xl"
-  }, "Want more payment methods or higher limits? Click below to switch into"), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    onClick: handleAdvancementClick,
-    className: "mt-3 inline-flex items-center gap-3 text-blue-400 hover:text-blue-300 font-semibold text-lg"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "text-2xl animate-pulse"
-  }, "\u27A1\uFE0F"), /*#__PURE__*/React.createElement("span", null, "Advancement Advertisements Mode"))), /*#__PURE__*/React.createElement("div", {
-    className: "mt-10 text-center"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "text-4xl sm:text-5xl mb-3 animate-bounce"
-  }, "\uD83D\uDC47"), /*#__PURE__*/React.createElement("button", {
-    type: "button",
-    onClick: scrollToOrderWizard,
-    className: "bg-blue-500 hover:bg-blue-600 text-white font-semibold text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-3.5 rounded-lg shadow-lg shadow-blue-500/30 transition"
-  }, "Place an Order")))), /*#__PURE__*/React.createElement(Section, {
-    id: "about"
-  }, /*#__PURE__*/React.createElement(Title, {
-    k: "About",
-    sub: "Personal, transparent, and built around your speed of business."
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "grid md:grid-cols-2 gap-6"
-  }, /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(CardContent, {
-    className: "text-white/80"
-  }, "At ", /*#__PURE__*/React.createElement("b", {
-    className: "text-white"
-  }, BUSINESS_NAME), ", we make crypto simple, safe, and fast. Founded by Jordan Mwinuka, we focus on honest pricing, instant delivery, and clear communication\u2014so you trade with confidence.")), /*#__PURE__*/React.createElement(Card, null, /*#__PURE__*/React.createElement(CardContent, {
-    className: "text-white/80"
-  }, "We operate a hybrid pricing model powered by public APIs and precision manual control, ensuring competitive spreads while protecting execution quality across market conditions.")))), /*#__PURE__*/React.createElement(Section, {
+      /* Point 1 */
+      /*#__PURE__*/React.createElement("div", {
+        className: "trust-point reveal",
+        style: { background: 'var(--color-bg-06, rgba(30,41,59,0.5))', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '18px 16px' }
+      },
+        /*#__PURE__*/React.createElement("div", { style: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(16,185,129,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' } }, /*#__PURE__*/React.createElement("svg", { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: '#10b981', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, /*#__PURE__*/React.createElement("polyline", { points: '23 6 13.5 15.5 8.5 10.5 1 18' }), /*#__PURE__*/React.createElement("polyline", { points: '17 6 23 6 23 12' }))),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '14px', fontWeight: 700, marginBottom: '4px' } }, "Best Rates"),
+        /*#__PURE__*/React.createElement("div", { className: "trust-point-desc", style: { fontSize: '12px', opacity: 0.45, lineHeight: 1.5 } }, "Public API pricing with manual precision control")
+      ),
+      /* Point 2 */
+      /*#__PURE__*/React.createElement("div", {
+        className: "trust-point reveal",
+        style: { background: 'var(--color-bg-06, rgba(30,41,59,0.5))', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '18px 16px' }
+      },
+        /*#__PURE__*/React.createElement("div", { style: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(234,179,8,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' } }, /*#__PURE__*/React.createElement("svg", { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: '#eab308', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, /*#__PURE__*/React.createElement("polygon", { points: '13 2 3 14 12 14 11 22 21 10 12 10 13 2' }))),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '14px', fontWeight: 700, marginBottom: '4px' } }, "Instant Settlement"),
+        /*#__PURE__*/React.createElement("div", { className: "trust-point-desc", style: { fontSize: '12px', opacity: 0.45, lineHeight: 1.5 } }, "M-Pesa, Tigo Pesa, CRDB & NMB supported")
+      ),
+      /* Point 3 */
+      /*#__PURE__*/React.createElement("div", {
+        className: "trust-point reveal",
+        style: { background: 'var(--color-bg-06, rgba(30,41,59,0.5))', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '18px 16px' }
+      },
+        /*#__PURE__*/React.createElement("div", { style: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(96,165,250,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' } }, /*#__PURE__*/React.createElement("svg", { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: '#60a5fa', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, /*#__PURE__*/React.createElement("path", { d: 'M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z' }), /*#__PURE__*/React.createElement("polyline", { points: '9 12 11 14 15 10' }))),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '14px', fontWeight: 700, marginBottom: '4px' } }, "Secure & Private"),
+        /*#__PURE__*/React.createElement("div", { className: "trust-point-desc", style: { fontSize: '12px', opacity: 0.45, lineHeight: 1.5 } }, "End-to-end encrypted with bank-grade security")
+      ),
+      /* Point 4 */
+      /*#__PURE__*/React.createElement("div", {
+        className: "trust-point reveal",
+        style: { background: 'var(--color-bg-06, rgba(30,41,59,0.5))', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '14px', padding: '18px 16px' }
+      },
+        /*#__PURE__*/React.createElement("div", { style: { width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(168,85,247,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '10px' } }, /*#__PURE__*/React.createElement("svg", { width: 18, height: 18, viewBox: '0 0 24 24', fill: 'none', stroke: '#a855f7', strokeWidth: 2, strokeLinecap: 'round', strokeLinejoin: 'round' }, /*#__PURE__*/React.createElement("circle", { cx: 12, cy: 12, r: 10 }), /*#__PURE__*/React.createElement("polyline", { points: '12 6 12 12 16 14' }))),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '14px', fontWeight: 700, marginBottom: '4px' } }, "24/7 Available"),
+        /*#__PURE__*/React.createElement("div", { className: "trust-point-desc", style: { fontSize: '12px', opacity: 0.45, lineHeight: 1.5 } }, "Trade any time, confirmations within minutes")
+      )
+    )
+  ),
+
+  /* ═══════════════════════════════════════════
+     RIGHT COLUMN: Unified Trading Card
+     ═══════════════════════════════════════════ */
+  /*#__PURE__*/React.createElement("div", {
+    className: "prices-card reveal",
+    style: {
+      background: 'var(--color-bg-06, rgba(30,41,59,0.6))',
+      border: '1px solid rgba(255,255,255,0.06)',
+      borderRadius: '20px',
+      padding: '24px',
+      position: 'sticky',
+      top: '100px'
+    }
+  },
+
+    /* Card header: Asset + timestamp */
+    /*#__PURE__*/React.createElement("div", {
+      style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }
+    },
+      /*#__PURE__*/React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: '10px' } },
+        /*#__PURE__*/React.createElement("span", { style: { width: '32px', height: '32px', borderRadius: '50%', background: '#10b981', color: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '14px' } }, "\u20AE"),
+        /*#__PURE__*/React.createElement("span", { style: { fontWeight: 700, fontSize: '18px' } }, "USDT"),
+        /*#__PURE__*/React.createElement("span", { className: "prices-pair-label", style: { fontSize: '12px', opacity: 0.4, fontWeight: 500 } }, "/ TZS")
+      ),
+      /*#__PURE__*/React.createElement("span", { className: "prices-updated", style: { fontSize: '11px', opacity: 0.35 } },
+        lastUpdated ? new Date(lastUpdated).toLocaleTimeString() : '...')
+    ),
+
+    /* Buy / Sell price boxes */
+    /*#__PURE__*/React.createElement("div", {
+      style: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }
+    },
+      /*#__PURE__*/React.createElement("div", {
+        style: { background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.12)', borderRadius: '12px', padding: '12px 14px' }
+      },
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '10px', fontWeight: 600, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '2px' } }, "Buy"),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '20px', fontWeight: 800, color: '#10b981', letterSpacing: '-0.02em' } }, formatPriceTzs(liveBuyRate))
+      ),
+      /*#__PURE__*/React.createElement("div", {
+        style: { background: 'rgba(249,115,22,0.06)', border: '1px solid rgba(249,115,22,0.12)', borderRadius: '12px', padding: '12px 14px' }
+      },
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '10px', fontWeight: 600, color: '#f97316', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '2px' } }, "Sell"),
+        /*#__PURE__*/React.createElement("div", { style: { fontSize: '20px', fontWeight: 800, color: '#f97316', letterSpacing: '-0.02em' } }, formatPriceTzs(liveSellRate))
+      )
+    ),
+
+    /* Divider */
+    /*#__PURE__*/React.createElement("div", { style: { height: '1px', background: 'rgba(255,255,255,0.06)', margin: '0 0 14px' } }),
+
+    /* BUY/SELL Toggle + Details inline */
+    /*#__PURE__*/React.createElement("div", {
+      style: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }
+    },
+      /*#__PURE__*/React.createElement("div", {
+        className: "prices-toggle",
+        style: { display: 'inline-flex', background: 'rgba(255,255,255,0.04)', borderRadius: '8px', padding: '2px', border: '1px solid rgba(255,255,255,0.06)' }
+      },
+        /*#__PURE__*/React.createElement("button", {
+          type: "button", onClick: () => setPriceMode('buy'),
+          style: { padding: '6px 20px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+            background: priceMode === 'buy' ? '#10b981' : 'transparent', color: priceMode === 'buy' ? '#0f172a' : 'rgba(255,255,255,0.45)' }
+        }, "BUY"),
+        /*#__PURE__*/React.createElement("button", {
+          type: "button", onClick: () => setPriceMode('sell'),
+          style: { padding: '6px 20px', borderRadius: '6px', fontSize: '12px', fontWeight: 700, border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+            background: priceMode === 'sell' ? '#f97316' : 'transparent', color: priceMode === 'sell' ? '#0f172a' : 'rgba(255,255,255,0.45)' }
+        }, "SELL")
+      ),
+      /*#__PURE__*/React.createElement("span", { style: { fontSize: '11px', opacity: 0.35, fontWeight: 500 } }, priceMode === 'buy' ? 'Buy Details' : 'Sell Details')
+    ),
+
+    /* Compact table */
+    /*#__PURE__*/React.createElement("div", {
+      style: { background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '10px', overflow: 'hidden', marginBottom: '14px' }
+    },
+      /*#__PURE__*/React.createElement("table", { style: { width: '100%', borderCollapse: 'collapse', fontSize: '12px' } },
+        /*#__PURE__*/React.createElement("thead", null,
+          /*#__PURE__*/React.createElement("tr", { style: { borderBottom: '1px solid rgba(255,255,255,0.05)' } },
+            ["Asset", "Price", "Limits", ""].map(h =>
+              /*#__PURE__*/React.createElement("th", { key: h, style: { padding: '8px 12px', textAlign: 'left', fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.35 } }, h)
+            )
+          )
+        ),
+        /*#__PURE__*/React.createElement("tbody", null,
+          offerDetails[priceMode].map(row =>
+            /*#__PURE__*/React.createElement("tr", { key: `${priceMode}-${row.asset}` },
+              /*#__PURE__*/React.createElement("td", { style: { padding: '8px 12px', fontWeight: 700 } }, row.asset),
+              /*#__PURE__*/React.createElement("td", { style: { padding: '8px 12px', fontWeight: 700, color: priceMode === 'buy' ? '#10b981' : '#f97316' } }, row.price),
+              /*#__PURE__*/React.createElement("td", { style: { padding: '8px 12px', fontSize: '11px', opacity: 0.5 } }, row.limit),
+              /*#__PURE__*/React.createElement("td", { style: { padding: '8px 12px', textAlign: 'right' } },
+                /*#__PURE__*/React.createElement("button", {
+                  type: "button", onClick: () => openQuickOrder(priceMode === 'buy' ? 'Buy' : 'Sell'),
+                  style: { padding: '5px 16px', borderRadius: '6px', fontSize: '11px', fontWeight: 700, border: 'none', cursor: 'pointer', color: '#fff', background: priceMode === 'buy' ? '#10b981' : '#f97316' }
+                }, priceMode === 'buy' ? 'Buy' : 'Sell')
+              )
+            )
+          )
+        )
+      )
+    ),
+
+    /* Payment methods — compact pills */
+    /*#__PURE__*/React.createElement("div", null,
+      /*#__PURE__*/React.createElement("p", {
+        style: { fontSize: '10px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em', opacity: 0.3, marginBottom: '8px' }
+      }, "Payment Methods"),
+      /*#__PURE__*/React.createElement("div", {
+        style: { display: 'flex', flexWrap: 'wrap', gap: '6px' }
+      },
+        currentPaymentMethods.length === 0
+          ? /*#__PURE__*/React.createElement("span", { style: { fontSize: '11px', opacity: 0.3 } }, "Loading...")
+          : (() => {
+              const getPaymentLogo = m => { const l = (m||"").toLowerCase(); if(l.includes('voda') || l.includes('mpesa')) return "img/payments/mpesa_voda.png"; if(l.includes('tigo')) return "img/payments/tigopesa.png"; if(l.includes('airtel')) return "img/payments/airtel.png"; if(l.includes('crdb')) return "img/payments/crdb_bank.png"; if(l.includes('nmb')) return "img/payments/nmb_bank.png"; if(l.includes('halo')) return "img/payments/halopesa.png"; return ""; };
+              return currentPaymentMethods.map(method =>
+                /*#__PURE__*/React.createElement("div", {
+                  key: `${priceMode}-${method}`,
+                  className: "pm-card",
+                  title: method,
+                  style: { padding: '6px 10px', borderRadius: '8px' }
+                },
+                  /*#__PURE__*/React.createElement("img", {
+                    src: getPaymentLogo(method), alt: method, className: "pm-card-logo",
+                    style: { height: '22px', maxWidth: '80px' },
+                    onError: e => { e.target.style.display = "none"; if (e.target.nextSibling) e.target.nextSibling.style.display = "flex"; }
+                  }),
+                  /*#__PURE__*/React.createElement("span", { className: "pm-card-fallback" }, method)
+                )
+              );
+            })()
+      )
+    )
+  )
+
+  )), /*#__PURE__*/React.createElement(Section, {
     id: "how"
   }, /*#__PURE__*/React.createElement(Title, {
     k: "How It Works",
@@ -3384,88 +3512,181 @@ function App() {
     className: "opacity-75",
     fill: "currentColor",
     d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-  })), "Submitting...") : wizardFinalSubmitted ? /*#__PURE__*/React.createElement(React.Fragment, null, "✓ Submitted") : 'Submit Order'))))), /*#__PURE__*/React.createElement("footer", {
-    className: "bg-black/60 text-white/80 border-t border-white/5 py-10"
+  })), "Submitting...") : wizardFinalSubmitted ? /*#__PURE__*/React.createElement(React.Fragment, null, "✓ Submitted") : 'Submit Order'))))),
+
+  /* ══════════════════════════════════════════════════════════
+     PREMIUM FOOTER
+     ══════════════════════════════════════════════════════════ */
+  /*#__PURE__*/React.createElement("div", {
+    style: { height: '2px', background: 'linear-gradient(90deg, transparent 0%, #10b981 30%, #059669 50%, #10b981 70%, transparent 100%)', opacity: 0.5 }
+  }),
+  /*#__PURE__*/React.createElement("footer", {
+    className: "text-white/80",
+    style: { background: 'linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.9) 100%)', borderTop: 'none' }
+  },
+
+  /* ── Trust Bar ── */
+  /*#__PURE__*/React.createElement("div", {
+    style: { padding: '20px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "w-full mx-auto px-4"
+    className: "w-full mx-auto px-4",
+    style: { display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '32px', flexWrap: 'wrap' }
+  },
+    [
+      { iconClass: 'fa-solid fa-shield-halved', text: 'Verified Platform' },
+      { iconClass: 'fa-solid fa-bolt', text: '24/7 Instant Settlement' },
+      { iconClass: 'fa-solid fa-users', text: '1,200+ Active Traders' },
+      { iconClass: 'fa-solid fa-building-columns', text: 'M-Pesa & CRDB Supported' }
+    ].map(function(item, i) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: i,
+        style: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.55)', fontWeight: 500, letterSpacing: '0.01em' }
+      }, /*#__PURE__*/React.createElement("i", { className: item.iconClass, style: { fontSize: '14px', color: '#10b981', width: '16px', textAlign: 'center' } }), item.text);
+    })
+  )),
+
+  /* ── Main Footer Content ── */
+  /*#__PURE__*/React.createElement("div", {
+    className: "w-full mx-auto px-4",
+    style: { paddingTop: '40px', paddingBottom: '24px' }
   }, /*#__PURE__*/React.createElement("div", {
-    className: "grid grid-cols-1 md:grid-cols-3 gap-6 items-center mb-6"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-3"
-  }, /*#__PURE__*/React.createElement(Logo, null), /*#__PURE__*/React.createElement("div", {
-    className: "text-sm opacity-80"
-  }, "\xA9\uFE0F ", new Date().getFullYear(), " ", BUSINESS_NAME, ". All rights reserved.")), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-center gap-6 text-sm opacity-80"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: "#",
-    className: "hover:text-white transition-colors"
-  }, "Privacy"), /*#__PURE__*/React.createElement("a", {
-    href: "#",
-    className: "hover:text-white transition-colors"
-  }, "Terms"), /*#__PURE__*/React.createElement("a", {
+    style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '40px', marginBottom: '40px' }
+  },
+
+  /* Column 1: Brand */
+  /*#__PURE__*/React.createElement("div", null,
+    /*#__PURE__*/React.createElement("div", {
+      style: { display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }
+    }, /*#__PURE__*/React.createElement(Logo, null), /*#__PURE__*/React.createElement("span", {
+      style: { fontWeight: 700, fontSize: '16px', color: '#f1f5f9', letterSpacing: '-0.01em' }
+    }, BUSINESS_NAME)),
+    /*#__PURE__*/React.createElement("p", {
+      style: { fontSize: '13px', lineHeight: 1.7, color: 'rgba(255,255,255,0.45)', maxWidth: '280px', margin: 0 }
+    }, "Tanzania\u2019s premier cryptocurrency platform. Buy and sell USDT with transparent rates, instant mobile money settlement, and dedicated support.")
+  ),
+
+  /* Column 2: Platform */
+  /*#__PURE__*/React.createElement("div", null,
+    /*#__PURE__*/React.createElement("h4", {
+      style: { fontSize: '12px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }
+    }, "Platform"),
+    ['Live Prices', 'How It Works', 'Start Trading', 'WhatsApp Support'].map(function(label, i) {
+      var hrefs = ['#prices', '#how', 'javascript:void(0)', wa('Hello, I need assistance.')];
+      return /*#__PURE__*/React.createElement("a", {
+        key: i,
+        href: hrefs[i],
+        target: label === 'WhatsApp Support' ? '_blank' : undefined,
+        rel: label === 'WhatsApp Support' ? 'noopener noreferrer' : undefined,
+        style: { display: 'block', fontSize: '13px', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', padding: '4px 0', transition: 'color 0.15s', fontWeight: 500 },
+        onMouseEnter: function(e) { e.target.style.color = '#10b981'; },
+        onMouseLeave: function(e) { e.target.style.color = 'rgba(255,255,255,0.5)'; }
+      }, label);
+    })
+  ),
+
+  /* Column 3: Legal */
+  /*#__PURE__*/React.createElement("div", null,
+    /*#__PURE__*/React.createElement("h4", {
+      style: { fontSize: '12px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }
+    }, "Legal"),
+    ['Privacy Policy', 'Terms of Service', 'AML Policy'].map(function(label, i) {
+      return /*#__PURE__*/React.createElement("a", {
+        key: i,
+        href: '#',
+        style: { display: 'block', fontSize: '13px', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', padding: '4px 0', transition: 'color 0.15s', fontWeight: 500 },
+        onMouseEnter: function(e) { e.target.style.color = '#10b981'; },
+        onMouseLeave: function(e) { e.target.style.color = 'rgba(255,255,255,0.5)'; }
+      }, label);
+    })
+  ),
+
+  /* Column 4: Connect */
+  /*#__PURE__*/React.createElement("div", null,
+    /*#__PURE__*/React.createElement("h4", {
+      style: { fontSize: '12px', fontWeight: 700, color: '#10b981', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '16px' }
+    }, "Connect"),
+    /*#__PURE__*/React.createElement("a", {
+      href: "mailto:" + SUPPORT_EMAIL,
+      style: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', padding: '4px 0', transition: 'color 0.15s', fontWeight: 500 },
+      onMouseEnter: function(e) { e.target.style.color = '#10b981'; },
+      onMouseLeave: function(e) { e.target.style.color = 'rgba(255,255,255,0.5)'; }
+    }, /*#__PURE__*/React.createElement("i", { className: 'fa-solid fa-envelope', style: { fontSize: '13px', color: '#10b981', width: '16px' } }), " ", SUPPORT_EMAIL),
+    /*#__PURE__*/React.createElement("a", {
+      href: wa('Hello, I need assistance.'),
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      style: { display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.5)', textDecoration: 'none', padding: '4px 0', transition: 'color 0.15s', fontWeight: 500 },
+      onMouseEnter: function(e) { e.target.style.color = '#10b981'; },
+      onMouseLeave: function(e) { e.target.style.color = 'rgba(255,255,255,0.5)'; }
+    }, /*#__PURE__*/React.createElement("i", { className: 'fa-brands fa-whatsapp', style: { fontSize: '14px', color: '#10b981', width: '16px' } }), " WhatsApp Chat")
+  )),
+
+  /* ── Divider ── */
+  /*#__PURE__*/React.createElement("div", {
+    style: { height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)', margin: '0 0 24px 0' }
+  }),
+
+  /* ── Bottom Bar: Socials + Copyright ── */
+  /*#__PURE__*/React.createElement("div", {
+    style: { display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }
+  },
+
+  /* Copyright */
+  /*#__PURE__*/React.createElement("div", {
+    style: { fontSize: '12px', color: 'rgba(255,255,255,0.35)', fontWeight: 400 }
+  }, "\u00A9 ", new Date().getFullYear(), " ", BUSINESS_NAME, ". All rights reserved."),
+
+  /* Social Icons */
+  /*#__PURE__*/React.createElement("div", {
+    style: { display: 'flex', alignItems: 'center', gap: '10px' }
+  },
+    /*#__PURE__*/React.createElement("a", {
+      href: "https://www.youtube.com/@jordanmwinukatz/",
+      target: "_blank", rel: "noopener noreferrer",
+      className: "w-9 h-9 rounded-full bg-white/5 hover:bg-red-500/20 border border-white/8 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-red-500/30",
+      title: "YouTube", "aria-label": "YouTube"
+    }, /*#__PURE__*/React.createElement("i", { className: "fab fa-youtube text-red-500 text-sm" })),
+    /*#__PURE__*/React.createElement("a", {
+      href: "https://t.me/jordanmwinukatz",
+      target: "_blank", rel: "noopener noreferrer",
+      className: "w-9 h-9 rounded-full bg-white/5 hover:bg-blue-500/20 border border-white/8 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-blue-500/30",
+      title: "Telegram", "aria-label": "Telegram"
+    }, /*#__PURE__*/React.createElement("i", { className: "fab fa-telegram text-blue-400 text-sm" })),
+    /*#__PURE__*/React.createElement("a", {
+      href: "https://tz.linkedin.com/in/jordan-mwinuka-571a14241",
+      target: "_blank", rel: "noopener noreferrer",
+      className: "w-9 h-9 rounded-full bg-white/5 hover:bg-blue-600/20 border border-white/8 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-blue-600/30",
+      title: "LinkedIn", "aria-label": "LinkedIn"
+    }, /*#__PURE__*/React.createElement("i", { className: "fab fa-linkedin text-blue-600 text-sm" })),
+    /*#__PURE__*/React.createElement("a", {
+      href: "https://x.com/jordanmwinukatz",
+      target: "_blank", rel: "noopener noreferrer",
+      className: "w-9 h-9 rounded-full bg-white/5 hover:bg-gray-800/30 border border-white/8 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-white/20",
+      title: "X (Twitter)", "aria-label": "X"
+    }, /*#__PURE__*/React.createElement("svg", {
+      className: "w-4 h-4 text-gray-300", fill: "currentColor", viewBox: "0 0 24 24"
+    }, /*#__PURE__*/React.createElement("path", {
+      d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
+    }))),
+    /*#__PURE__*/React.createElement("a", {
+      href: "https://www.instagram.com/jordanmwinukatz/",
+      target: "_blank", rel: "noopener noreferrer",
+      className: "w-9 h-9 rounded-full bg-white/5 hover:bg-pink-500/20 border border-white/8 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-pink-500/30",
+      title: "Instagram", "aria-label": "Instagram"
+    }, /*#__PURE__*/React.createElement("i", { className: "fab fa-instagram text-pink-500 text-sm" }))
+  ),
+
+  /* Back to top */
+  /*#__PURE__*/React.createElement("a", {
     href: "#top",
-    className: "hover:text-white transition-colors"
-  }, "Back to top")), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-start md:justify-end gap-3"
-  }, /*#__PURE__*/React.createElement(Button, {
-    as: "a",
-    href: wa("Hello, I need assistance.")
-  }, "Support"), /*#__PURE__*/React.createElement(Button, {
-    as: "a",
-    href: `mailto:${SUPPORT_EMAIL}`
-  }, "Email"))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-center gap-4 pt-6 border-t border-white/5"
-  }, /*#__PURE__*/React.createElement("a", {
-    href: "https://www.youtube.com/@jordanmwinukatz/",
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "w-10 h-10 rounded-full bg-white/5 hover:bg-red-500/20 border border-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-red-500/30",
-    title: "YouTube",
-    "aria-label": "Follow us on YouTube"
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "fab fa-youtube text-red-500 text-lg"
-  })), /*#__PURE__*/React.createElement("a", {
-    href: "https://t.me/jordanmwinukatz",
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "w-10 h-10 rounded-full bg-white/5 hover:bg-blue-500/20 border border-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-blue-500/30",
-    title: "Telegram",
-    "aria-label": "Follow us on Telegram"
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "fab fa-telegram text-blue-400 text-lg"
-  })), /*#__PURE__*/React.createElement("a", {
-    href: "https://tz.linkedin.com/in/jordan-mwinuka-571a14241",
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "w-10 h-10 rounded-full bg-white/5 hover:bg-blue-600/20 border border-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-blue-600/30",
-    title: "LinkedIn",
-    "aria-label": "Follow us on LinkedIn"
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "fab fa-linkedin text-blue-600 text-lg"
-  })), /*#__PURE__*/React.createElement("a", {
-    href: "https://x.com/jordanmwinukatz",
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "w-10 h-10 rounded-full bg-white/5 hover:bg-gray-800/30 border border-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-white/30",
-    title: "X (Twitter)",
-    "aria-label": "Follow us on X"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-5 h-5 text-gray-200",
-    fill: "currentColor",
-    viewBox: "0 0 24 24",
-    "aria-hidden": "true"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"
-  }))), /*#__PURE__*/React.createElement("a", {
-    href: "https://www.instagram.com/jordanmwinukatz/",
-    target: "_blank",
-    rel: "noopener noreferrer",
-    className: "w-10 h-10 rounded-full bg-white/5 hover:bg-pink-500/20 border border-white/10 flex items-center justify-center transition-all duration-200 hover:scale-110 hover:border-pink-500/30",
-    title: "Instagram",
-    "aria-label": "Follow us on Instagram"
-  }, /*#__PURE__*/React.createElement("i", {
-    className: "fab fa-instagram text-pink-500 text-lg"
-  }))))), /*#__PURE__*/React.createElement(Modal, {
+    style: { fontSize: '12px', color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.15s', fontWeight: 500 },
+    onMouseEnter: function(e) { e.target.style.color = '#10b981'; },
+    onMouseLeave: function(e) { e.target.style.color = 'rgba(255,255,255,0.35)'; }
+  }, "\u2191 Back to top")
+
+  ))),
+
+  /*#__PURE__*/React.createElement(Modal, {
     open: orderOpen,
     onClose: () => setOrderOpen(false)
   }, /*#__PURE__*/React.createElement("div", {
@@ -3669,8 +3890,20 @@ function App() {
     className: `rounded-lg py-2 text-sm font-medium ${authMode === 'login' ? 'bg-white text-slate-900 shadow' : 'text-slate-200 hover:bg-white/10'}`
   }, "Log in"), /*#__PURE__*/React.createElement("button", {
     onClick: () => setAuthMode('create'),
+    onClick: () => setAuthMode('create'),
     className: `rounded-lg py-2 text-sm font-medium ${authMode === 'create' ? 'bg-white text-slate-900 shadow' : 'text-slate-200 hover:bg-white/10'}`
-  }, "Create Account")), /*#__PURE__*/React.createElement("form", {
+  }, "Create Account")), /*#__PURE__*/React.createElement("div", {
+    id: "google-signin-btn",
+    className: "w-full flex justify-center mt-4 mb-2"
+  }), authMode !== 'forgot' && /*#__PURE__*/React.createElement("div", {
+    className: "relative flex items-center py-2"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "flex-grow border-t border-slate-700"
+  }), /*#__PURE__*/React.createElement("span", {
+    className: "flex-shrink-0 mx-4 text-slate-500 text-xs uppercase"
+  }, "Or using email"), /*#__PURE__*/React.createElement("div", {
+    className: "flex-grow border-t border-slate-700"
+  })), /*#__PURE__*/React.createElement("form", {
     className: "mt-4 space-y-3",
     onSubmit: async e => {
       e.preventDefault();
@@ -3679,6 +3912,7 @@ function App() {
           if (!authForm.email.trim()) throw new Error('Email is required');
           const res = await fetch('api/auth.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },
@@ -3701,6 +3935,7 @@ function App() {
         } else if (authMode === 'login') {
           const res = await fetch('api/auth.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },
@@ -3738,6 +3973,7 @@ function App() {
           if (!authForm.agree) throw new Error('You must agree to the Terms');
           const res = await fetch('api/auth.php', {
             method: 'POST',
+            credentials: 'include',
             headers: {
               'Content-Type': 'application/json'
             },
@@ -4179,6 +4415,7 @@ function App() {
         formData.append('file', file);
         const uploadRes = await fetch('api/upload_profile.php', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
           },
@@ -4192,6 +4429,7 @@ function App() {
         // Update profile with new picture
         const updateRes = await fetch('api/auth.php', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
@@ -4245,6 +4483,7 @@ function App() {
       try {
         const res = await fetch('api/auth.php', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
@@ -4342,6 +4581,7 @@ function App() {
       try {
         const res = await fetch('api/auth.php', {
           method: 'POST',
+          credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
             'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
@@ -4541,3 +4781,44 @@ if (document.readyState === 'loading') {
   // Use setTimeout to ensure React/ReactDOM are fully initialized
   setTimeout(renderApp, 0);
 }
+
+/* ============================================================
+   SCROLL-REVEAL: IntersectionObserver for .reveal elements
+   ============================================================ */
+(function initReveal() {
+  function setupReveal() {
+    if (!('IntersectionObserver' in window)) {
+      // Fallback: show everything immediately
+      document.querySelectorAll('.reveal').forEach(function(el) { el.classList.add('revealed'); });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.reveal:not(.revealed)').forEach(function(el) {
+      observer.observe(el);
+    });
+
+    // Re-observe when React re-renders new .reveal elements
+    var bodyObserver = new MutationObserver(function() {
+      document.querySelectorAll('.reveal:not(.revealed)').forEach(function(el) {
+        observer.observe(el);
+      });
+    });
+    bodyObserver.observe(document.body, { childList: true, subtree: true });
+  }
+
+  // Wait for React to finish rendering
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() { setTimeout(setupReveal, 300); });
+  } else {
+    setTimeout(setupReveal, 300);
+  }
+})();

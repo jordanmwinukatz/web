@@ -9,6 +9,7 @@ $pdo = $db->getConnection();
 $statusFilter = $_GET['status'] ?? 'all';
 $search = $_GET['search'] ?? '';
 $expandId = (int)($_GET['expand'] ?? 0);
+$isTrash = ($statusFilter === 'trash');
 
 // If expanding a specific card from notification, show all to ensure it's found
 if ($expandId > 0) {
@@ -19,9 +20,15 @@ if ($expandId > 0) {
 $where = [];
 $params = [];
 
-if ($statusFilter !== 'all') {
-    $where[] = "us.submission_status = ?";
-    $params[] = $statusFilter;
+// Soft-delete filtering
+if ($isTrash) {
+    $where[] = "us.deleted_at IS NOT NULL";
+} else {
+    $where[] = "us.deleted_at IS NULL";
+    if ($statusFilter !== 'all') {
+        $where[] = "us.submission_status = ?";
+        $params[] = $statusFilter;
+    }
 }
 if (!empty($search)) {
     $where[] = "(us.id LIKE ? OR us.order_number LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.name')) LIKE ? OR JSON_UNQUOTE(JSON_EXTRACT(us.user_info, '$.email')) LIKE ?)";
@@ -33,20 +40,21 @@ if (!empty($search)) {
 
 $whereClause = !empty($where) ? ' WHERE ' . implode(' AND ', $where) : '';
 
-// Counts
+// Counts (only non-trashed)
 $countsStmt = $pdo->query("
     SELECT 
-        COUNT(*) AS total,
-        SUM(CASE WHEN submission_status = 'pending' THEN 1 ELSE 0 END) AS pending,
-        SUM(CASE WHEN submission_status = 'reviewed' THEN 1 ELSE 0 END) AS reviewed,
-        SUM(CASE WHEN submission_status = 'completed' THEN 1 ELSE 0 END) AS completed,
-        SUM(CASE WHEN submission_status = 'rejected' THEN 1 ELSE 0 END) AS rejected
+        SUM(CASE WHEN deleted_at IS NULL THEN 1 ELSE 0 END) AS total,
+        SUM(CASE WHEN submission_status = 'pending' AND deleted_at IS NULL THEN 1 ELSE 0 END) AS pending,
+        SUM(CASE WHEN submission_status = 'reviewed' AND deleted_at IS NULL THEN 1 ELSE 0 END) AS reviewed,
+        SUM(CASE WHEN submission_status = 'completed' AND deleted_at IS NULL THEN 1 ELSE 0 END) AS completed,
+        SUM(CASE WHEN submission_status = 'rejected' AND deleted_at IS NULL THEN 1 ELSE 0 END) AS rejected,
+        SUM(CASE WHEN deleted_at IS NOT NULL THEN 1 ELSE 0 END) AS trashed
     FROM user_submissions
 ");
 $counts = $countsStmt->fetch(PDO::FETCH_ASSOC);
 
 // Get max ID for polling
-$maxIdStmt = $pdo->query("SELECT MAX(id) FROM user_submissions");
+$maxIdStmt = $pdo->query("SELECT MAX(id) FROM user_submissions WHERE deleted_at IS NULL");
 $maxId = $maxIdStmt->fetchColumn() ?: 0;
 
 // Submissions list
@@ -278,6 +286,49 @@ function timeAgoSub($datetime) {
         .btn-pending:hover:not(:disabled) { background: rgba(251,191,36,0.25); }
         .btn-reject { background: rgba(239,68,68,0.15); color: #f87171; }
         .btn-reject:hover:not(:disabled) { background: rgba(239,68,68,0.25); }
+        .btn-delete { background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.3); color: #fca5a5; margin-left: auto; }
+        .btn-delete:hover:not(:disabled) { background: rgba(220,38,38,0.2); border-color: rgba(220,38,38,0.5); color: #fecaca; }
+        .btn-restore { background: rgba(52,211,153,0.15); color: #34d399; }
+        .btn-restore:hover:not(:disabled) { background: rgba(52,211,153,0.25); }
+
+        /* Bulk select checkbox */
+        .card-checkbox { position: relative; z-index: 10; margin-right: 8px; flex-shrink: 0; }
+        .card-checkbox input[type=checkbox] {
+            width: 18px; height: 18px; cursor: pointer; accent-color: #facc15;
+            border-radius: 4px; border: 2px solid rgba(255,255,255,0.2);
+        }
+        .card-header-left { display: flex; align-items: center; gap: 12px; flex: 1; }
+
+        /* Bulk action bar */
+        .bulk-bar {
+            position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #1e293b, #0f172a); border: 1px solid rgba(250,204,21,0.3);
+            border-radius: 16px; padding: 12px 24px; display: flex; align-items: center; gap: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6); z-index: 9000;
+            transition: transform 0.35s cubic-bezier(0.4,0,0.2,1); min-width: 320px;
+        }
+        .bulk-bar.visible { transform: translateX(-50%) translateY(0); }
+        .bulk-bar .bulk-count { font-size: 14px; font-weight: 700; color: #fde68a; white-space: nowrap; }
+        .bulk-bar .bulk-btn {
+            padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
+            border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+            transition: all 0.2s; font-family: inherit; white-space: nowrap;
+        }
+        .bulk-bar .bulk-btn-trash { background: rgba(239,68,68,0.15); color: #f87171; }
+        .bulk-bar .bulk-btn-trash:hover { background: rgba(239,68,68,0.25); }
+        .bulk-bar .bulk-btn-restore { background: rgba(52,211,153,0.15); color: #34d399; }
+        .bulk-bar .bulk-btn-restore:hover { background: rgba(52,211,153,0.25); }
+        .bulk-bar .bulk-btn-permadelete { background: rgba(220,38,38,0.15); color: #fca5a5; }
+        .bulk-bar .bulk-btn-permadelete:hover { background: rgba(220,38,38,0.3); }
+        .bulk-bar .bulk-btn-cancel { background: rgba(255,255,255,0.05); color: var(--text-secondary); }
+        .bulk-bar .bulk-btn-cancel:hover { background: rgba(255,255,255,0.1); color: #f1f5f9; }
+        .select-all-row {
+            display: flex; align-items: center; gap: 12px; padding: 10px 16px; margin-bottom: 8px;
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 10px; font-size: 13px; color: var(--text-secondary);
+        }
+        .select-all-row label { cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .status-trashed { background: rgba(100,116,139,0.2); color: #94a3b8; }
 
         /* Notes */
         .note-input-row { display: flex; gap: 8px; margin-top: 12px; }
@@ -432,22 +483,39 @@ function timeAgoSub($datetime) {
                         <a href="?status=completed<?= $search ? '&search='.urlencode($search) : '' ?>" class="filter-tab <?= $statusFilter === 'completed' ? 'active' : '' ?>">
                             Completed <span class="count"><?= $counts['completed'] ?></span>
                         </a>
-                        <a href="?status=rejected<?= $search ? '&search='.urlencode($search) : '' ?>" class="filter-tab <?= $statusFilter === 'rejected' ? 'active' : '' ?>" style="<?= $statusFilter === 'rejected' ? '' : '' ?>">
+                        <a href="?status=rejected<?= $search ? '&search='.urlencode($search) : '' ?>" class="filter-tab <?= $statusFilter === 'rejected' ? 'active' : '' ?>">
                             Rejected <span class="count"><?= $counts['rejected'] ?></span>
+                        </a>
+                        <a href="?status=trash<?= $search ? '&search='.urlencode($search) : '' ?>" class="filter-tab <?= $statusFilter === 'trash' ? 'active' : '' ?>" style="<?= (int)$counts['trashed'] > 0 ? '' : 'opacity:0.5;' ?>">
+                            <i class="fas fa-trash-alt" style="margin-right:4px;font-size:11px;"></i> Trash <span class="count"><?= $counts['trashed'] ?></span>
                         </a>
                     </div>
                     <div style="font-size:13px; color:var(--text-muted);">
-                        Showing <?= count($submissions) ?> submissions
+                        Showing <?= count($submissions) ?> <?= $isTrash ? 'trashed' : '' ?> submissions
                     </div>
                 </div>
 
                 <!-- Submissions List -->
+                <!-- Select All Row -->
+                <?php if (!empty($submissions)): ?>
+                <div class="select-all-row">
+                    <label><input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll(this)"> <strong>Select All</strong></label>
+                    <span id="bulk-select-info" style="color:var(--text-muted);"></span>
+                </div>
+                <?php endif; ?>
+
                 <div style="display:flex; flex-direction:column; gap:12px;">
                     <?php if (empty($submissions)): ?>
                         <div class="empty-state">
-                            <i class="fas fa-inbox"></i>
-                            <h3 style="font-size:18px; font-weight:600; margin-bottom:8px;">No submissions found</h3>
-                            <p>Try changing the filter or search criteria.</p>
+                            <?php if ($isTrash): ?>
+                                <i class="fas fa-trash-alt"></i>
+                                <h3 style="font-size:18px; font-weight:600; margin-bottom:8px;">Trash is empty</h3>
+                                <p>Deleted submissions will appear here and can be restored.</p>
+                            <?php else: ?>
+                                <i class="fas fa-inbox"></i>
+                                <h3 style="font-size:18px; font-weight:600; margin-bottom:8px;">No submissions found</h3>
+                                <p>Try changing the filter or search criteria.</p>
+                            <?php endif; ?>
                         </div>
                     <?php else: ?>
                         <?php foreach ($submissions as $sub):
@@ -478,15 +546,20 @@ function timeAgoSub($datetime) {
                             $platformEmail = htmlspecialchars($sub['platform_email'] ?? '');
                         ?>
                         <div class="submission-card <?= $unread ? 'unread' : '' ?>" id="card-<?= $subId ?>" data-id="<?= $subId ?>" data-status="<?= $status ?>">
-                            <div class="card-summary" onclick="toggleCard(<?= $subId ?>)">
+                            <div class="card-summary">
                                 <div class="card-header">
-                                    <div style="display:flex; align-items:center; gap:12px;">
-                                        <span class="card-order"><?= $order ?></span>
-                                        <span style="font-size:12px; color:var(--text-muted);"><?= $type ?></span>
+                                    <div class="card-header-left">
+                                        <div class="card-checkbox" onclick="event.stopPropagation()">
+                                            <input type="checkbox" class="bulk-checkbox" value="<?= $subId ?>" onchange="updateBulkBar()">
+                                        </div>
+                                        <div onclick="toggleCard(<?= $subId ?>)" style="display:flex;align-items:center;gap:12px;cursor:pointer;flex:1;">
+                                            <span class="card-order"><?= $order ?></span>
+                                            <span style="font-size:12px; color:var(--text-muted);"><?= $type ?></span>
+                                        </div>
                                     </div>
-                                    <span class="card-status status-<?= $status ?>" id="badge-<?= $subId ?>"><?= $status ?></span>
+                                    <span class="card-status status-<?= $isTrash ? 'trashed' : $status ?>" id="badge-<?= $subId ?>"><?= $isTrash ? 'trashed' : $status ?></span>
                                 </div>
-                                <div class="card-body">
+                                <div class="card-body" onclick="toggleCard(<?= $subId ?>)" style="cursor:pointer;">
                                     <div class="card-user">
                                         <span class="card-name"><?= $name ?></span>
                                         <span class="card-email"><?= $email ?></span>
@@ -498,12 +571,20 @@ function timeAgoSub($datetime) {
                                         <span class="card-time"><i class="far fa-clock" style="margin-right:4px;"></i><?= $time ?></span>
                                     </div>
                                 </div>
-                                <div class="card-expand-hint"><i class="fas fa-chevron-down"></i> Click to view details & take action</div>
+                                <div class="card-expand-hint" onclick="toggleCard(<?= $subId ?>)" style="cursor:pointer;"><i class="fas fa-chevron-down"></i> Click to view details & take action</div>
                             </div>
 
                             <div class="card-detail" id="detail-<?= $subId ?>">
                                 <!-- Action Buttons -->
                                 <div class="action-bar">
+                                    <?php if ($isTrash): ?>
+                                    <button class="action-btn btn-restore" onclick="restoreSubmission(<?= $subId ?>)">
+                                        <i class="fas fa-undo"></i> Restore
+                                    </button>
+                                    <button class="action-btn btn-delete" onclick="permanentDeleteSubmission(<?= $subId ?>)">
+                                        <i class="fas fa-trash-alt"></i> Delete Permanently
+                                    </button>
+                                    <?php else: ?>
                                     <button class="action-btn btn-review" onclick="updateStatus(<?= $subId ?>, 'reviewed')" id="btn-review-<?= $subId ?>" <?= $status === 'reviewed' ? 'disabled' : '' ?>>
                                         <i class="fas fa-eye"></i> Mark Reviewed
                                     </button>
@@ -516,6 +597,10 @@ function timeAgoSub($datetime) {
                                     <button class="action-btn btn-pending" onclick="updateStatus(<?= $subId ?>, 'pending')" id="btn-pending-<?= $subId ?>" <?= $status === 'pending' ? 'disabled' : '' ?>>
                                         <i class="fas fa-undo"></i> Reopen
                                     </button>
+                                    <button class="action-btn btn-delete" onclick="trashSubmission(<?= $subId ?>)" id="btn-delete-<?= $subId ?>">
+                                        <i class="fas fa-trash-alt"></i> Move to Trash
+                                    </button>
+                                    <?php endif; ?>
                                 </div>
 
                                 <!-- Add Note -->
@@ -592,6 +677,18 @@ function timeAgoSub($datetime) {
                 </div>
             </main>
         </div>
+    </div>
+
+    <!-- Bulk Action Bar -->
+    <div class="bulk-bar" id="bulk-bar">
+        <span class="bulk-count" id="bulk-count">0 selected</span>
+        <?php if ($isTrash): ?>
+        <button class="bulk-btn bulk-btn-restore" onclick="bulkRestore()"><i class="fas fa-undo"></i> Restore All</button>
+        <button class="bulk-btn bulk-btn-permadelete" onclick="bulkPermanentDelete()"><i class="fas fa-skull-crossbones"></i> Delete Forever</button>
+        <?php else: ?>
+        <button class="bulk-btn bulk-btn-trash" onclick="bulkTrash()"><i class="fas fa-trash-alt"></i> Move to Trash</button>
+        <?php endif; ?>
+        <button class="bulk-btn bulk-btn-cancel" onclick="clearBulkSelection()"><i class="fas fa-times"></i> Cancel</button>
     </div>
 
     <!-- Lightbox -->
@@ -728,6 +825,124 @@ function timeAgoSub($datetime) {
             showToast(result.error || 'Failed to add note', 'error');
         }
     }
+
+    // Move single submission to trash (soft delete)
+    async function trashSubmission(id) {
+        if (!confirm('Move this submission to Trash?\n\nYou can restore it later from the Trash tab.')) return;
+        const result = await apiCall({ action: 'bulk_trash', ids: [id] });
+        if (result.success) {
+            showToast('Moved to Trash', 'success');
+            fadeOutCard(id);
+        } else {
+            showToast(result.error || 'Failed', 'error');
+        }
+    }
+
+    // Restore single submission from trash
+    async function restoreSubmission(id) {
+        const result = await apiCall({ action: 'bulk_restore', ids: [id] });
+        if (result.success) {
+            showToast('Submission restored', 'success');
+            fadeOutCard(id);
+        } else {
+            showToast(result.error || 'Failed', 'error');
+        }
+    }
+
+    // Permanently delete single submission
+    async function permanentDeleteSubmission(id) {
+        if (!confirm('🚨 PERMANENTLY delete this submission?\n\nThis cannot be undone!')) return;
+        const result = await apiCall({ action: 'permanent_delete', ids: [id] });
+        if (result.success) {
+            showToast('Deleted permanently', 'success');
+            fadeOutCard(id);
+        } else {
+            showToast(result.error || 'Failed', 'error');
+        }
+    }
+
+    function fadeOutCard(id) {
+        const card = document.getElementById('card-' + id);
+        if (!card) return;
+        card.style.transition = 'all 0.4s';
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => card.remove(), 400);
+    }
+
+    // ========== BULK SELECTION ==========
+    function getSelectedIds() {
+        return [...document.querySelectorAll('.bulk-checkbox:checked')].map(cb => parseInt(cb.value));
+    }
+
+    function updateBulkBar() {
+        const ids = getSelectedIds();
+        const bar = document.getElementById('bulk-bar');
+        const countEl = document.getElementById('bulk-count');
+        const infoEl = document.getElementById('bulk-select-info');
+        if (ids.length > 0) {
+            bar.classList.add('visible');
+            countEl.textContent = ids.length + ' selected';
+            if (infoEl) infoEl.textContent = ids.length + ' selected';
+        } else {
+            bar.classList.remove('visible');
+            if (infoEl) infoEl.textContent = '';
+        }
+    }
+
+    function toggleSelectAll(masterCb) {
+        document.querySelectorAll('.bulk-checkbox').forEach(cb => cb.checked = masterCb.checked);
+        updateBulkBar();
+    }
+
+    function clearBulkSelection() {
+        document.querySelectorAll('.bulk-checkbox').forEach(cb => cb.checked = false);
+        const selectAll = document.getElementById('select-all-checkbox');
+        if (selectAll) selectAll.checked = false;
+        updateBulkBar();
+    }
+
+    async function bulkTrash() {
+        const ids = getSelectedIds();
+        if (!ids.length) return;
+        if (!confirm(`Move ${ids.length} submission(s) to Trash?\n\nYou can restore them later.`)) return;
+        const result = await apiCall({ action: 'bulk_trash', ids });
+        if (result.success) {
+            showToast(`${ids.length} submission(s) moved to Trash`, 'success');
+            ids.forEach(id => fadeOutCard(id));
+            clearBulkSelection();
+        } else {
+            showToast(result.error || 'Failed', 'error');
+        }
+    }
+
+    async function bulkRestore() {
+        const ids = getSelectedIds();
+        if (!ids.length) return;
+        if (!confirm(`Restore ${ids.length} submission(s)?`)) return;
+        const result = await apiCall({ action: 'bulk_restore', ids });
+        if (result.success) {
+            showToast(`${ids.length} submission(s) restored`, 'success');
+            ids.forEach(id => fadeOutCard(id));
+            clearBulkSelection();
+        } else {
+            showToast(result.error || 'Failed', 'error');
+        }
+    }
+
+    async function bulkPermanentDelete() {
+        const ids = getSelectedIds();
+        if (!ids.length) return;
+        if (!confirm(`🚨 PERMANENTLY delete ${ids.length} submission(s)?\n\nThis CANNOT be undone!`)) return;
+        const result = await apiCall({ action: 'permanent_delete', ids });
+        if (result.success) {
+            showToast(`${ids.length} submission(s) permanently deleted`, 'success');
+            ids.forEach(id => fadeOutCard(id));
+            clearBulkSelection();
+        } else {
+            showToast(result.error || 'Failed', 'error');
+        }
+    }
     // Auto-expand from notification link
     <?php if ($expandId > 0): ?>
     (function() {
@@ -777,7 +992,6 @@ function timeAgoSub($datetime) {
             if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
                 suggestionsBox.style.display = 'none';
             }
-        });
         });
     }
 

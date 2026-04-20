@@ -190,6 +190,22 @@
       'footer.support':      'Support',
       'footer.email':        'Email',
       'footer.logout':       'Logout',
+      // Header buttons
+      'header.login':        'Log In',
+      'header.create':       'Create Account',
+      // How It Works (native HTML 5-step)
+      'hiw.heading':         'How It Works',
+      'hiw.sub':             'Your trade from start to finish in five clear steps.',
+      'hiw.s1_title':        'Create Account',
+      'hiw.s1_desc':         'Sign up with your name and email. Your account secures your order history and saved payment details.',
+      'hiw.s2_title':        'Check Live Rates',
+      'hiw.s2_desc':         'View real-time buy/sell rates on our live price board. Use the calculator to see exactly what you get.',
+      'hiw.s3_title':        'Place Your Order',
+      'hiw.s3_desc':         'Choose buy or sell, enter amount, pick payment method, and provide your exchange platform details.',
+      'hiw.s4_title':        'Pay & Upload Proof',
+      'hiw.s4_desc':         'Complete payment via M-Pesa, bank, or crypto. Upload a screenshot of your receipt as proof.',
+      'hiw.s5_title':        'We Verify & Deliver',
+      'hiw.s5_desc':         'Our team reviews your proof, confirms the transaction, and delivers your crypto or TZS.',
     },
 
     sw: {
@@ -326,6 +342,22 @@
       'footer.support':      'Msaada',
       'footer.email':        'Barua pepe',
       'footer.logout':       'Toka',
+      // Header buttons
+      'header.login':        'Ingia',
+      'header.create':       'Fungua Akaunti',
+      // How It Works (native HTML 5-step)
+      'hiw.heading':         'Jinsi Inavyofanya Kazi',
+      'hiw.sub':             'Biashara yako kutoka mwanzo hadi mwisho kwa hatua tano rahisi.',
+      'hiw.s1_title':        'Fungua Akaunti',
+      'hiw.s1_desc':         'Jisajili kwa jina lako na barua pepe. Akaunti yako inalinda historia ya maagizo yako na maelezo ya malipo yaliyohifadhiwa.',
+      'hiw.s2_title':        'Angalia Bei za Sasa',
+      'hiw.s2_desc':         'Angalia bei za kununua/kuuza kwa wakati halisi kwenye bodi yetu ya bei. Tumia kikokotoo kuona unachopata.',
+      'hiw.s3_title':        'Weka Agizo Lako',
+      'hiw.s3_desc':         'Chagua kununua au kuuza, ingiza kiasi, chagua njia ya malipo, na toa maelezo ya jukwaa lako la kubadilishana.',
+      'hiw.s4_title':        'Lipa na Pakia Uthibitisho',
+      'hiw.s4_desc':         'Kamilisha malipo kupitia M-Pesa, benki, au crypto. Pakia picha ya risiti yako kama uthibitisho.',
+      'hiw.s5_title':        'Tunathibitisha na Kutoa',
+      'hiw.s5_desc':         'Timu yetu inakagua uthibitisho wako, inathibitisha muamala, na kutoa crypto au TZS yako.',
     },
 
     fr: {
@@ -738,26 +770,14 @@
       var allEls = document.querySelectorAll('span, div, a, button, label, p, h1, h2, h3, h4, th, td, em, strong');
       allEls.forEach(function (el) {
         if (el.hasAttribute('data-i18n')) return;
-        // Skip elements with many child elements (containers)
-        // but allow elements with 1-2 child elements (e.g. h1 with a span inside)
+        // Skip elements with child elements entirely — auto-tagging a parent
+        // then setting textContent would destroy all its children (e.g. h1
+        // containing a gradient <span> + <br> + text node)
         var childElements = el.querySelectorAll(':scope > *');
+        if (childElements.length > 0) return;
 
-        // For leaf elements (no child elements), use textContent directly
-        var text;
-        if (childElements.length === 0) {
-          text = el.textContent.trim();
-        } else {
-          // For elements with children, try to match using only direct text nodes
-          var directText = '';
-          for (var i = 0; i < el.childNodes.length; i++) {
-            if (el.childNodes[i].nodeType === 3) { // Text node
-              directText += el.childNodes[i].textContent;
-            }
-          }
-          text = directText.trim();
-          // If no direct text, skip — don't match on concatenated child text
-          if (!text) return;
-        }
+        // Leaf element — use textContent directly
+        var text = el.textContent.trim();
 
         var key = TEXT_I18N_MAP[text];
         if (key) {
