@@ -1500,7 +1500,7 @@ section {
 
 /* ===== Hero Gradient Text (the accent word) ===== */
 .hero-gradient-text {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 30%, #fbbf24 60%, #f59e0b 100%);
+    background: linear-gradient(135deg, #facc15 0%, #eab308 30%, #facc15 60%, #eab308 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     background-clip: text;
