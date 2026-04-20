@@ -21,7 +21,7 @@ $inputRaw = file_get_contents('php://input');
 $inputData = json_decode($inputRaw, true) ?? [];
 $action = $inputData['action'] ?? $_POST['action'] ?? $_GET['action'] ?? null;
 
-$exemptActions = ['login', 'register', 'check_auth', 'forgot_password', 'reset_password', 'verify_email', 'resend_verification'];
+$exemptActions = ['login', 'register', 'google_login', 'check_auth', 'forgot_password', 'reset_password', 'verify_email', 'resend_verification'];
 if (!in_array($action, $exemptActions)) {
     csrf_verify();
 }

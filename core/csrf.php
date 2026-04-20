@@ -50,7 +50,7 @@ function csrf_verify() {
     $headerToken  = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
 
     // If the session token is missing or user is not logged in, the session likely expired
-    if (!isset($_SESSION['user_id']) && !in_array($action ?? '', ['login', 'register'])) {
+    if (!isset($_SESSION['user_id']) && !in_array($action ?? '', ['login', 'register', 'google_login'])) {
         http_response_code(401);
         header('Content-Type: application/json');
         echo json_encode([
