@@ -3890,7 +3890,6 @@ function App() {
     className: `rounded-lg py-2 text-sm font-medium ${authMode === 'login' ? 'bg-white text-slate-900 shadow' : 'text-slate-200 hover:bg-white/10'}`
   }, "Log in"), /*#__PURE__*/React.createElement("button", {
     onClick: () => setAuthMode('create'),
-    onClick: () => setAuthMode('create'),
     className: `rounded-lg py-2 text-sm font-medium ${authMode === 'create' ? 'bg-white text-slate-900 shadow' : 'text-slate-200 hover:bg-white/10'}`
   }, "Create Account")), /*#__PURE__*/React.createElement("div", {
     id: "google-signin-btn",
