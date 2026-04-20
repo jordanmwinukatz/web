@@ -810,7 +810,7 @@ function App() {
   const [userSubmissions, setUserSubmissions] = useState([]);
   const [showUserDashboard, setShowUserDashboard] = useState(false);
   const [loadingSubmissions, setLoadingSubmissions] = useState(false);
-  const [dashboardTab, setDashboardTab] = useState('orders'); // 'orders' | 'profile' | 'settings'
+  const [dashboardTab, setDashboardTab] = useState('overview'); // 'overview' | 'orders' | 'profile' | 'settings'
   const [lightboxImage, setLightboxImage] = useState(null);
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   const wizardEmailRef = useRef(null);
@@ -4071,601 +4071,288 @@ authOpen && (() => {
       }, authMode === 'login' ? 'Sign up' : 'Log in')))
 
   )));
-})(), showUserDashboard && authUser && /*#__PURE__*/React.createElement("div", {
-    className: "fixed inset-0 z-[120] flex items-center justify-center"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "absolute inset-0 bg-black/70",
-    onClick: () => setShowUserDashboard(false)
-  }), /*#__PURE__*/React.createElement("div", {
-    className: "relative z-[121] w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-3xl border border-white/10 bg-black/95 backdrop-blur-xl shadow-2xl account-dashboard",
-    onClick: e => e.stopPropagation()
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "p-6 border-b border-white/10 account-header"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between mb-4"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
-    className: "text-2xl font-bold text-white"
-  }, "My Account"), /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60 mt-1"
-  }, "Welcome back, ", authUser.name)), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setShowUserDashboard(false),
-    className: "text-white/60 hover:text-white transition-colors"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-6 h-6",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M6 18L18 6M6 6l12 12"
-  })))), /*#__PURE__*/React.createElement("div", {
-    className: "flex gap-2 border-b border-white/10 account-tabs"
-  }, /*#__PURE__*/React.createElement("button", {
-    onClick: () => setDashboardTab('orders'),
-    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 account-tab ${dashboardTab === 'orders' ? 'text-yellow-400 border-yellow-400 account-tab-active' : 'text-white/60 border-transparent hover:text-white/80'}`
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-4 h-4",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-  })), "Orders")), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setDashboardTab('profile'),
-    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 account-tab ${dashboardTab === 'profile' ? 'text-yellow-400 border-yellow-400 account-tab-active' : 'text-white/60 border-transparent hover:text-white/80'}`
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-4 h-4",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-  })), "Profile")), /*#__PURE__*/React.createElement("button", {
-    onClick: () => setDashboardTab('settings'),
-    className: `px-4 py-2 text-sm font-medium transition-colors border-b-2 account-tab ${dashboardTab === 'settings' ? 'text-yellow-400 border-yellow-400 account-tab-active' : 'text-white/60 border-transparent hover:text-white/80'}`
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "flex items-center gap-2"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-4 h-4",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-  }), /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-  })), "Settings")))), /*#__PURE__*/React.createElement("div", {
-    className: "p-6 overflow-y-auto max-h-[calc(90vh-180px)] account-scroll account-tab-content",
-    key: dashboardTab
-  }, dashboardTab === 'orders' && /*#__PURE__*/React.createElement(React.Fragment, null, loadingSubmissions ? /*#__PURE__*/React.createElement("div", {
-    className: "text-center py-12"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-yellow-400"
-  }), /*#__PURE__*/React.createElement("p", {
-    className: "mt-4 text-white/60"
-  }, "Loading your orders...")) : userSubmissions.length === 0 ? /*#__PURE__*/React.createElement("div", {
-    className: "text-center py-12 orders-empty-state"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "orders-empty-icon"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-16 h-16 mx-auto text-white/20 mb-4",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-  }))), /*#__PURE__*/React.createElement("p", {
-    className: "text-white/60 text-lg orders-empty-title"
-  }, "No orders yet"), /*#__PURE__*/React.createElement("p", {
-    className: "text-white/40 text-sm mt-2 orders-empty-desc"
-  }, "Start by placing your first order!"), /*#__PURE__*/React.createElement("button", {
-    className: "orders-cta-btn",
-    onClick: () => { setShowUserDashboard(false); const el = document.getElementById('prices'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
-  }, /*#__PURE__*/React.createElement("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M13 7l5 5m0 0l-5 5m5-5H6" })), "Start Trading")) : /*#__PURE__*/React.createElement("div", {
-    className: "space-y-4"
-  }, userSubmissions.map(submission => {
-    const formData = submission.form_data || {};
-    const isOrder = submission.submission_type === 'order_form';
-    const statusColors = {
-      pending: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-      approved: 'bg-green-500/20 text-green-400 border-green-500/30',
-      rejected: 'bg-red-500/20 text-red-400 border-red-500/30',
-      completed: 'bg-blue-500/20 text-blue-400 border-blue-500/30'
-    };
+})(), showUserDashboard && authUser && (() => {
+  // ── Compute metrics ──
+  const orders = userSubmissions.filter(s => s.submission_type === 'order_form');
+  const completedOrders = orders.filter(s => (s.submission_status || '').toLowerCase() === 'completed' || (s.submission_status || '').toLowerCase() === 'approved');
+  const activeOrders = orders.filter(s => (s.submission_status || '').toLowerCase() === 'pending');
+  const totalVolume = completedOrders.reduce((sum, s) => {
+    const amt = parseFloat((s.form_data || {}).amount) || 0;
+    return sum + amt;
+  }, 0);
+
+  const tabTitles = { overview: 'Overview', orders: 'Order History', profile: 'Profile', settings: 'Settings' };
+
+  // Helper: profile image src
+  const getProfileSrc = () => {
+    if (!profilePicture) return null;
+    if (profilePicture.startsWith('http')) return profilePicture;
+    if (profilePicture.startsWith('uploads/')) return window.location.pathname.split('/').slice(0, -1).join('/') + '/' + profilePicture;
+    return window.location.pathname.split('/').slice(0, -1).join('/') + '/uploads/profiles/' + profilePicture;
+  };
+
+  // SVG icons
+  const IconGrid = React.createElement("svg", { fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.8 },
+    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" }));
+  const IconOrders = React.createElement("svg", { fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.8 },
+    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }));
+  const IconProfile = React.createElement("svg", { fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.8 },
+    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" }));
+  const IconSettings = React.createElement("svg", { fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.8 },
+    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" }),
+    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z" }));
+  const IconLogout = React.createElement("svg", { className: "w-4 h-4", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.8 },
+    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" }));
+  const IconClose = React.createElement("svg", { width: 16, height: 16, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2.5, strokeLinecap: "round", strokeLinejoin: "round" },
+    React.createElement("line", { x1: 18, y1: 6, x2: 6, y2: 18 }), React.createElement("line", { x1: 6, y1: 6, x2: 18, y2: 18 }));
+
+  const navItems = [
+    { key: 'overview', label: 'Overview', icon: IconGrid },
+    { key: 'orders', label: 'Order History', icon: IconOrders },
+    { key: 'profile', label: 'Profile', icon: IconProfile },
+    { key: 'settings', label: 'Settings', icon: IconSettings },
+  ];
+
+  // ── Build order row ──
+  const renderOrderRow = (submission) => {
+    const fd = submission.form_data || {};
     const status = submission.submission_status || 'pending';
-    return /*#__PURE__*/React.createElement("div", {
-      key: submission.id,
-      className: "rounded-xl border border-white/10 bg-white/5 p-3 hover:bg-white/10 transition-colors mb-3 order-card"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "flex items-start justify-between mb-2"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "flex-1 min-w-0"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "flex items-center gap-2 mb-1 flex-wrap"
-    }, /*#__PURE__*/React.createElement("span", {
-      className: "text-sm font-bold text-white"
-    }, "Order #", submission.order_number || submission.id), /*#__PURE__*/React.createElement("span", {
-      className: `px-2 py-0.5 rounded-full text-[10px] font-semibold border ${statusColors[status] || statusColors.pending}`
-    }, status.charAt(0).toUpperCase() + status.slice(1)), isOrder && formData.order_type && /*#__PURE__*/React.createElement("span", {
-      className: `px-2 py-0.5 rounded-full text-[10px] font-bold ${formData.order_type.toLowerCase() === 'buy' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`
-    }, formData.order_type.toUpperCase())), /*#__PURE__*/React.createElement("p", {
-      className: "text-xs text-white/50"
-    }, new Date(submission.created_at).toLocaleString()))), isOrder && /*#__PURE__*/React.createElement("div", {
-      className: "grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-2"
-    }, formData.amount && formData.amount !== 'N/A' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-      className: "text-white/40 text-[10px] mb-0.5"
-    }, "Amount"), /*#__PURE__*/React.createElement("p", {
-      className: "text-white font-semibold text-xs"
-    }, formData.amount, " ", formData.currency || 'USDT')), formData.platform && formData.platform !== 'N/A' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-      className: "text-white/40 text-[10px] mb-0.5"
-    }, "Platform"), /*#__PURE__*/React.createElement("p", {
-      className: "text-white font-semibold text-xs"
-    }, formData.platform)), formData.payment_method && formData.payment_method !== 'N/A' && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-      className: "text-white/40 text-[10px] mb-0.5"
-    }, "Payment"), /*#__PURE__*/React.createElement("p", {
-      className: "text-white font-semibold text-xs"
-    }, formData.payment_method)), formData.route_type && /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-      className: "text-white/40 text-[10px] mb-0.5"
-    }, "Route"), /*#__PURE__*/React.createElement("p", {
-      className: "text-white font-semibold text-xs"
-    }, formData.route_type === 'stay' ? 'Stay' : 'P2P'))), isOrder && formData.receipts && Array.isArray(formData.receipts) && formData.receipts.length > 0 && /*#__PURE__*/React.createElement("div", {
-      className: "mt-2 pt-2 border-t border-white/10"
-    }, /*#__PURE__*/React.createElement("p", {
-      className: "text-white/40 text-[10px] mb-1.5"
-    }, "Payment Proof (", formData.receipts.length, ")"), /*#__PURE__*/React.createElement("div", {
-      className: "flex flex-wrap gap-1.5"
-    }, formData.receipts.map((receipt, idx) => {
-      // Handle different path formats
-      let imageSrc = receipt;
-      if (!receipt.startsWith('http')) {
-        // Get base path from current location
-        const basePath = window.location.pathname.split('/').slice(0, -1).join('/') || '';
-        // If it starts with 'uploads/', prepend base path
-        if (receipt.startsWith('uploads/')) {
-          imageSrc = `${basePath}/${receipt}`;
-        } else if (!receipt.startsWith('/')) {
-          // If it doesn't start with /, prepend base path
-          imageSrc = `${basePath}/${receipt}`;
-        } else {
-          // If it starts with /, prepend base path (remove leading / first)
-          imageSrc = `${basePath}${receipt}`;
-        }
+    const orderType = (fd.order_type || 'buy').toLowerCase();
+    let imageSrc = null;
+    if (fd.receipts && Array.isArray(fd.receipts) && fd.receipts.length > 0) {
+      const r = fd.receipts[0];
+      if (r.startsWith('http')) imageSrc = r;
+      else {
+        const bp = window.location.pathname.split('/').slice(0, -1).join('/') || '';
+        imageSrc = r.startsWith('/') ? bp + r : bp + '/' + r;
       }
-      const imageHref = imageSrc;
-      return /*#__PURE__*/React.createElement("a", {
-        key: idx,
-        href: imageHref,
-        className: "block relative group",
-        onClick: e => {
-          e.preventDefault();
-          setLightboxImage(imageHref);
-        }
-      }, /*#__PURE__*/React.createElement("img", {
-        src: imageSrc,
-        alt: `Proof ${idx + 1}`,
-        className: "w-14 h-14 object-cover rounded border border-white/20 hover:border-yellow-400/50 transition-colors cursor-pointer",
-        onError: e => {
-          // Fallback if image fails to load
-          console.error('Failed to load image:', imageSrc, 'Original receipt:', receipt);
-          e.target.style.display = 'none';
-          const parent = e.target.parentElement;
-          if (parent) {
-            parent.innerHTML = `<div class="w-14 h-14 rounded border border-white/20 bg-gray-800 flex items-center justify-center text-[10px] text-white/40">Img</div>`;
-          }
-        }
-      }), /*#__PURE__*/React.createElement("div", {
-        className: "absolute inset-0 bg-black/0 hover:bg-black/30 rounded transition-all flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none"
-      }, /*#__PURE__*/React.createElement("svg", {
-        className: "w-4 h-4 text-white",
-        fill: "none",
-        stroke: "currentColor",
-        viewBox: "0 0 24 24"
-      }, /*#__PURE__*/React.createElement("path", {
-        strokeLinecap: "round",
-        strokeLinejoin: "round",
-        strokeWidth: 2,
-        d: "M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-      }))));
-    }))));
-  }))), dashboardTab === 'profile' && /*#__PURE__*/React.createElement("div", {
-    className: "space-y-6"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center gap-4 pb-6 border-b border-white/10 profile-header"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "relative profile-avatar-ring"
-  }, profilePicture ? /*#__PURE__*/React.createElement("img", {
-    src: profilePicture.startsWith('http') ? profilePicture : profilePicture.startsWith('uploads/') ? window.location.pathname.split('/').slice(0, -1).join('/') + '/' + profilePicture : window.location.pathname.split('/').slice(0, -1).join('/') + '/uploads/profiles/' + profilePicture,
-    alt: authUser.name,
-    className: "w-20 h-20 rounded-full object-cover border-2 border-white/20",
-    onError: e => {
-      // Fallback to initial if image fails to load
-      e.target.style.display = 'none';
-      const fallback = e.target.parentElement.querySelector('.profile-fallback');
-      if (fallback) fallback.style.display = 'flex';
     }
-  }) : null, /*#__PURE__*/React.createElement("div", {
-    className: `w-20 h-20 rounded-full bg-gradient-to-br from-yellow-400 to-cyan-400 flex items-center justify-center text-2xl font-bold text-slate-900 ${profilePicture ? 'hidden profile-fallback' : ''}`
-  }, authUser.name.charAt(0).toUpperCase()), /*#__PURE__*/React.createElement("label", {
-    className: "absolute bottom-0 right-0 w-7 h-7 rounded-full bg-gradient-to-r from-yellow-400 to-cyan-400 flex items-center justify-center cursor-pointer hover:brightness-110 transition-all border-2 border-black/20"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-4 h-4 text-slate-900",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-  }), /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-  })), /*#__PURE__*/React.createElement("input", {
-    type: "file",
-    accept: "image/jpeg,image/png,image/webp,image/gif",
-    className: "hidden",
-    onChange: async e => {
-      const file = e.target.files[0];
-      if (!file) return;
+    return React.createElement("div", { key: submission.id, className: "dash-order-row" },
+      React.createElement("div", { className: `dash-order-type ${orderType}` }, orderType === 'buy' ? '↓' : '↑'),
+      React.createElement("div", { className: "dash-order-info" },
+        React.createElement("div", { className: "dash-order-id" }, "Order #", submission.order_number || submission.id),
+        React.createElement("div", { className: "dash-order-date" }, new Date(submission.created_at).toLocaleString())),
+      fd.amount && fd.amount !== 'N/A' ? React.createElement("div", { className: "dash-order-amount" },
+        React.createElement("div", { className: "dash-order-amount-val" }, fd.amount, " ", fd.currency || 'USDT'),
+        fd.payment_method && React.createElement("div", { className: "dash-order-amount-label" }, fd.payment_method)) : null,
+      React.createElement("span", { className: `dash-order-status ${status}` }, status),
+      imageSrc ? React.createElement("img", {
+        src: imageSrc, alt: "Proof", className: "dash-receipt-thumb",
+        onClick: () => setLightboxImage(imageSrc),
+        onError: e => { e.target.style.display = 'none'; }
+      }) : null
+    );
+  };
 
-      // Validate file size (2MB max to match server limit)
-      if (file.size > 2 * 1024 * 1024) {
-        setProfileMessage({
-          type: 'error',
-          text: 'Image must be less than 2MB'
-        });
-        return;
-      }
-      setUploadingPicture(true);
-      setProfileMessage(null);
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        const uploadRes = await fetch('api/upload_profile.php', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
-          },
-          body: formData
-        });
-        const uploadData = await uploadRes.json();
-        if (!uploadData.success) {
-          throw new Error(uploadData.error || 'Upload failed');
-        }
+  return React.createElement("div", { className: "dash-overlay" },
+    /* Backdrop */
+    React.createElement("div", { className: "dash-backdrop", onClick: () => setShowUserDashboard(false) }),
+    /* Main Container */
+    React.createElement("div", { className: "dash-container", onClick: e => e.stopPropagation() },
 
-        // Update profile with new picture
-        const updateRes = await fetch('api/auth.php', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
-          },
-          body: JSON.stringify({
-            action: 'update_profile',
-            name: profileForm.name,
-            email: profileForm.email,
-            current_email: authUser.email,
-            profile_picture: uploadData.url
-          })
-        });
-        const updateData = await updateRes.json();
-        if (updateData.success) {
-          setProfilePicture(uploadData.url);
-          setAuthUser(updateData.user);
-          localStorage.setItem('authUser', JSON.stringify(updateData.user));
-          setProfileMessage({
-            type: 'success',
-            text: 'Profile picture updated successfully!'
-          });
-        } else {
-          throw new Error(updateData.error || 'Failed to update profile');
-        }
-      } catch (error) {
-        setProfileMessage({
-          type: 'error',
-          text: error.message || 'Failed to upload picture'
-        });
-      } finally {
-        setUploadingPicture(false);
-        e.target.value = ''; // Reset input
-      }
-    },
-    disabled: uploadingPicture
-  }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
-    className: "text-xl font-bold text-white"
-  }, authUser.name), /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60"
-  }, authUser.email), uploadingPicture && /*#__PURE__*/React.createElement("p", {
-    className: "text-xs text-yellow-400 mt-1"
-  }, "Uploading..."))), /*#__PURE__*/React.createElement("div", {
-    className: "profile-form-section"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "text-lg font-semibold text-white mb-4"
-  }, "Profile Information"), /*#__PURE__*/React.createElement("form", {
-    onSubmit: async e => {
-      e.preventDefault();
-      setUpdatingProfile(true);
-      setProfileMessage(null);
-      try {
-        const res = await fetch('api/auth.php', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
-          },
-          body: JSON.stringify({
-            action: 'update_profile',
-            name: profileForm.name,
-            email: profileForm.email,
-            current_email: authUser.email
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          setAuthUser(data.user);
-          localStorage.setItem('authUser', JSON.stringify(data.user));
-          setProfileMessage({
-            type: 'success',
-            text: 'Profile updated successfully!'
-          });
-          setProfileForm({
-            name: data.user.name || '',
-            email: data.user.email || ''
-          });
-        } else {
-          setProfileMessage({
-            type: 'error',
-            text: data.error || 'Failed to update profile'
-          });
-        }
-      } catch (error) {
-        setProfileMessage({
-          type: 'error',
-          text: 'Error updating profile. Please try again.'
-        });
-      } finally {
-        setUpdatingProfile(false);
-      }
-    },
-    className: "space-y-4"
-  }, profileMessage && /*#__PURE__*/React.createElement("div", {
-    className: `p-3 rounded-lg ${profileMessage.type === 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-400' : 'bg-red-500/20 border border-red-500/30 text-red-400'}`
-  }, profileMessage.text), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-white/80 mb-2"
-  }, "Full Name"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    value: profileForm.name,
-    onChange: e => setProfileForm({
-      ...profileForm,
-      name: e.target.value
-    }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
-    required: true,
-    disabled: updatingProfile
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-white/80 mb-2"
-  }, "Email Address"), /*#__PURE__*/React.createElement("input", {
-    type: "email",
-    value: profileForm.email,
-    onChange: e => setProfileForm({
-      ...profileForm,
-      email: e.target.value
-    }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
-    required: true,
-    disabled: updatingProfile
-  })), /*#__PURE__*/React.createElement("button", {
-    type: "submit",
-    disabled: updatingProfile || profileForm.name === authUser.name && profileForm.email === authUser.email,
-    className: "px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400 font-semibold text-slate-900 hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed account-btn-primary"
-  }, updatingProfile ? 'Updating...' : 'Update Profile')))), dashboardTab === 'settings' && /*#__PURE__*/React.createElement("div", {
-    className: "space-y-6"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", {
-    className: "text-lg font-semibold text-white mb-4"
-  }, "Change Password"), /*#__PURE__*/React.createElement("form", {
-    onSubmit: async e => {
-      e.preventDefault();
-      setChangingPassword(true);
-      setSettingsMessage(null);
-      if (settingsForm.newPassword !== settingsForm.confirmPassword) {
-        setSettingsMessage({
-          type: 'error',
-          text: 'New passwords do not match'
-        });
-        setChangingPassword(false);
-        return;
-      }
-      if (settingsForm.newPassword.length < 8) {
-        setSettingsMessage({
-          type: 'error',
-          text: 'Password must be at least 8 characters'
-        });
-        setChangingPassword(false);
-        return;
-      }
-      try {
-        const res = await fetch('api/auth.php', {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
-          },
-          body: JSON.stringify({
-            action: 'change_password',
-            email: authUser.email,
-            currentPassword: settingsForm.currentPassword,
-            newPassword: settingsForm.newPassword
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          setSettingsMessage({
-            type: 'success',
-            text: 'Password changed successfully!'
-          });
-          setSettingsForm({
-            currentPassword: '',
-            newPassword: '',
-            confirmPassword: ''
-          });
-        } else {
-          setSettingsMessage({
-            type: 'error',
-            text: data.error || 'Failed to change password'
-          });
-        }
-      } catch (error) {
-        setSettingsMessage({
-          type: 'error',
-          text: 'Error changing password. Please try again.'
-        });
-      } finally {
-        setChangingPassword(false);
-      }
-    },
-    className: "space-y-4"
-  }, settingsMessage && /*#__PURE__*/React.createElement("div", {
-    className: `p-3 rounded-lg ${settingsMessage.type === 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-400' : 'bg-red-500/20 border border-red-500/30 text-red-400'}`
-  }, settingsMessage.text), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-white/80 mb-2"
-  }, "Current Password"), /*#__PURE__*/React.createElement("input", {
-    type: "password",
-    value: settingsForm.currentPassword,
-    onChange: e => setSettingsForm({
-      ...settingsForm,
-      currentPassword: e.target.value
-    }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
-    required: true,
-    disabled: changingPassword
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-white/80 mb-2"
-  }, "New Password"), /*#__PURE__*/React.createElement("input", {
-    type: "password",
-    value: settingsForm.newPassword,
-    onChange: e => setSettingsForm({
-      ...settingsForm,
-      newPassword: e.target.value
-    }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
-    placeholder: "Minimum 8 characters",
-    required: true,
-    disabled: changingPassword
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("label", {
-    className: "block text-sm font-medium text-white/80 mb-2"
-  }, "Confirm New Password"), /*#__PURE__*/React.createElement("input", {
-    type: "password",
-    value: settingsForm.confirmPassword,
-    onChange: e => setSettingsForm({
-      ...settingsForm,
-      confirmPassword: e.target.value
-    }),
-    className: "w-full rounded-xl bg-slate-900/60 border border-white/10 px-4 py-3 text-white outline-none focus:ring-2 focus:ring-cyan-400/50 account-input",
-    required: true,
-    disabled: changingPassword
-  }), settingsForm.confirmPassword && settingsForm.newPassword !== settingsForm.confirmPassword && /*#__PURE__*/React.createElement("p", {
-    className: "mt-1 text-xs text-red-400"
-  }, "Passwords do not match")), /*#__PURE__*/React.createElement("button", {
-    type: "submit",
-    disabled: changingPassword || !settingsForm.currentPassword || !settingsForm.newPassword || settingsForm.newPassword !== settingsForm.confirmPassword,
-    className: "px-6 py-3 rounded-xl bg-gradient-to-r from-yellow-400 via-yellow-300 to-cyan-400 font-semibold text-slate-900 hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed account-btn-primary"
-  }, changingPassword ? 'Changing...' : 'Change Password'))), /*#__PURE__*/React.createElement("div", {
-    className: "pt-6 border-t border-white/10"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "text-lg font-semibold text-white mb-4"
-  }, "Account Information"), /*#__PURE__*/React.createElement("div", {
-    className: "space-y-3"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 stat-card"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60"
-  }, "Member Since"), /*#__PURE__*/React.createElement("p", {
-    className: "text-white font-medium stat-value"
-  }, new Date().toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 stat-card"
-  }, /*#__PURE__*/React.createElement("div", { className: "stat-icon stat-icon-orders" }, /*#__PURE__*/React.createElement("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60 stat-label"
-  }, "Total Orders"), /*#__PURE__*/React.createElement("p", {
-    className: "text-white font-medium stat-value"
-  }, userSubmissions.filter(s => s.submission_type === 'order_form').length))), /*#__PURE__*/React.createElement("div", {
-    className: "flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 stat-card"
-  }, /*#__PURE__*/React.createElement("div", { className: "stat-icon stat-icon-status" }, /*#__PURE__*/React.createElement("svg", { className: "w-5 h-5", fill: "none", stroke: "currentColor", viewBox: "0 0 24 24" }, /*#__PURE__*/React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 2, d: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" }))), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", {
-    className: "text-sm text-white/60 stat-label"
-  }, "Account Status"), /*#__PURE__*/React.createElement("p", {
-    className: "text-green-400 font-medium stat-value"
-  }, "Active"))))), /*#__PURE__*/React.createElement("div", {
-    className: "pt-6 border-t border-white/10"
-  }, /*#__PURE__*/React.createElement("h3", {
-    className: "text-lg font-semibold text-white mb-4"
-  }, "Account Actions"), /*#__PURE__*/React.createElement("button", {
-    onClick: async () => {
-      try {
-        await fetch('api/auth.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || ''
-          },
-          body: JSON.stringify({
-            action: 'logout'
-          })
-        });
-        localStorage.removeItem('authUser');
-        setAuthUser(null);
-        setUserSubmissions([]);
-        setShowUserDashboard(false);
-      } catch (e) {
-        console.error('Logout error:', e);
-        // Still clear local state
-        localStorage.removeItem('authUser');
-        setAuthUser(null);
-        setUserSubmissions([]);
-        setShowUserDashboard(false);
-      }
-    },
-    className: "w-full inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-medium border border-red-500/30 bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors"
-  }, /*#__PURE__*/React.createElement("svg", {
-    className: "w-5 h-5",
-    fill: "none",
-    stroke: "currentColor",
-    viewBox: "0 0 24 24"
-  }, /*#__PURE__*/React.createElement("path", {
-    strokeLinecap: "round",
-    strokeLinejoin: "round",
-    strokeWidth: 2,
-    d: "M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-  })), "Logout")))))), lightboxImage && /*#__PURE__*/React.createElement("div", {
+      /* ── SIDEBAR ── */
+      React.createElement("nav", { className: "dash-sidebar" },
+        /* User card */
+        React.createElement("div", { className: "dash-sidebar-user" },
+          React.createElement("div", { className: "dash-sidebar-avatar" },
+            getProfileSrc() ? React.createElement("img", { src: getProfileSrc(), alt: authUser.name, onError: e => { e.target.style.display = 'none'; } }) : authUser.name.charAt(0).toUpperCase()),
+          React.createElement("div", { style: { minWidth: 0 } },
+            React.createElement("div", { className: "dash-sidebar-name" }, authUser.name),
+            React.createElement("div", { className: "dash-sidebar-email" }, authUser.email))),
+
+        /* Nav items */
+        navItems.map(item => React.createElement("button", {
+          key: item.key,
+          className: `dash-nav-item ${dashboardTab === item.key ? 'active' : ''}`,
+          onClick: () => setDashboardTab(item.key)
+        }, item.icon, item.label)),
+
+        /* Divider + Logout */
+        React.createElement("div", { className: "dash-nav-divider" }),
+        React.createElement("button", {
+          className: "dash-nav-item",
+          style: { color: '#f87171' },
+          onClick: async () => {
+            try {
+              await fetch('api/auth.php', { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || '' }, body: JSON.stringify({ action: 'logout' }) });
+            } catch(e) {} finally {
+              localStorage.removeItem('authUser');
+              setAuthUser(null); setUserSubmissions([]); setShowUserDashboard(false);
+            }
+          }
+        }, IconLogout, "Logout")),
+
+      /* ── CONTENT ── */
+      React.createElement("div", { className: "dash-content" },
+
+        /* Header */
+        React.createElement("div", { className: "dash-content-header" },
+          React.createElement("h2", { className: "dash-content-title" }, tabTitles[dashboardTab] || 'Dashboard'),
+          React.createElement("button", { className: "dash-close-btn", onClick: () => setShowUserDashboard(false) }, IconClose)),
+
+        /* Body */
+        React.createElement("div", { className: "dash-content-body", key: dashboardTab },
+
+          /* ═══ OVERVIEW TAB ═══ */
+          dashboardTab === 'overview' && React.createElement(React.Fragment, null,
+            /* Metric cards */
+            React.createElement("div", { className: "dash-metrics" },
+              React.createElement("div", { className: "dash-metric-card" },
+                React.createElement("div", { className: "dash-metric-icon gold" },
+                  React.createElement("svg", { width: 20, height: 20, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" }))),
+                React.createElement("div", { className: "dash-metric-value" }, totalVolume > 0 ? totalVolume.toLocaleString(undefined, { maximumFractionDigits: 2 }) + ' USDT' : '0'),
+                React.createElement("div", { className: "dash-metric-label" }, "Total Volume")),
+
+              React.createElement("div", { className: "dash-metric-card" },
+                React.createElement("div", { className: "dash-metric-icon green" },
+                  React.createElement("svg", { width: 20, height: 20, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M13 10V3L4 14h7v7l9-11h-7z" }))),
+                React.createElement("div", { className: "dash-metric-value" }, activeOrders.length),
+                React.createElement("div", { className: "dash-metric-label" }, "Active Orders")),
+
+              React.createElement("div", { className: "dash-metric-card" },
+                React.createElement("div", { className: "dash-metric-icon blue" },
+                  React.createElement("svg", { width: 20, height: 20, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" }))),
+                React.createElement("div", { className: "dash-metric-value" }, completedOrders.length),
+                React.createElement("div", { className: "dash-metric-label" }, "Completed Trades"))),
+
+            /* Recent orders preview */
+            React.createElement("div", { className: "dash-section-title" }, "Recent Orders"),
+            loadingSubmissions ? React.createElement("div", { style: { textAlign: 'center', padding: '24px 0' } },
+              React.createElement("div", { style: { display: 'inline-block', width: 28, height: 28, border: '2px solid transparent', borderTopColor: '#facc15', borderRadius: '50%', animation: 'spin 0.8s linear infinite' } }),
+              React.createElement("p", { style: { color: 'rgba(255,255,255,0.5)', marginTop: 12, fontSize: 13 } }, "Loading..."))
+            : orders.length === 0 ? React.createElement("div", { className: "dash-empty" },
+              React.createElement("div", { className: "dash-empty-icon" },
+                React.createElement("svg", { fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.5 },
+                  React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }))),
+              React.createElement("div", { className: "dash-empty-title" }, "No orders yet"),
+              React.createElement("div", { className: "dash-empty-desc" }, "Start trading to see your order history here."),
+              React.createElement("button", { className: "orders-cta-btn", onClick: () => { setShowUserDashboard(false); const el = document.getElementById('prices'); if (el) el.scrollIntoView({ behavior: 'smooth' }); } },
+                React.createElement("svg", { width: 18, height: 18, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                  React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M13 7l5 5m0 0l-5 5m5-5H6" })), "Start Trading"))
+            : orders.slice(0, 5).map(renderOrderRow)),
+
+          /* ═══ ORDERS TAB ═══ */
+          dashboardTab === 'orders' && React.createElement(React.Fragment, null,
+            loadingSubmissions ? React.createElement("div", { style: { textAlign: 'center', padding: '40px 0' } },
+              React.createElement("div", { style: { display: 'inline-block', width: 32, height: 32, border: '2px solid transparent', borderTopColor: '#facc15', borderRadius: '50%', animation: 'spin 0.8s linear infinite' } }),
+              React.createElement("p", { style: { color: 'rgba(255,255,255,0.5)', marginTop: 12, fontSize: 13 } }, "Loading your orders..."))
+            : userSubmissions.length === 0 ? React.createElement("div", { className: "dash-empty" },
+              React.createElement("div", { className: "dash-empty-icon" },
+                React.createElement("svg", { fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 1.5 },
+                  React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" }))),
+              React.createElement("div", { className: "dash-empty-title" }, "No orders yet"),
+              React.createElement("div", { className: "dash-empty-desc" }, "Start by placing your first order!"),
+              React.createElement("button", { className: "orders-cta-btn", onClick: () => { setShowUserDashboard(false); const el = document.getElementById('prices'); if (el) el.scrollIntoView({ behavior: 'smooth' }); } },
+                React.createElement("svg", { width: 18, height: 18, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                  React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M13 7l5 5m0 0l-5 5m5-5H6" })), "Start Trading"))
+            : userSubmissions.map(renderOrderRow)),
+
+          /* ═══ PROFILE TAB ═══ */
+          dashboardTab === 'profile' && React.createElement(React.Fragment, null,
+            /* Profile header */
+            React.createElement("div", { className: "dash-profile-header" },
+              React.createElement("div", { className: "profile-avatar-ring", style: { position: 'relative' } },
+                getProfileSrc() ? React.createElement("img", { src: getProfileSrc(), alt: authUser.name, style: { width: 72, height: 72, borderRadius: '50%', objectFit: 'cover', border: '2px solid rgba(255,255,255,0.15)' }, onError: e => { e.target.style.display = 'none'; const fb = e.target.parentElement.querySelector('.pf-fallback'); if (fb) fb.style.display = 'flex'; } }) : null,
+                React.createElement("div", { className: `pf-fallback`, style: { width: 72, height: 72, borderRadius: '50%', background: 'linear-gradient(135deg, #facc15, #eab308)', display: getProfileSrc() ? 'none' : 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, fontWeight: 700, color: '#0f172a' } }, authUser.name.charAt(0).toUpperCase()),
+                React.createElement("label", { style: { position: 'absolute', bottom: 0, right: 0, width: 28, height: 28, borderRadius: '50%', background: 'linear-gradient(135deg, #facc15, #eab308)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: '2px solid rgba(0,0,0,0.2)' } },
+                  React.createElement("svg", { width: 14, height: 14, fill: "none", stroke: "#0f172a", viewBox: "0 0 24 24", strokeWidth: 2 },
+                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" }),
+                    React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M15 13a3 3 0 11-6 0 3 3 0 016 0z" })),
+                  React.createElement("input", { type: "file", accept: "image/jpeg,image/png,image/webp,image/gif", style: { display: 'none' }, disabled: uploadingPicture, onChange: async e => {
+                    const file = e.target.files[0]; if (!file) return;
+                    if (file.size > 2 * 1024 * 1024) { setProfileMessage({ type: 'error', text: 'Image must be less than 2MB' }); return; }
+                    setUploadingPicture(true); setProfileMessage(null);
+                    try {
+                      const formData = new FormData(); formData.append('file', file);
+                      const uploadRes = await fetch('api/upload_profile.php', { method: 'POST', credentials: 'include', headers: { 'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || '' }, body: formData });
+                      const uploadData = await uploadRes.json();
+                      if (!uploadData.success) throw new Error(uploadData.error || 'Upload failed');
+                      const updateRes = await fetch('api/auth.php', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || '' }, body: JSON.stringify({ action: 'update_profile', name: profileForm.name, email: profileForm.email, current_email: authUser.email, profile_picture: uploadData.url }) });
+                      const updateData = await updateRes.json();
+                      if (updateData.success) { setProfilePicture(uploadData.url); setAuthUser(updateData.user); localStorage.setItem('authUser', JSON.stringify(updateData.user)); setProfileMessage({ type: 'success', text: 'Profile picture updated!' }); }
+                      else throw new Error(updateData.error || 'Failed to update profile');
+                    } catch (error) { setProfileMessage({ type: 'error', text: error.message || 'Failed to upload picture' }); } finally { setUploadingPicture(false); e.target.value = ''; }
+                  } }))),
+              React.createElement("div", null,
+                React.createElement("h3", { style: { fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 4 } }, authUser.name),
+                React.createElement("p", { style: { fontSize: 13, color: 'rgba(255,255,255,0.5)' } }, authUser.email),
+                uploadingPicture && React.createElement("p", { style: { fontSize: 12, color: '#facc15', marginTop: 4 } }, "Uploading..."))),
+
+            /* Profile form */
+            React.createElement("div", { style: { marginTop: 4 } },
+              React.createElement("div", { className: "dash-section-title" }, "Profile Information"),
+              React.createElement("form", { onSubmit: async e => {
+                e.preventDefault(); setUpdatingProfile(true); setProfileMessage(null);
+                try {
+                  const res = await fetch('api/auth.php', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || '' }, body: JSON.stringify({ action: 'update_profile', name: profileForm.name, email: profileForm.email, current_email: authUser.email }) });
+                  const data = await res.json();
+                  if (data.success) { setAuthUser(data.user); localStorage.setItem('authUser', JSON.stringify(data.user)); setProfileMessage({ type: 'success', text: 'Profile updated successfully!' }); setProfileForm({ name: data.user.name || '', email: data.user.email || '' }); }
+                  else setProfileMessage({ type: 'error', text: data.error || 'Failed to update profile' });
+                } catch (error) { setProfileMessage({ type: 'error', text: 'Error updating profile. Please try again.' }); } finally { setUpdatingProfile(false); }
+              }, style: { display: 'flex', flexDirection: 'column', gap: 16 } },
+                profileMessage && React.createElement("div", { style: { padding: 12, borderRadius: 10, background: profileMessage.type === 'success' ? 'rgba(52,211,153,0.12)' : 'rgba(248,113,113,0.12)', border: `1px solid ${profileMessage.type === 'success' ? 'rgba(52,211,153,0.25)' : 'rgba(248,113,113,0.25)'}`, color: profileMessage.type === 'success' ? '#34d399' : '#f87171', fontSize: 13 } }, profileMessage.text),
+                React.createElement("div", null,
+                  React.createElement("label", { style: { display: 'block', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 8 } }, "Full Name"),
+                  React.createElement("input", { type: "text", value: profileForm.name, onChange: e => setProfileForm({ ...profileForm, name: e.target.value }), className: "account-input", required: true, disabled: updatingProfile })),
+                React.createElement("div", null,
+                  React.createElement("label", { style: { display: 'block', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 8 } }, "Email Address"),
+                  React.createElement("input", { type: "email", value: profileForm.email, onChange: e => setProfileForm({ ...profileForm, email: e.target.value }), className: "account-input", required: true, disabled: updatingProfile })),
+                React.createElement("button", { type: "submit", disabled: updatingProfile || (profileForm.name === authUser.name && profileForm.email === authUser.email), className: "account-btn-primary", style: { alignSelf: 'flex-start' } }, updatingProfile ? 'Updating...' : 'Update Profile')))),
+
+          /* ═══ SETTINGS TAB ═══ */
+          dashboardTab === 'settings' && React.createElement(React.Fragment, null,
+            React.createElement("div", { className: "dash-section-title" }, "Change Password"),
+            React.createElement("form", { onSubmit: async e => {
+              e.preventDefault(); setChangingPassword(true); setSettingsMessage(null);
+              if (settingsForm.newPassword !== settingsForm.confirmPassword) { setSettingsMessage({ type: 'error', text: 'New passwords do not match' }); setChangingPassword(false); return; }
+              if (settingsForm.newPassword.length < 8) { setSettingsMessage({ type: 'error', text: 'Password must be at least 8 characters' }); setChangingPassword(false); return; }
+              try {
+                const res = await fetch('api/auth.php', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': document.cookie.match(/X-CSRF-TOKEN=([^;]+)/)?.[1] || '' }, body: JSON.stringify({ action: 'change_password', email: authUser.email, currentPassword: settingsForm.currentPassword, newPassword: settingsForm.newPassword }) });
+                const data = await res.json();
+                if (data.success) { setSettingsMessage({ type: 'success', text: 'Password changed successfully!' }); setSettingsForm({ currentPassword: '', newPassword: '', confirmPassword: '' }); }
+                else setSettingsMessage({ type: 'error', text: data.error || 'Failed to change password' });
+              } catch (error) { setSettingsMessage({ type: 'error', text: 'Error changing password. Please try again.' }); } finally { setChangingPassword(false); }
+            }, style: { display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 480 } },
+              settingsMessage && React.createElement("div", { style: { padding: 12, borderRadius: 10, background: settingsMessage.type === 'success' ? 'rgba(52,211,153,0.12)' : 'rgba(248,113,113,0.12)', border: `1px solid ${settingsMessage.type === 'success' ? 'rgba(52,211,153,0.25)' : 'rgba(248,113,113,0.25)'}`, color: settingsMessage.type === 'success' ? '#34d399' : '#f87171', fontSize: 13 } }, settingsMessage.text),
+              React.createElement("div", null,
+                React.createElement("label", { style: { display: 'block', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 8 } }, "Current Password"),
+                React.createElement("input", { type: "password", value: settingsForm.currentPassword, onChange: e => setSettingsForm({ ...settingsForm, currentPassword: e.target.value }), className: "account-input", required: true, disabled: changingPassword })),
+              React.createElement("div", null,
+                React.createElement("label", { style: { display: 'block', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 8 } }, "New Password"),
+                React.createElement("input", { type: "password", value: settingsForm.newPassword, onChange: e => setSettingsForm({ ...settingsForm, newPassword: e.target.value }), className: "account-input", placeholder: "Minimum 8 characters", required: true, disabled: changingPassword })),
+              React.createElement("div", null,
+                React.createElement("label", { style: { display: 'block', fontSize: 13, fontWeight: 500, color: 'rgba(255,255,255,0.7)', marginBottom: 8 } }, "Confirm New Password"),
+                React.createElement("input", { type: "password", value: settingsForm.confirmPassword, onChange: e => setSettingsForm({ ...settingsForm, confirmPassword: e.target.value }), className: "account-input", required: true, disabled: changingPassword }),
+                settingsForm.confirmPassword && settingsForm.newPassword !== settingsForm.confirmPassword && React.createElement("p", { style: { marginTop: 4, fontSize: 12, color: '#f87171' } }, "Passwords do not match")),
+              React.createElement("button", { type: "submit", disabled: changingPassword || !settingsForm.currentPassword || !settingsForm.newPassword || settingsForm.newPassword !== settingsForm.confirmPassword, className: "account-btn-primary", style: { alignSelf: 'flex-start' } }, changingPassword ? 'Changing...' : 'Change Password')),
+
+            /* Account info */
+            React.createElement("div", { style: { marginTop: 32, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.06)' } },
+              React.createElement("div", { className: "dash-section-title" }, "Account Information"),
+              React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 10 } },
+                React.createElement("div", { className: "dash-order-row" },
+                  React.createElement("div", { className: "dash-metric-icon gold", style: { width: 36, height: 36, marginBottom: 0 } },
+                    React.createElement("svg", { width: 16, height: 16, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                      React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" }))),
+                  React.createElement("div", { className: "dash-order-info" },
+                    React.createElement("div", { className: "dash-order-date" }, "Member Since"),
+                    React.createElement("div", { className: "dash-order-id" }, new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })))),
+                React.createElement("div", { className: "dash-order-row" },
+                  React.createElement("div", { className: "dash-metric-icon green", style: { width: 36, height: 36, marginBottom: 0 } },
+                    React.createElement("svg", { width: 16, height: 16, fill: "none", stroke: "currentColor", viewBox: "0 0 24 24", strokeWidth: 2 },
+                      React.createElement("path", { strokeLinecap: "round", strokeLinejoin: "round", d: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" }))),
+                  React.createElement("div", { className: "dash-order-info" },
+                    React.createElement("div", { className: "dash-order-date" }, "Account Status"),
+                    React.createElement("div", { style: { fontSize: 13, fontWeight: 600, color: '#34d399' } }, "Active"))))))
+
+        ) /* end dash-content-body */
+      ) /* end dash-content */
+    ) /* end dash-container */
+  ); /* end dash-overlay */
+})(), lightboxImage && /*#__PURE__*/React.createElement("div", {
     className: "fixed inset-0 z-[130] flex items-center justify-center",
     onClick: () => setLightboxImage(null)
   }, /*#__PURE__*/React.createElement("div", {
