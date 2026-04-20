@@ -815,7 +815,46 @@ function App() {
   const [quickOrderOpen, setQuickOrderOpen] = useState(false);
   const wizardEmailRef = useRef(null);
   const orderEndRef = useRef(null);
-  
+  const wizardUidRef = useRef(null);
+  const wizardTzsInputRef = useRef(null);
+  const wizardUsdtInputRef = useRef(null);
+  const [profileForm, setProfileForm] = useState({
+    name: '',
+    email: ''
+  });
+  const [settingsForm, setSettingsForm] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [updatingProfile, setUpdatingProfile] = useState(false);
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [profileMessage, setProfileMessage] = useState(null);
+  const [settingsMessage, setSettingsMessage] = useState(null);
+  const [profilePicture, setProfilePicture] = useState(null);
+  const [uploadingPicture, setUploadingPicture] = useState(false);
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login'); // 'login' | 'create' | 'forgot'
+  const [authForm, setAuthForm] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    confirm: '',
+    agree: false,
+    remember: true
+  });
+  const [resetEmailSent, setResetEmailSent] = useState(false);
+  const [authShowPw, setAuthShowPw] = useState(false);
+  const [authShowPw2, setAuthShowPw2] = useState(false);
+  const [authToast, setAuthToast] = useState(null);
+  const [wizardSide, setWizardSide] = useState(""); // "Buy" | "Sell"
+  const [wizardRoute, setWizardRoute] = useState(""); // "stay" | "p2p"
+  const [wizardUnit, setWizardUnit] = useState(""); // "TZS" | "USDT"
+  const [wizardTzs, setWizardTzs] = useState("");
+  const [wizardUsdt, setWizardUsdt] = useState("");
+  const [wizardAmtErr, setWizardAmtErr] = useState("");
+  const [wizardP2pPlatform, setWizardP2pPlatform] = useState("");
+
   // Google Auth Initialization
   useEffect(() => {
     window.handleGoogleResponse = async (response) => {
@@ -872,45 +911,6 @@ function App() {
       }, 100);
     }
   }, [authOpen, authMode]);
-  const wizardUidRef = useRef(null);
-  const wizardTzsInputRef = useRef(null);
-  const wizardUsdtInputRef = useRef(null);
-  const [profileForm, setProfileForm] = useState({
-    name: '',
-    email: ''
-  });
-  const [settingsForm, setSettingsForm] = useState({
-    currentPassword: '',
-    newPassword: '',
-    confirmPassword: ''
-  });
-  const [updatingProfile, setUpdatingProfile] = useState(false);
-  const [changingPassword, setChangingPassword] = useState(false);
-  const [profileMessage, setProfileMessage] = useState(null);
-  const [settingsMessage, setSettingsMessage] = useState(null);
-  const [profilePicture, setProfilePicture] = useState(null);
-  const [uploadingPicture, setUploadingPicture] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
-  const [authMode, setAuthMode] = useState('login'); // 'login' | 'create' | 'forgot'
-  const [authForm, setAuthForm] = useState({
-    fullName: '',
-    email: '',
-    password: '',
-    confirm: '',
-    agree: false,
-    remember: true
-  });
-  const [resetEmailSent, setResetEmailSent] = useState(false);
-  const [authShowPw, setAuthShowPw] = useState(false);
-  const [authShowPw2, setAuthShowPw2] = useState(false);
-  const [authToast, setAuthToast] = useState(null);
-  const [wizardSide, setWizardSide] = useState(""); // "Buy" | "Sell"
-  const [wizardRoute, setWizardRoute] = useState(""); // "stay" | "p2p"
-  const [wizardUnit, setWizardUnit] = useState(""); // "TZS" | "USDT"
-  const [wizardTzs, setWizardTzs] = useState("");
-  const [wizardUsdt, setWizardUsdt] = useState("");
-  const [wizardAmtErr, setWizardAmtErr] = useState("");
-  const [wizardP2pPlatform, setWizardP2pPlatform] = useState("");
 
   // Analytics tracking functions
   const trackWizardStep = (step, actionType, paymentMethod = null, routeType = null) => {
