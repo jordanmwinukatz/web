@@ -1918,6 +1918,7 @@ a.hero-btn-whatsapp:hover {
     }
     .prices-card {
         position: static !important;
+        order: -1 !important;
     }
 }
 
