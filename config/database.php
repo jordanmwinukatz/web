@@ -26,7 +26,7 @@ class Database {
             $this->host     = Env::get('DB_HOST', 'localhost');
             $this->db_name  = Env::get('DB_DATABASE', 'u234315390_main');
             $this->username = Env::get('DB_USERNAME', 'u234315390_main');
-            $this->password = Env::get('DB_PASSWORD', 'Nb/1S2QbiR');
+            $this->password = Env::get('DB_PASSWORD', 'e0@/S53F/K');
         } else {
             // Local development defaults (XAMPP)
             $this->host     = Env::get('DB_HOST', 'localhost');
