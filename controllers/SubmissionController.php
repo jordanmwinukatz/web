@@ -462,6 +462,46 @@ try {
         }
 
         // Ensure script exits after background processing
+        // === BACKGROUND: Send emails after response is flushed ===
+        if ($input['submission_type'] === 'order_form') {
+            try {
+                require_once __DIR__ . '/../config/email.php';
+                if (class_exists('EmailSender')) {
+                    $emailSender = new EmailSender();
+
+                    $orderData = [
+                        'submission_id' => $submission_id,
+                        'order_number' => $orderNumber,
+                        'form_data' => $input['form_data'],
+                        'user_info' => $input['user_info'] ?? []
+                    ];
+
+                    // Send confirmation email to user
+                    $userEmail = $orderData['user_info']['email'] ?? null;
+                    $userName = $orderData['user_info']['name'] ?? 'Customer';
+                    if (!empty($userEmail) && $userEmail !== 'N/A') {
+                        try {
+                            $emailSender->sendOrderConfirmation($userEmail, $userName, $orderData);
+                        } catch (Exception $e) {
+                            error_log('Background: Failed to send user confirmation email: ' . $e->getMessage());
+                        }
+                    }
+
+                    // Send notification to all admins
+                    $adminEmails = ['jordanmwinukatz@gmail.com', 'jordanmwinuka@gmail.com', 'thiongoowen7@gmail.com'];
+                    foreach ($adminEmails as $adminEmail) {
+                        try {
+                            $emailSender->sendAdminNotification($adminEmail, $orderData);
+                        } catch (Exception $e) {
+                            error_log("Background: Failed to send admin email to $adminEmail: " . $e->getMessage());
+                        }
+                    }
+                }
+            } catch (Exception $e) {
+                error_log('Background email sending failed: ' . $e->getMessage());
+            }
+        }
+
         exit;
         
     } elseif ($method === 'GET') {
