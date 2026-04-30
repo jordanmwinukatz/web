@@ -140,12 +140,12 @@ try {
             $hasProfilePic = $colCheck && $colCheck->fetch();
             
             if ($hasProfilePic) {
-                $stmt = $pdo->prepare('SELECT id, name, email, profile_picture FROM users WHERE id = ?');
+                $stmt = $pdo->prepare('SELECT id, name, email, profile_picture, created_at FROM users WHERE id = ?');
             } else {
-                $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+                $stmt = $pdo->prepare('SELECT id, name, email, created_at FROM users WHERE id = ?');
             }
         } catch (Exception $e) {
-            $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+            $stmt = $pdo->prepare('SELECT id, name, email, created_at FROM users WHERE id = ?');
         }
         
         $stmt->execute([$userId]);
@@ -283,14 +283,14 @@ try {
             $colCheckAdmin = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'is_admin'");
             $hasIsAdmin = $colCheckAdmin && $colCheckAdmin->fetch();
             
-            $selectFields = ['id', 'name', 'email'];
+            $selectFields = ['id', 'name', 'email', 'created_at'];
             if ($hasProfilePic) $selectFields[] = 'profile_picture';
             if ($hasEmailVerified) $selectFields[] = 'email_verified';
             if ($hasIsAdmin) $selectFields[] = 'is_admin';
             
             $stmt = $pdo->prepare('SELECT ' . implode(', ', $selectFields) . ' FROM users WHERE id = ?');
         } catch (Exception $e) {
-            $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+            $stmt = $pdo->prepare('SELECT id, name, email, created_at FROM users WHERE id = ?');
         }
         
         $stmt->execute([$userId]);
@@ -422,7 +422,7 @@ try {
             $colCheckAdmin = $pdo->query("SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users' AND COLUMN_NAME = 'is_admin'");
             $hasIsAdmin = $colCheckAdmin && $colCheckAdmin->fetch();
             
-            $selectFields = ['id', 'name', 'email'];
+            $selectFields = ['id', 'name', 'email', 'created_at'];
             if ($hasProfilePic) {
                 $selectFields[] = 'profile_picture';
             }
@@ -436,7 +436,7 @@ try {
             $stmt = $pdo->prepare('SELECT ' . implode(', ', $selectFields) . ' FROM users WHERE id = ?');
         } catch (Exception $e) {
             // Fallback if column check fails
-            $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+            $stmt = $pdo->prepare('SELECT id, name, email, created_at FROM users WHERE id = ?');
         }
         
         $stmt->execute([$user['id']]);
@@ -644,13 +644,13 @@ try {
             $hasProfilePic = $colCheck && $colCheck->fetch();
             
             if ($hasProfilePic) {
-                $stmt = $pdo->prepare('SELECT id, name, email, profile_picture FROM users WHERE id = ?');
+                $stmt = $pdo->prepare('SELECT id, name, email, profile_picture, created_at FROM users WHERE id = ?');
             } else {
-                $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+                $stmt = $pdo->prepare('SELECT id, name, email, created_at FROM users WHERE id = ?');
             }
         } catch (Exception $e) {
             // Fallback if column check fails
-            $stmt = $pdo->prepare('SELECT id, name, email FROM users WHERE id = ?');
+            $stmt = $pdo->prepare('SELECT id, name, email, created_at FROM users WHERE id = ?');
         }
         
         $stmt->execute([$userId]);
