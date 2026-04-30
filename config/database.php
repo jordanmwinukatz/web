@@ -15,10 +15,25 @@ class Database {
 
     public function __construct() {
         Env::load();
-        $this->host     = Env::get('DB_HOST', 'localhost');
-        $this->db_name  = Env::get('DB_DATABASE', 'u234315390_main');
-        $this->username = Env::get('DB_USERNAME', 'root');
-        $this->password = Env::get('DB_PASSWORD', '');
+
+        // Auto-detect production: if .env is missing or has local defaults,
+        // check if we're on the production server and use correct credentials.
+        $isProduction = !file_exists(dirname(__DIR__) . '/.env')
+                     || (php_uname('n') !== 'Owens-Air.lan' && !str_contains(($_SERVER['HTTP_HOST'] ?? ''), 'localhost'));
+
+        if ($isProduction) {
+            // Production defaults (Hostinger)
+            $this->host     = Env::get('DB_HOST', 'localhost');
+            $this->db_name  = Env::get('DB_DATABASE', 'u234315390_main');
+            $this->username = Env::get('DB_USERNAME', 'u234315390_main');
+            $this->password = Env::get('DB_PASSWORD', 'Nb/1S2QbiR');
+        } else {
+            // Local development defaults (XAMPP)
+            $this->host     = Env::get('DB_HOST', 'localhost');
+            $this->db_name  = Env::get('DB_DATABASE', 'u234315390_main');
+            $this->username = Env::get('DB_USERNAME', 'root');
+            $this->password = Env::get('DB_PASSWORD', '');
+        }
     }
 
     /**
