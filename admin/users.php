@@ -2,6 +2,9 @@
 require_once 'auth_check.php';
 require_once '../config/database.php';
 
+// Set timezone to East Africa Time (UTC+3) for accurate time display
+date_default_timezone_set('Africa/Dar_es_Salaam');
+
 $db = new Database();
 $pdo = $db->getConnection();
 
